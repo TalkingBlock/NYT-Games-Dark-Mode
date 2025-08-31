@@ -1,0 +1,16 @@
+{
+  "name": "NYT Games Dark Mode",
+  "description": "Applies Dark Mode to all of the website NYT Games!",
+  "version": "0.1.0",
+  "manifest_version": 3,
+  "permissions": ["scripting", "activeTab"],
+  "content_scripts": [
+    {
+      "matches": [
+      "https://www.nytimes.com/crosswords/game/mini/*"
+      ],
+      "js": ["crossword.js"],
+      "css": ["crossword.css"]
+    }
+  ]
+}

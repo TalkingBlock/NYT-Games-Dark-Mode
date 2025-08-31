@@ -1,0 +1,144 @@
+/* Main Background: #0f0f0f */
+
+.pz-row {
+    background: #0f0f0f;
+    color: white;
+}
+
+#js-global-nav {
+    background: #0f0f0f;
+}
+
+.pz-content {
+    background: #0f0f0f
+}
+
+.pz-nav__logo rect {
+    fill: #0f0f0f;
+}
+
+.pz-nav__logo path {
+    fill: white;
+}
+
+body .pz-nav__hamburger-inner, body .pz-nav__hamburger-inner::before, body .pz-nav__hamburger-inner::after {
+    background-color: white;
+}
+
+.xwd__layout_container {
+    background: #0f0f0f;
+}
+
+.pz-ad-box {
+    background-color: #0f0f0f;
+}
+
+body .xwd__modal--body {
+    background-color: #0f0f0f;
+    color: white;
+}
+
+.xwd__modal--content {
+    background: #0f0f0f;
+    color: white;
+}
+
+.xwd__timer--button {
+    background: #0f0f0f;
+}
+
+.xwd__tool--button button {
+    background-color: #0f0f0f !important; 
+    color: white !important;
+}
+
+body .xwd__modal--overlay {
+    background-color: black;
+}
+
+.xwd__tool--button:hover button {
+    background-color: #f1f1f1 !important; 
+}
+
+.xwd__toolbar_icon--support, .xwd__toolbar_icon--pencil, .xwd__toolbar_icon--settings-gear {
+    filter: invert(1);
+}
+
+.xwd__modal--button-container .pz-moment__button {
+    color: black;
+    background: white;
+}
+
+body .pz-ad-box {
+    background-color: #0f0f0f;
+}
+
+body .pz-footer {
+    background-color: #0f0f0f;
+    color: white;
+}
+
+body .Footer-module_legalLink__saQgH a {
+    color: white;
+}
+
+.xwd__cell text {
+    fill: white;
+}
+
+body .xwd__cell--cell {
+    fill: #585863;
+}
+
+body .xwd__cell--block {
+    fill: #161718;
+}
+
+body .xwd__cell--related {
+    fill: #596d83;
+}
+
+body .xwd__cell--highlighted {
+    fill: #483f80;
+}
+
+body .xwd__cell--related.xwd__cell--highlighted {
+    fill: #483f80;
+}
+
+body .xwd__cell--selected {
+    fill: #4678aa;
+}
+
+body .xwd__cell--related.xwd__cell--highlighted.xwd__cell--selected {
+    fill: #4678aa;
+}
+
+body .xwd__clue-bar-desktop--bar {
+    background: #393361;
+    color: white;
+}
+
+body .xwd__clue--highlighted {
+    border-left-color: #483f80;
+}
+
+body .xwd__clue--related {
+    background-color: #596d83;
+}
+
+body .xwd__clue--selected {
+    background-color: #483f80;
+}
+
+.xwd__clue--li span {
+    color: white;
+}
+
+.xwd__clue--filled {
+    color: red;
+}
+
+[data-group="grid"] rect, [data-group="grid"] path {
+    stroke: #161718;
+}
