@@ -47,26 +47,37 @@ body .xwd__modal--body {
     background: #0f0f0f;
 }
 
+.xwd__timer--button i {
+    filter: invert(1);
+}
+
 .xwd__tool--button button {
-    background-color: #0f0f0f !important; 
+    background-color: #0f0f0f !important;
     color: white !important;
+}
+
+.xwd__tool--button button:hover {
+    background-color: #777777 !important;
+}
+
+.xwd__toolbar_icon--support, .xwd__toolbar_icon--pencil, .xwd__toolbar_icon--settings-gear {
+    filter: invert(1);
+    background-color: transparent !important;
+    
 }
 
 body .xwd__modal--overlay {
     background-color: black;
 }
 
-.xwd__tool--button:hover button {
-    background-color: #f1f1f1 !important; 
-}
-
-.xwd__toolbar_icon--support, .xwd__toolbar_icon--pencil, .xwd__toolbar_icon--settings-gear {
-    filter: invert(1);
-}
-
 .xwd__modal--button-container .pz-moment__button {
     color: black;
     background: white;
+}
+
+.xwd__modal--button-container .pz-moment__button.secondary {
+    color: white;
+    background: black;
 }
 
 body .pz-ad-box {
@@ -85,6 +96,11 @@ body .Footer-module_legalLink__saQgH a {
 .xwd__cell text {
     fill: white;
 }
+
+body .xwd__assistance--confirmed~text:last-of-type {
+    fill: #a9d6fe;
+}
+
 
 body .xwd__cell--cell {
     fill: #585863;
@@ -135,8 +151,8 @@ body .xwd__clue--selected {
     color: white;
 }
 
-.xwd__clue--filled {
-    color: red;
+.xwd__clue--filled span {
+    color: #959595;
 }
 
 [data-group="grid"] rect, [data-group="grid"] path {
