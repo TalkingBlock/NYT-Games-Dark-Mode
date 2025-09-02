@@ -208,3 +208,36 @@ body .xwd__modal--close:hover {
 .pz-icon-close {
     filter: invert(1);
 }
+
+.xwd__support-menu .xwd__menu--item .xwd__menu--btnlink, .xwd__support-menu .xwd__menu--item a {
+    background: #0f0f0f;
+    color: white;
+}
+
+.Icon-module_iconWrapper__ZfKPm path {
+    fill: white;
+}
+
+.xwd__menu--item a:hover {
+    background-color: #777777 !important;
+}
+
+.Icon-module_iconWrapper__ZfKPm:hover,
+[data-testid="icon-arrow"]:hover {
+    background-color: transparent !important;
+}
+
+.xwd__editorial-content--subGameplayGrid h2,
+.xwd__editorial-content--subGameplayGrid p,
+body .xwd__editorial-content--subGameplayGrid .xwd__editorial-content--header a,
+body .xwd__editorial-content--editorialCard .xwd__editorial-content--kicker {
+    color: white;
+}
+
+body .xwd__editorial-content--subGameplayGrid .xwd__editorial-content--header {
+    border-top: solid 6px white;
+}
+
+body .xwd__printtools--button:hover {
+    background-color: #e4e4e4;
+}
