@@ -63,7 +63,11 @@ body .xwd__modal--body {
 .xwd__toolbar_icon--support, .xwd__toolbar_icon--pencil, .xwd__toolbar_icon--settings-gear {
     filter: invert(1);
     background-color: transparent !important;
-    
+}
+
+.xwd__toolbar_icon--pencil-active {
+    filter: brightness(0) saturate(100%) invert(74%) sepia(5%) saturate(3796%) hue-rotate(185deg) brightness(100%) contrast(96%);
+    background-color: transparent !important;
 }
 
 body .xwd__modal--overlay {
@@ -157,4 +161,50 @@ body .xwd__clue--selected {
 
 [data-group="grid"] rect, [data-group="grid"] path {
     stroke: #161718;
+}
+
+.DirectLink-module_directLink__description__SPUgJ,
+.LinkGroup-module_linkGroup__header__e8tYm,
+body .ExpansionButton-module_ExpansionButton__lqTjh {
+    color: white;
+}
+
+.pz-icon-arrow-down, .pz-icon-arrow-up {
+    filter: invert(1);
+}
+
+.CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
+    background: #0f0f0f;
+}
+
+body .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
+body .CollapsibleLink-module_isexpanded__AGnRL, 
+body .DirectLink-module_directLink__kSggP:hover,
+body .pz-nav-drawer__link:hover {
+    background-color: #777777;
+}
+
+body .pz-nav-drawer__account {
+    border-top: 1px solid white;
+    background-color: #0f0f0f;
+    color: white;
+    margin-top: 0px;
+}
+
+body .pz-nav__button.gray:hover,
+body .pz-nav__button.white:hover {
+    background-color: #e4e4e4;
+    color: black;
+}
+
+body .mini__congrats-modal--content {
+    color: white;
+}
+
+body .xwd__modal--close:hover {
+    color: #959595;
+}
+
+.pz-icon-close {
+    filter: invert(1);
 }
