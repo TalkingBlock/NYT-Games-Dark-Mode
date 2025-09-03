@@ -1,0 +1,31 @@
+body {
+    min-width: 300px;
+    min-height: 300px;
+    font-family: Arial, sans-serif
+}
+
+button {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer
+}
+
+button:hover {
+    background-color: #cccccc;
+}
+
+.info {
+    text-align: center;
+    margin: 10px;;
+}
+
+.lineOne p, .lineTwo p {
+    font-weight: bold;
+    text-align: center;
+    padding: 3px;
+    display: inline-block;
+}
+

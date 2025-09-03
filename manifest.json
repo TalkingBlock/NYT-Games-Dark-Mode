@@ -1,7 +1,7 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Applies Dark Mode to all of the website NYT Games!",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab"],
   "action": {
@@ -17,11 +17,11 @@
       "https://www.nytimes.com/crosswords/game/mini/*",
       "https://www.nytimes.com/crosswords/game/daily/*"
       ],
-      "js": ["crossword.js"],
-      "css": ["crossword.css"]
+      "js": ["scripts/crossword.js"],
+      "css": ["stylesheets/crossword.css"]
     }, {
       "matches": ["https://www.nytimes.com/crosswords"],
-      "css": ["menu.css"]
+      "css": ["stylesheets/menu.css"]
     }
   ]
 }
