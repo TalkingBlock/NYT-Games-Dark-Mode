@@ -1,9 +1,16 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Applies Dark Mode to all of the website NYT Games!",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "48": "icons/nytdark48.png",
+    "128": "icons/nytdark128.png"
+  },
   "content_scripts": [
     {
       "matches": [
@@ -12,6 +19,9 @@
       ],
       "js": ["crossword.js"],
       "css": ["crossword.css"]
+    }, {
+      "matches": ["https://www.nytimes.com/crosswords"],
+      "css": ["menu.css"]
     }
   ]
 }
