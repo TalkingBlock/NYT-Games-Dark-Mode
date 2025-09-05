@@ -118,7 +118,7 @@ h2 {
   position: relative;
   display: inline-block;
   width: 36px;
-  height: 19px;
+  height: 20px;
 }
 
 .switch input {
@@ -145,22 +145,16 @@ h2 {
   height: 12px;
   width: 12px;
   left: 4px;
-  bottom: 3px;
-  background-color: white;
+  bottom: 4px;
+  background-color: #999999;
   transition: .3s;
   border-radius: 30%;
 }
 
-input:checked + .slider {
-  background-color: purple;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px purple;
-}
 
 input:checked + .slider:before {
   transform: translateX(16px);
+  background-color: limegreen;
 }
 
 .dark-mode {
@@ -173,4 +167,10 @@ input:checked + .slider:before {
 
 .misc {
   grid-area: misc;
+}
+
+.no-transition .slider,
+.no-transition .slider::before,
+.no-transition .slider:before {
+  transition: none !important;
 }
