@@ -1,12 +1,15 @@
-:root {
-  --box-stroke: linear-gradient(90deg,rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
-}
-
 body {
   width: 350px;
   height: 350px;
   font-family: Arial, sans-serif;
   padding: 10px;
+  background: 
+    radial-gradient(at top left, rgba(255, 183, 77, 0.65), transparent 70%),
+    radial-gradient(at top right, rgba(148, 31, 114, 0.75), transparent 70%),
+    radial-gradient(at bottom left, rgba(35, 114, 192, 0.75), transparent 70%),
+    radial-gradient(at bottom right, rgba(166, 77, 255, 0.75), transparent 70%),
+    #000000;
+  background-blend-mode: screen;
 }
 
 .header {
@@ -17,19 +20,18 @@ body {
   font-weight: bold;
 }
 
-.logo {
-  font-weight: bold;
-}
-
 h1 {
+  color: white;
   font-size: 16px;
   margin: 0;
 }
 
 h2 {
+  color: white;
   font-size: 14px;
   font-weight: bold;
-  margin: 5px 0;
+  margin: 5px;
+  text-align: center;
 }
 
 .content {
@@ -48,7 +50,8 @@ h2 {
 }
 
 .toggle-line p {
-  margin-left: 6px;
+  color: white;
+  margin-left: 10px;
   font-weight: bold;
 }
 
@@ -56,9 +59,7 @@ h2 {
   border: 3px solid transparent;
   border-radius: 12px;
   padding: 10px;
-  background: 
-    linear-gradient(white, white) padding-box,
-    var(--box-stroke) border-box;               
+  background: #00000080;          
   min-height: 130px;
 }
 
@@ -66,9 +67,7 @@ h2 {
   border: 3px solid transparent;
   border-radius: 12px;
   padding: 10px;
-  background: 
-    linear-gradient(white, white) padding-box,
-    var(--box-stroke) border-box; 
+  background: #00000080;   
   min-height: 120px;
 }
 
@@ -76,10 +75,12 @@ h2 {
   border: 3px solid transparent;
   border-radius: 12px;
   padding: 10px;
-  background: 
-    linear-gradient(white, white) padding-box,
-    var(--box-stroke) border-box; 
+  background: #00000080;   
   min-height: 42px;
+}
+
+.dark-mode-box p, .color-box p, .misc-box p {
+  color: white;
 }
 
 .scrollable {
@@ -93,20 +94,20 @@ h2 {
   width: 6px;
 }
 
-.scrollable::-webkit-scrollbar-thumb:hover {
-  background: #00000080;
+.scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: #ffffff40;
   border-radius: 10px;
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
   background-clip: padding-box;
 }
 
-.scrollable::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.scrollable::-webkit-scrollbar-thumb {
-  background: #00000040;
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #ffffff80;
   border-radius: 10px;
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
@@ -116,8 +117,8 @@ h2 {
 .switch {
   position: relative;
   display: inline-block;
-  width: 30px;
-  height: 17px;
+  width: 36px;
+  height: 19px;
 }
 
 .switch input {
@@ -133,21 +134,21 @@ h2 {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #cccccc;
+  background-color: #55555580;
   transition: .4s;
-  border-radius: 17px;
+  border-radius: 7px;
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 13px;
-  width: 13px;
-  left: 2px;
-  bottom: 2px;
+  height: 12px;
+  width: 12px;
+  left: 4px;
+  bottom: 3px;
   background-color: white;
-  transition: .4s;
-  border-radius: 50%;
+  transition: .3s;
+  border-radius: 30%;
 }
 
 input:checked + .slider {
@@ -159,7 +160,7 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  transform: translateX(13px);
+  transform: translateX(16px);
 }
 
 .dark-mode {
