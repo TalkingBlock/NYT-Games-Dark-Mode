@@ -48,7 +48,7 @@ body .ExpansionButton-module_ExpansionButton__lqTjh {
     filter: invert(1);
 }
 
-.CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
+.CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
     background: #0f0f0f;
 }
 
@@ -81,6 +81,54 @@ body .progress__playMoreLink:hover {
     background-color: #777777;
 }
 
-body .printTool:hover {
+body .thumb .printTool {
     background: #0f0f0f;
+}
+
+.print:hover {
+    filter: invert(1);
+}
+
+body .tab__tabGroup .tab__tab>.active {
+    background-color: #0f0f0f;
+    color: white;
+    border-color: #777777;
+}
+
+body .tab__tabGroup .tab__tab {
+    background-color: #222222;
+}
+
+body .tab__tabGroup .tab__tab:hover {
+    color: white;
+}
+
+.expandToRow {
+    background-color: #0f0f0f;
+}
+
+body .tab__tabGroup .tab__tabNav {
+    border: 1px solid #777777;
+    background-color: #0f0f0f;
+}
+
+body .hub-game-card {
+    border-color: #0f0f0f;
+}
+
+body .hub-game-card:hover.pips,
+body .hub-game-card:hover.strands,
+body .hub-game-card:hover.letter-boxed,
+body .hub-game-card:hover.tiles,
+body .hub-game-card:hover.sudoku {
+    border-right-color: #cccccc;
+    border-bottom-color:#cccccc;
+}
+body .hub-game-card__button {
+    border-color: #cccccc;
+}
+
+.featured .print:hover,
+.island .print:hover {
+    filter: invert(0);
 }

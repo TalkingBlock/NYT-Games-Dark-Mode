@@ -1,7 +1,7 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Applies Dark Mode to all of the website NYT Games!",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab", "storage"],
   "action": {

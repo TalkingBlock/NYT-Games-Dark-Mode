@@ -172,7 +172,7 @@ body .ExpansionButton-module_ExpansionButton__lqTjh {
     filter: invert(1);
 }
 
-.CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
+.CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
     background: #0f0f0f;
 }
 
