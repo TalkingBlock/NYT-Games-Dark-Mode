@@ -1,35 +1,34 @@
-document.addEventListener("DOMContentLoaded", () => {
-    document.body.classList.add("no-transition");
-    const checkboxes = Array.from(document.querySelectorAll(".darkmode-box input[type='checkbox']"));
-    const ids = checkboxes.map(cb => cb.id).filter(Boolean);
+function toggleMiniDarkMode() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {action: "enableMiniDarkMode"});
+        chrome.storage.sync.set({miniDarkModeEnabled: document.getElementById("mini-crossword").checked});
+    });
+}
 
-    function attachListeners() {
-        checkboxes.forEach(cb => {
-            cb.addEventListener("change", () => {
-                chrome.storage.local.set({ [cb.id]: cb.checked });
-            });
-        });
-    }
+function toggleCrosswordDarkMode() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {action: "enableCrosswordDarkMode"});
+        chrome.storage.sync.set({crosswordDarkModeEnabled: document.getElementById("the-crossword").checked});
+    });
+}
 
-    function finishInit() {
-        attachListeners();
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                document.body.classList.remove("no-transition");
-            });
-        });
-    }
+function toggleMenuDarkMode() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {action: "enableMenuDarkMode"});
+        chrome.storage.sync.set({menuDarkModeEnabled: document.getElementById("games-menu").checked});
+    });
+}
 
-    if (ids.length) {
-        chrome.storage.local.get(ids, (result) => {
-            checkboxes.forEach(cb => {
-                if (result.hasOwnProperty(cb.id)) {
-                    cb.checked = !!result[cb.id];
-                }
-            });
-            finishInit();
-        });
-    } else {
-        finishInit();
-    }
+document.addEventListener("DOMContentLoaded", function() {
+    var miniSlider = document.getElementById("mini-crossword");
+    var crosswordSlider = document.getElementById("the-crossword");
+    var menuSlider = document.getElementById("games-menu");
+    chrome.storage.sync.get(["miniDarkModeEnabled", "crosswordDarkModeEnabled", "menuDarkModeEnabled"], function(data) {
+        miniSlider.checked = data.miniDarkModeEnabled || false;
+        crosswordSlider.checked = data.crosswordDarkModeEnabled || false;
+        menuSlider.checked = data.menuDarkModeEnabled || false;
+    });
+    miniSlider.addEventListener("click", toggleMiniDarkMode);
+    crosswordSlider.addEventListener("click", toggleCrosswordDarkMode);
+    menuSlider.addEventListener("click", toggleMenuDarkMode);
 });
