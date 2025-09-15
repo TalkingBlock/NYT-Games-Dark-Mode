@@ -31,6 +31,10 @@ function enableMiniDarkMode() {
             background-color: white;
         }
 
+        body .pz-nav__hamburger:focus {
+            background-color: #777777;
+        }
+
         .xwd__layout_container {
             background: #0f0f0f;
         }
@@ -226,6 +230,22 @@ function enableMiniDarkMode() {
         .Icon-module_iconWrapper__ZfKPm:hover,
         [data-testid="icon-arrow"]:hover {
             background-color: transparent !important;
+        }
+
+        .pz-desktop .xwd__loading {
+            background-color: #0f0f0f;
+        }
+
+        body .xwd--loading-bar {
+            background-color: black;
+        }
+
+        body .xwd--loading-bar__fill {
+            background-color: white;
+        }
+
+        html .pz-page {
+            background-color: #0f0f0f;
         }
     `;
     const style = document.createElement("style");

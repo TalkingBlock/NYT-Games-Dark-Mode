@@ -27,6 +27,10 @@ function enableMenuDarkMode() {
             background-color: white;
         }
 
+        body .pz-nav__hamburger:focus {
+            background-color: #777777;
+        }
+
         body .pz-ad-box {
             background-color: #0f0f0f;
         }
@@ -79,6 +83,10 @@ function enableMenuDarkMode() {
             color: white;
         }
 
+        body .featured .date, body .island .date {
+            color: black;
+        }
+
         body .progress__playMoreLink:hover {
             background-color: #777777;
         }
@@ -119,13 +127,13 @@ function enableMenuDarkMode() {
         }
 
         body .hub-game-card:hover.pips,
-        body .hub-game-card:hover.strands,
         body .hub-game-card:hover.letter-boxed,
         body .hub-game-card:hover.tiles,
         body .hub-game-card:hover.sudoku {
             border-right-color: #cccccc;
             border-bottom-color:#cccccc;
         }
+
         body .hub-game-card__button {
             border-color: #cccccc;
         }
@@ -133,6 +141,10 @@ function enableMenuDarkMode() {
         .featured .print:hover,
         .island .print:hover {
             filter: invert(0);
+        }
+
+        .island.loadingDay {
+            background-color: #0f0f0f;
         }
     `;
     const style = document.createElement("style");
