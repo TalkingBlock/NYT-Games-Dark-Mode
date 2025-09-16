@@ -146,6 +146,50 @@ function enableMenuDarkMode() {
         .island.loadingDay {
             background-color: #0f0f0f;
         }
+
+        .moar-games-variant.hub-welcome, .accordion__drawerContent, .section__container {
+            background-color: #0f0f0f;
+        }
+
+        .moar-games-variant .hub-welcome__title {
+            color: white;
+        }
+
+        .alternate-card-phone.moar-games-variant {
+            background-color: #0f0f0f;
+            margin-bottom: 0px;
+            border-bottom: 12px solid #0f0f0f;
+        }
+
+        .accordion__drawerTitle {
+            color: white;
+            background-color: black;
+            border-top: 1px solid white;
+            border-bottom: 1px solid white;
+        }
+
+        .accordion__drawerTitle:active {
+            background: #777777;
+        }    
+
+        .hub-mobile-stats__container {
+            color: white;
+            background-color: #0f0f0f;
+        }
+
+        .hub-mobile-stats__time {
+            color: white;
+        }
+
+        body .alternate-card-phone.loading-card {
+            background-color: #0f0f0f;
+        }
+
+        @media (max-width: 767.98px) {
+            #hub-root {
+                background-color: #0f0f0f;
+            }
+        }
     `;
     const style = document.createElement("style");
     style.id = "menustyle";
