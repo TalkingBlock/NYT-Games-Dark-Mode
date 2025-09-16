@@ -262,6 +262,16 @@ function enableCrosswordDarkMode() {
         html .pz-page {
             background-color: #0f0f0f;
         }
+    
+        .xwd__start-modal--icon {
+            box-shadow: inset 0 0 0 3px white;
+            border-radius: 10px;
+        }
+
+        .xwd__print-modal--userOpacity {
+            border: 1px solid white;
+            opacity: 1;
+        }
     `;
     const style = document.createElement("style");
     style.id = "crosswordstyle";

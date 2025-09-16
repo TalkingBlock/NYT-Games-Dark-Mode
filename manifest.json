@@ -13,12 +13,17 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.nytimes.com/crosswords/game/mini/*"],
+      "matches": ["https://www.nytimes.com/crosswords/game/mini/*",
+                  "https://www.nytimes.com/crosswords/game/bonus/*"],
       "js": ["scripts/miniCrossword.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/crosswords/game/daily/*"],
       "js": ["scripts/theCrossword.js"],
+      "run_at": "document_start"
+    }, {
+      "matches": ["https://www.nytimes.com/crosswords/archive/*"],
+      "js": ["scripts/crosswordsArchive.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/crosswords"],

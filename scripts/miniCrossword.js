@@ -247,6 +247,11 @@ function enableMiniDarkMode() {
         html .pz-page {
             background-color: #0f0f0f;
         }
+
+        .xwd__start-modal--icon.mini {
+            border: 3px solid white;
+            border-radius: 10px;
+        }
     `;
     const style = document.createElement("style");
     style.id = "ministyle";

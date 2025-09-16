@@ -1,18 +1,9 @@
-function enableMenuDarkMode() {
-    const menuCSS = `
+function enableCrosswordsArchiveDarkMode() {
+    const crosswordsArchiveCSS = `
         /* Main Background: #0f0f0f */
-
-        .pz-row {
-            background: #0f0f0f;
-            color: white;
-        }
 
         #js-global-nav {
             background: #0f0f0f;
-        }
-
-        .pz-content {
-            background: #0f0f0f
         }
 
         .pz-nav__logo rect {
@@ -78,25 +69,8 @@ function enableMenuDarkMode() {
             color: black;
         }
 
-        .section__header, .progress__sectionHeader, .hub-section-header, 
-        body .progress__playMoreLink, .oneLiner, .date {
-            color: white;
-        }
-
-        body .featured .date, body .island .date {
-            color: black;
-        }
-
-        body .progress__playMoreLink:hover {
-            background-color: #777777;
-        }
-
-        body .thumb .printTool {
-            background: #0f0f0f;
-        }
-
-        .print:hover {
-            filter: invert(1);
+        .pz-game-screen {
+            background-color: #0f0f0f;
         }
 
         body .tab__tabGroup .tab__tab>.active {
@@ -119,107 +93,75 @@ function enableMenuDarkMode() {
 
         body .tab__tabGroup .tab__tabNav {
             border: 1px solid #777777;
+            background-color: #222222;
+        }
+
+        .archive_date-selector-container {
             background-color: #0f0f0f;
         }
 
-        body .hub-game-card {
-            border-color: #0f0f0f;
+        .archive_date-selector-container select {
+            color: white;
+            background: #0f0f0f;
         }
 
-        body .hub-game-card:hover.pips,
-        body .hub-game-card:hover.letter-boxed,
-        body .hub-game-card:hover.tiles,
-        body .hub-game-card:hover.sudoku {
-            border-right-color: #cccccc;
-            border-bottom-color:#cccccc;
+        .progressIconContent.puzzleProgress0,
+        .progressIconContent.miniProgress0 {
+            border: 1px solid white;
         }
 
-        body .hub-game-card__button {
-            border-color: #cccccc;
+        .calendar.puzzleInfo .date {
+            color: white;
         }
 
-        .featured .print:hover,
+        .calendar.puzzleInfo .printTool {
+            background-color: #0f0f0f;
+        }
+
+        .print:hover,
+        .cardRibbon.brandNew {
+            filter: invert(1);
+        }
+
         .island .print:hover {
             filter: invert(0);
         }
 
-        .island.loadingDay {
-            background-color: #0f0f0f;
-        }
-
-        .moar-games-variant.hub-welcome, .accordion__drawerContent, .section__container {
-            background-color: #0f0f0f;
-        }
-
-        .moar-games-variant .hub-welcome__title {
+        .archive_list-item .archive_title, .archive_list-item .archive_date, .archive_list-item 
+        .archive_author, .archive_list-item .archive_puzzle-actions, .archive_list-item .archive_title>a,
+        .archive_list-columns {
             color: white;
         }
 
-        .alternate-card-phone.moar-games-variant {
-            background-color: #0f0f0f;
-            margin-bottom: 0px;
-            border-bottom: 12px solid #0f0f0f;
-        }
-
-        .accordion__drawerTitle {
-            color: white;
-            background-color: black;
-            border-top: 1px solid white;
-            border-bottom: 1px solid white;
-        }
-
-        .accordion__drawerTitle:active {
-            background: #777777;
-        }    
-
-        .hub-mobile-stats__container {
-            color: white;
-            background-color: #0f0f0f;
-        }
-
-        .hub-mobile-stats__time {
-            color: white;
-        }
-
-        body .alternate-card-phone.loading-card {
-            background-color: #0f0f0f;
-        }
-
-        @media (max-width: 767.98px) {
-            #hub-root {
-                background-color: #0f0f0f;
-            }
-        }
-
-        .progressIconContent {
-            border: 1px solid white;
+        .archive_list-item .archive_puzzle-actions a:visited {
+            color: mediumpurple;
         }
     `;
     const style = document.createElement("style");
-    style.id = "menustyle";
-    style.innerText = menuCSS;
+    style.id = "crosswordsarchivestyle";
+    style.innerText = crosswordsArchiveCSS;
     document.head.appendChild(style);
 }
 
-function disableMenuDarkMode() {
-    const styleElement = document.getElementById("menustyle");
+function disableCrosswordsArchiveDarkMode() {
+    const styleElement = document.getElementById("crosswordsarchivestyle");
     if (styleElement) {
         styleElement.remove();
     }
 }
 
 chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableMenuDarkMode") {
-        if (document.getElementById("menustyle")) {
-            disableMenuDarkMode();
+    if (message.action == "enableCrosswordsArchiveDarkMode") {
+        if (document.getElementById("crosswordsarchivestyle")) {
+            disableCrosswordsArchiveDarkMode();
         } else {
-            enableMenuDarkMode();
+            enableCrosswordsArchiveDarkMode();
         }
     }
 });
 
-chrome.storage.sync.get("menuDarkModeEnabled", function(data) {
-    if (data.menuDarkModeEnabled) {
-        enableMenuDarkMode();
+chrome.storage.sync.get("crosswordsArchiveDarkModeEnabled", function(data) {
+    if (data.crosswordsArchiveDarkModeEnabled) {
+        enableCrosswordsArchiveDarkMode();
     }
 });
