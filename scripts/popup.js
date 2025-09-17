@@ -12,6 +12,13 @@ function toggleCrosswordDarkMode() {
     });
 }
 
+function toggleConnectionsDarkMode() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {action: "enableConnectionsDarkMode"});
+        chrome.storage.sync.set({connectionsDarkModeEnabled: document.getElementById("connections").checked});
+    });
+}
+
 function toggleCrosswordsArchiveDarkMode() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {action: "enableCrosswordsArchiveDarkMode"});
@@ -29,16 +36,71 @@ function toggleMenuDarkMode() {
 document.addEventListener("DOMContentLoaded", function() {
     var miniSlider = document.getElementById("mini-crossword");
     var crosswordSlider = document.getElementById("the-crossword");
+    var connectionsSlider = document.getElementById("connections");
     var crosswordsArchiveSlider = document.getElementById("archive-crosswords");
     var menuSlider = document.getElementById("games-menu");
-    chrome.storage.sync.get(["miniDarkModeEnabled", "crosswordDarkModeEnabled", "crosswordsArchiveDarkModeEnabled", "menuDarkModeEnabled"], function(data) {
-        miniSlider.checked = data.miniDarkModeEnabled || false;
-        crosswordSlider.checked = data.crosswordDarkModeEnabled || false;
-        crosswordsArchiveSlider.checked = data.crosswordsArchiveDarkModeEnabled || false;
-        menuSlider.checked = data.menuDarkModeEnabled || false;
-    });
+
+    function setupMainSlider(mainId, childIds) {
+        const main = document.getElementById(mainId);
+        const children = childIds.map(id => document.getElementById(id));
+
+        function updateChildren() {
+            const isEnabled = main.checked;
+            children.forEach(child => {
+                const wrapper = child.closest(".toggle-line");
+                if (isEnabled) {
+                    wrapper.classList.remove("disabled");
+                    child.disabled = false;
+                } else {
+                    wrapper.classList.add("disabled");
+                    child.disabled = true;
+                }
+            });
+            chrome.storage.sync.set({[mainId]: isEnabled});
+        }
+        main.addEventListener("change", updateChildren);
+        chrome.storage.sync.get(mainId, function(data) {
+            main.checked = data[mainId] || false;
+            updateChildren();
+        });
+    }
+
+    setupMainSlider("games-main", [
+        "mini-crossword",
+        "the-crossword",
+        "spelling-bee",
+        "pips",
+        "strands",
+        "connections",
+        "letter-boxed",
+        "tiles",
+        "sudoku"
+    ]);
+    setupMainSlider("archives-main", [
+        "archive-crosswords",
+        "archive-spelling-bee",
+        "archive-wordle",
+        "archive-strands",
+        "archive-connections"
+    ]);
+    setupMainSlider("misc-main", [
+        "games-menu",
+        "statistics"
+    ]);
+
+    chrome.storage.sync.get(
+        ["miniDarkModeEnabled", "crosswordDarkModeEnabled", "connectionsDarkModeEnabled", "crosswordsArchiveDarkModeEnabled", "menuDarkModeEnabled"],
+        function(data) {
+            miniSlider.checked = data.miniDarkModeEnabled || false;
+            crosswordSlider.checked = data.crosswordDarkModeEnabled || false;
+            connectionsSlider.checked = data.connectionsDarkModeEnabled || false;
+            crosswordsArchiveSlider.checked = data.crosswordsArchiveDarkModeEnabled || false;
+            menuSlider.checked = data.menuDarkModeEnabled || false;
+        }
+    );
     miniSlider.addEventListener("click", toggleMiniDarkMode);
     crosswordSlider.addEventListener("click", toggleCrosswordDarkMode);
+    connectionsSlider.addEventListener("click", toggleConnectionsDarkMode);
     crosswordsArchiveSlider.addEventListener("click", toggleCrosswordsArchiveDarkMode);
     menuSlider.addEventListener("click", toggleMenuDarkMode);
 });

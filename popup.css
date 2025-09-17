@@ -89,6 +89,11 @@ h2 {
   margin: 0;
 }
 
+.toggle-line.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
 .switch {
   position: relative;
   display: inline-block;
