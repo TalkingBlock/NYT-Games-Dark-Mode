@@ -69,8 +69,46 @@ function enableConnectionsDarkMode() {
             color: black;
         }
 
-        .pz-game-screen {
+        .pz-game-screen, .pz-game-field {
             background-color: #0f0f0f;
+        }
+
+        .pz-content {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Board-module_form__B5pmo h2 {
+            color: white;
+        }
+
+        .Mistakes-module_mistakesContent__nlijY {
+            color: white;
+        }
+
+        .Mistakes-module_bubble__nDlOh {
+            background-color: white;
+        }
+
+        .Card-module_label__U_Q2H, .ActionButton-module_button__IlhXt {
+            background-color: #dddddd;
+        }
+
+        .Icon-module_iconWrapper__ZfKPm path {
+            fill: white;
+        }
+
+        .ToolbarItem-module_toolbar_item__xrBr_ {
+            background-color: #0f0f0f;
+        }
+
+        .ToolbarItem-module_toolbar_item__xrBr_:hover {
+            background-color: #777777;
+        }
+
+        .ActionButton-module_button__IlhXt.ActionButton-module_filled__zUShw {
+            background-color: rgb(179, 167, 254);
+            color: black;
         }
     `;
     const style = document.createElement("style");
