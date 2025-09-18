@@ -180,6 +180,7 @@ function enableCrosswordDarkMode() {
 
         .CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
             background: #0f0f0f;
+            border-top: 1px solid white;
         }
 
         body .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
