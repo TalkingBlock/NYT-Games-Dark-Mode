@@ -1,3 +1,5 @@
+// Will eventually simplify this so its not copy pasted functions
+
 function toggleMiniDarkMode() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {action: "enableMiniDarkMode"});

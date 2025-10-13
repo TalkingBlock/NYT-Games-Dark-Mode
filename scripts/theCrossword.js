@@ -85,9 +85,17 @@ function enableCrosswordDarkMode() {
             background: white;
         }
 
+        .xwd__modal--button-container .pz-moment__button.secondary[aria-disabled="true"] {
+            opacity: 50%;
+            color: white;
+            background: black;
+            border: 1px solid white;
+        }
+
         .xwd__modal--button-container .pz-moment__button.secondary {
             color: white;
             background: black;
+            border: 1px solid white;
         }
 
         body .pz-ad-box {
@@ -162,6 +170,10 @@ function enableCrosswordDarkMode() {
 
         .xwd__clue--filled span {
             color: #959595;
+        }
+
+        .xwd__clue-list--title {
+            color: white;
         }
 
         [data-group="grid"] rect, [data-group="grid"] path {

@@ -137,6 +137,14 @@ function enableCrosswordsArchiveDarkMode() {
         .archive_list-item .archive_puzzle-actions a:visited {
             color: mediumpurple;
         }
+
+        .archive_calendar-item {
+            color: white;
+        }
+
+        .pz-page {
+            background: #0f0f0f;
+        }
     `;
     const style = document.createElement("style");
     style.id = "crosswordsarchivestyle";

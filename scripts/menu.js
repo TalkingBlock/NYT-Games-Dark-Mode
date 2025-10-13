@@ -195,6 +195,10 @@ function enableMenuDarkMode() {
         .progressIconContent {
             border: 1px solid white;
         }
+
+        .pz-page {
+            background: #0f0f0f;
+        }
     `;
     const style = document.createElement("style");
     style.id = "menustyle";
