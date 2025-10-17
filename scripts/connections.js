@@ -111,6 +111,66 @@ function enableConnectionsDarkMode() {
             background-color: rgb(179, 167, 254);
             color: black;
         }
+
+        @keyframes flyOut {
+            from {
+                opacity: 1;
+            }
+            to {
+				opacity: 1;
+            }
+        }
+
+		.xwd__modal--overlay, .xwd__modal--body {
+			background-color: #0f0f0f;
+		}
+
+		.Stat-module_stats__row__xnktL, .Stats-module_stats__Oq7rS {
+			border-color: white;
+		}
+
+		.TrophyItem-module_name__wbtJx {
+			color: white;
+		}
+
+		.xwd__modal--body .pz-icon,
+		.dark_inline_carrot__icon {
+			filter: invert(1);
+		}
+
+		.BadgeDetail-module_background__Y5IWc, 
+		.pz-moment__frame, .BadgeDetail-module_container__RKO_D {
+			background-color: #0f0f0f;
+		}
+
+		.BadgeDetail-module_background__Y5IWc path {
+			fill: #2c132f !important;
+		}
+
+		.BadgeDetail-module_layeredGridItem__sybv8 {
+			color: white;
+		}
+
+		.BadgeDetailCTAs-module_buttonContainer__Td8eU a.pz-moment__button.secondary.default {
+			color: white;
+			border: 1px solid white;
+		}
+
+		.BadgeDetail-module_helpCenterIcon__ZsJPD, .BadgeDetail-module_closeIcon__pPedP {
+			fill: white;
+		}
+
+		.Dropdown-module_dropdown__menuItem__FJHMg a,
+		.Dropdown-module_dropdown__menuItem__FJHMg button {
+			background-color: black;
+			color: white;
+		}
+
+		.Dropdown-module_dropdown__menuItem__FJHMg a:hover,
+		.Dropdown-module_dropdown__menuItem__FJHMg button:hover {
+			background-color: #777777
+		}
+
     `;
     const style = document.createElement("style");
     style.id = "connectionsstyle";
