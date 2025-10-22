@@ -286,6 +286,11 @@ function enableCrosswordDarkMode() {
             border: 1px solid white;
             opacity: 1;
         }
+
+        .xwd__editorial-content--subGameplayGrid .xwd__editorial-content--header a::after {
+            border-right: 2px solid white;
+            border-top: 2px solid white;
+        }
     `;
     const style = document.createElement("style");
     style.id = "crosswordstyle";
