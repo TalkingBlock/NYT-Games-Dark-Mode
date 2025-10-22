@@ -116,13 +116,8 @@ function enableConnectionsDarkMode() {
             color: black;
         }
 
-        @keyframes flyOut {
-            from {
-                opacity: 1;
-            }
-            to {
-				opacity: 1;
-            }
+        .pz-game-wrapper {
+            background-color: #0f0f0f !important;
         }
 
 		.xwd__modal--overlay, .xwd__modal--body {
