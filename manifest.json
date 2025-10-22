@@ -1,7 +1,7 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "A toggleable dark mode to all of the website NYT Games!",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab", "storage"],
   "action": {
@@ -22,7 +22,8 @@
       "js": ["scripts/theCrossword.js"],
       "run_at": "document_start"
     }, {
-      "matches": ["https://www.nytimes.com/games/connections/*"],
+      "matches": ["https://www.nytimes.com/games/connections",
+                  "https://www.nytimes.com/games/connections/20*"],
       "js": ["scripts/connections.js"],
       "run_at": "document_start"
     }, {
@@ -30,6 +31,10 @@
       "js": ["scripts/crosswordsArchive.js"],
       "run_at": "document_start"
     }, {
+      "matches": ["https://www.nytimes.com/games/connections/archive/*"],
+      "js": ["scripts/connectionsArchive.js"],
+      "run_at": "document_start"
+    }, { 
       "matches": ["https://www.nytimes.com/crosswords"],
       "js": ["scripts/menu.js"],
       "run_at": "document_start"

@@ -1,1 +1,2 @@
 A Chrome extension allowing for a dark mode appearance on the NYT Games website.
+Created by Mateo V :D

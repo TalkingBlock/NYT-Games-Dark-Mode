@@ -42,6 +42,7 @@ function enableCrosswordDarkMode() {
         body .xwd__modal--body {
             background-color: #0f0f0f;
             color: white;
+            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .1);
         }
 
         .xwd__modal--content {

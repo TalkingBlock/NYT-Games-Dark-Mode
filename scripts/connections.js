@@ -70,6 +70,10 @@ function enableConnectionsDarkMode() {
             color: black;
         }
 
+        html .pz-page {
+            background-color: #0f0f0f;
+        }
+
         .pz-game-screen, .pz-game-field {
             background-color: #0f0f0f;
         }
@@ -171,6 +175,49 @@ function enableConnectionsDarkMode() {
 			background-color: #777777
 		}
 
+        .pz-moment__congrats .pz-moment {
+            background-color: #0f0f0f !important;
+        }
+
+        .Congrats-module_modalTitle__QDY5W, .Stat-module_stats__row__xnktL, .css-adlkoi p, .css-sc2rbl p {
+            color: white;
+        }
+
+        .css-1jvmgpk {
+            border-bottom: 1px solid white;
+        }
+
+        body .css-1wqvipx {
+            color: black;
+            border: 1px solid white;
+            background: white;
+        }
+
+        body .css-1wqvipx:hover:enabled {
+            background: #777777;
+            color: white;
+        }
+
+        .pz-icon-close {
+            filter: invert(1);
+        }
+
+        .Toast-module_toast__YAoDa {
+            color: #0f0f0f;
+            background-color: white;
+        }
+        
+        .modal-rules-body.conn__modal--help {
+            background: #0f0f0f;
+        }
+
+        .HowToPlay-module_helpArrow__WMXx9 {
+            filter: invert(1);
+        }
+
+        .xwd__modal--body {
+            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .1);
+        }
     `;
     const style = document.createElement("style");
     style.id = "connectionsstyle";
