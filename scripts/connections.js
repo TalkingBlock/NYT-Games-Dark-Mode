@@ -174,7 +174,7 @@ function enableConnectionsDarkMode() {
             background-color: #0f0f0f !important;
         }
 
-        .Congrats-module_modalTitle__QDY5W, .Stat-module_stats__row__xnktL, .css-adlkoi p, .css-sc2rbl p {
+        .Congrats-module_modalTitle__QDY5W, .Stat-module_stats__row__xnktL, .css-adlkoi p, .css-sc2rbl p, body .css-1gd2pxv {
             color: white;
         }
 
@@ -182,13 +182,13 @@ function enableConnectionsDarkMode() {
             border-bottom: 1px solid white;
         }
 
-        body .css-1wqvipx {
+        body .css-1wqvipx, body .css-kkbic9, body .css-zoyaaz {
             color: black;
             border: 1px solid white;
             background: white;
         }
 
-        body .css-1wqvipx:hover:enabled {
+        body .css-1wqvipx:hover:enabled, body .css-kkbic9:hover:enabled, body .css-zoyaaz:hover:enabled {
             background: #777777;
             color: white;
         }
@@ -212,6 +212,10 @@ function enableConnectionsDarkMode() {
 
         .xwd__modal--body {
             box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .1);
+        }
+
+        .inner-text {
+            color: white;
         }
     `;
     const style = document.createElement("style");

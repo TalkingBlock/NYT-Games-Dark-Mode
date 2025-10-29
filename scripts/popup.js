@@ -21,6 +21,13 @@ function toggleConnectionsDarkMode() {
     });
 }
 
+function toggleSudokuDarkMode() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {action: "enableSudokuDarkMode"});
+        chrome.storage.sync.set({sudokuDarkModeEnabled: document.getElementById("sudoku").checked});
+    });
+}
+
 function toggleCrosswordsArchiveDarkMode() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, {action: "enableCrosswordsArchiveDarkMode"});
@@ -46,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var miniSlider = document.getElementById("mini-crossword");
     var crosswordSlider = document.getElementById("the-crossword");
     var connectionsSlider = document.getElementById("connections");
+    var sudokuSlider = document.getElementById("sudoku");
     var crosswordsArchiveSlider = document.getElementById("archive-crosswords");
     var connectionsArchiveSlider = document.getElementById("archive-connections");
     var menuSlider = document.getElementById("games-menu");
@@ -99,11 +107,14 @@ document.addEventListener("DOMContentLoaded", function() {
     ]);
 
     chrome.storage.sync.get(
-        ["miniDarkModeEnabled", "crosswordDarkModeEnabled", "connectionsDarkModeEnabled", "crosswordsArchiveDarkModeEnabled", "connectionsArchiveDarkModeEnabled", "menuDarkModeEnabled"],
+        ["miniDarkModeEnabled", "crosswordDarkModeEnabled", "connectionsDarkModeEnabled", "sudokuDarkModeEnabled", 
+         "crosswordsArchiveDarkModeEnabled", "connectionsArchiveDarkModeEnabled", 
+         "menuDarkModeEnabled"],
         function(data) {
             miniSlider.checked = data.miniDarkModeEnabled || false;
             crosswordSlider.checked = data.crosswordDarkModeEnabled || false;
             connectionsSlider.checked = data.connectionsDarkModeEnabled || false;
+            sudokuSlider.checked = data.sudokuDarkModeEnabled || false;
             crosswordsArchiveSlider.checked = data.crosswordsArchiveDarkModeEnabled || false;
             connectionsArchiveSlider.checked = data.connectionsArchiveDarkModeEnabled || false;
             menuSlider.checked = data.menuDarkModeEnabled || false;
@@ -112,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function() {
     miniSlider.addEventListener("click", toggleMiniDarkMode);
     crosswordSlider.addEventListener("click", toggleCrosswordDarkMode);
     connectionsSlider.addEventListener("click", toggleConnectionsDarkMode);
+    sudokuSlider.addEventListener("click", toggleSudokuDarkMode);
     crosswordsArchiveSlider.addEventListener("click", toggleCrosswordsArchiveDarkMode);
     connectionsArchiveSlider.addEventListener("click", toggleConnectionsArchiveDarkMode);
     menuSlider.addEventListener("click", toggleMenuDarkMode);
