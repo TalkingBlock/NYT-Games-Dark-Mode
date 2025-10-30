@@ -196,13 +196,35 @@ function enableSudokuDarkMode() {
             color: white;
         }
 
-        .css-1299j98 {
+        body .css-1299j98 {
             background: white;
             color: black;
         }
 
-        .css-1299j98:hover:enabled {
-            background: #777777;
+        body .css-1299j98:hover:enabled {
+            background: #e4e4e4;
+        }
+        
+        .confirmed .su-cell__value>path {
+            fill: #b5cdff;
+        }
+
+        .Dropdown-module_dropdown__menuItem__FJHMg a, .Dropdown-module_dropdown__menuItem__FJHMg button {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Dropdown-module_dropdown__menuItem__FJHMg button:hover {
+            background-color: #777777;
+        }
+
+        .pz-icon-close {
+            filter: invert(1);
+        }
+
+        .xwd__modal--body.modal-settings-body, .xwd__modal--body.modal-rules-body {
+            background: #0f0f0f;
+            color: white;
         }
     `;    
     const style = document.createElement("style");

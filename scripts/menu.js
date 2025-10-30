@@ -148,7 +148,7 @@ function enableMenuDarkMode() {
             background-color: #0f0f0f;
         }
 
-        .moar-games-variant.hub-welcome, .accordion__drawerContent, .section__container {
+        .accordion__drawerContent, .section__container {
             background-color: #0f0f0f;
         }
 
@@ -198,6 +198,26 @@ function enableMenuDarkMode() {
 
         .pz-page {
             background: #0f0f0f;
+        }
+
+        .hub-welcome {
+            background-color: #4d88f9;
+        }
+
+        .moar-games-variant .hub-game-card {
+            border: solid 1px #dcdcdc;
+        }
+
+        @media (min-width: 767.98px) {
+            .moar-games-variant .hub-our-games__content {
+                background-color: #4688f9;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .moar-games-variant.hub-welcome {
+                background-color: #0f0f0f;
+            }
         }
     `;
     const style = document.createElement("style");
