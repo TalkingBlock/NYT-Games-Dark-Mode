@@ -14,11 +14,12 @@
   "content_scripts": [
     {
       "matches": ["https://www.nytimes.com/crosswords/game/mini/*",
-                  "https://www.nytimes.com/crosswords/game/bonus/*"],
+                  "https://www.nytimes.com/crosswords/game/mini?utm_source=wordle&utm_medium=referral&utm_campaign=wordle_nav"],
       "js": ["scripts/miniCrossword.js"],
       "run_at": "document_start"
     }, {
-      "matches": ["https://www.nytimes.com/crosswords/game/daily/*"],
+      "matches": ["https://www.nytimes.com/crosswords/game/daily/*",
+                  "https://www.nytimes.com/crosswords/game/bonus/*"],
       "js": ["scripts/theCrossword.js"],
       "run_at": "document_start"
     }, {
