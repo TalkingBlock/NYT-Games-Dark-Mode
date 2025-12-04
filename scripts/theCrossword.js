@@ -291,6 +291,10 @@ function enableCrosswordDarkMode() {
             border-right: 2px solid white;
             border-top: 2px solid white;
         }
+
+        .xwd__cell--cell+circle {
+            filter: brightness(0) saturate(100%) invert(8%) sepia(1%) saturate(3049%) hue-rotate(166deg) brightness(94%) contrast(97%);
+        }
     `;
     const style = document.createElement("style");
     style.id = "crosswordstyle";

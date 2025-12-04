@@ -218,7 +218,7 @@ function enableSudokuDarkMode() {
             background-color: #777777;
         }
 
-        .pz-icon-close {
+        .pz-icon-close, .kebab-icon {
             filter: invert(1);
         }
 

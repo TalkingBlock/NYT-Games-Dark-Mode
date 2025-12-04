@@ -103,7 +103,8 @@ document.addEventListener("DOMContentLoaded", function() {
     ]);
     setupMainSlider("misc-main", [
         "games-menu",
-        "statistics"
+        "statistics",
+        "custom-wordle"
     ]);
 
     chrome.storage.sync.get(

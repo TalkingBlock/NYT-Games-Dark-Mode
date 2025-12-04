@@ -99,6 +99,10 @@ function enableMiniDarkMode() {
             border: 1px solid white;
         }
 
+        .pz-moment__button.primary:active {
+            background: #e4e4e4;
+        }
+    
         body .pz-ad-box {
             background-color: #0f0f0f;
         }
@@ -128,6 +132,10 @@ function enableMiniDarkMode() {
             fill: #161718;
         }
 
+        body .xwd__cell--shaded {
+            fill: #383840;
+        }
+
         body .xwd__cell--related {
             fill: #596d83;
         }
@@ -136,12 +144,20 @@ function enableMiniDarkMode() {
             fill: #483f80;
         }
 
+        .xwd__cell--highlighted.xwd__cell--shaded {
+            fill: #383361;
+        }
+
         body .xwd__cell--related.xwd__cell--highlighted {
             fill: #483f80;
         }
 
         body .xwd__cell--selected {
             fill: #4678aa;
+        }
+
+        .xwd__cell--selected.xwd__cell--shaded {
+            fill: #476e93;
         }
 
         body .xwd__cell--related.xwd__cell--highlighted.xwd__cell--selected {
@@ -265,6 +281,10 @@ function enableMiniDarkMode() {
         .xwd__start-modal--icon.mini {
             border: 3px solid white;
             border-radius: 10px;
+        }
+
+        .xwd__cell--cell+circle {
+            filter: brightness(0) saturate(100%) invert(8%) sepia(1%) saturate(3049%) hue-rotate(166deg) brightness(94%) contrast(97%);
         }
     `;
     const style = document.createElement("style");

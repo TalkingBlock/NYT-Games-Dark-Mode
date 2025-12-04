@@ -14,4 +14,5 @@ Follow these steps if you were given Beta access:
 
 ## Credits
 
-Created by Mateo V
+Created by Mateo V.
+Have questions/thoughts/feedback? Reach out to me at villmateo07@gmail.com.

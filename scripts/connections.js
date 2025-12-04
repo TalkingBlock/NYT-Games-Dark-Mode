@@ -217,6 +217,10 @@ function enableConnectionsDarkMode() {
         .inner-text {
             color: white;
         }
+
+        .ActionButton-module_button__IlhXt.ActionButton-module_filled__zUShw:disabled {
+            background-color: #5a594e
+        }
     `;
     const style = document.createElement("style");
     style.id = "connectionsstyle";
