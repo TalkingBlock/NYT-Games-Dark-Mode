@@ -1,16 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
     const toggles = {
-        "mini-crossword": {
-            storageKey: "miniDarkModeEnabled",
-            action: "enableMiniDarkMode"
-        },
         "the-crossword": {
             storageKey: "crosswordDarkModeEnabled",
             action: "enableCrosswordDarkMode"
         },
+        "mini-crossword": {
+            storageKey: "miniDarkModeEnabled",
+            action: "enableMiniDarkMode"
+        },
         "connections": {
             storageKey: "connectionsDarkModeEnabled",
             action: "enableConnectionsDarkMode"
+        },
+        "strands": {
+            storageKey: "strandsDarkModeEnabled",
+            action: "enableStrandsDarkMode"
         },
         "sudoku": {
             storageKey: "sudokuDarkModeEnabled",
@@ -23,6 +27,14 @@ document.addEventListener("DOMContentLoaded", function () {
         "archive-connections": {
             storageKey: "connectionsArchiveDarkModeEnabled",
             action: "enableConnectionsArchiveDarkMode"
+        },
+        "archive-wordle": {
+            storageKey: "wordleArchiveDarkModeEnabled",
+            action: "enableWordleArchiveDarkMode"
+        },
+        "archive-strands": {
+            storageKey: "strandsArchiveDarkModeEnabled",
+            action: "enableStrandsArchiveDarkMode"
         },
         "games-menu": {
             storageKey: "menuDarkModeEnabled",
@@ -66,26 +78,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     setupMainSlider("games-main", [
-        "mini-crossword",
         "the-crossword",
+        "mini-crossword",
+        "connections",
         "spelling-bee",
         "pips",
         "strands",
-        "connections",
         "letter-boxed",
         "tiles",
         "sudoku"
     ]);
     setupMainSlider("archives-main", [
         "archive-crosswords",
+        "archive-connections",
         "archive-spelling-bee",
         "archive-wordle",
-        "archive-strands",
-        "archive-connections"
+        "archive-strands"
     ]);
     setupMainSlider("misc-main", [
         "games-menu",
         "statistics",
-        "custom-wordle"
+        "custom-wordle",
+        "ta-connections"
     ]);
 });
