@@ -1,28 +1,49 @@
 document.addEventListener("DOMContentLoaded", function () {
     const toggles = {
-        "mini-crossword":        "enableMiniDarkMode",
-        "the-crossword":         "enableCrosswordDarkMode",
-        "connections":           "enableConnectionsDarkMode",
-        "sudoku":                "enableSudokuDarkMode",
-        "archive-crosswords":    "enableCrosswordsArchiveDarkMode",
-        "archive-connections":   "enableConnectionsArchiveDarkMode",
-        "games-menu":            "enableMenuDarkMode"
+        "mini-crossword": {
+            storageKey: "miniDarkModeEnabled",
+            action: "enableMiniDarkMode"
+        },
+        "the-crossword": {
+            storageKey: "crosswordDarkModeEnabled",
+            action: "enableCrosswordDarkMode"
+        },
+        "connections": {
+            storageKey: "connectionsDarkModeEnabled",
+            action: "enableConnectionsDarkMode"
+        },
+        "sudoku": {
+            storageKey: "sudokuDarkModeEnabled",
+            action: "enableSudokuDarkMode"
+        },
+        "archive-crosswords": {
+            storageKey: "crosswordsArchiveDarkModeEnabled",
+            action: "enableCrosswordsArchiveDarkMode"
+        },
+        "archive-connections": {
+            storageKey: "connectionsArchiveDarkModeEnabled",
+            action: "enableConnectionsArchiveDarkMode"
+        },
+        "games-menu": {
+            storageKey: "menuDarkModeEnabled",
+            action: "enableMenuDarkMode"
+        }
     };
 
-    function handleToggle(id, action) {
-        chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+    function handleToggle(id, storageKey, action) {
+        const enabled = document.getElementById(id).checked;
+        chrome.tabs.query({active: true, currentWindow: true}, tabs => {
             chrome.tabs.sendMessage(tabs[0].id, {action});
         });
-        const enabled = document.getElementById(id).checked;
-        chrome.storage.sync.set({[id + "Enabled"]: enabled});
+        chrome.storage.sync.set({[storageKey]: enabled});
     }
 
-    for (const [id, action] of Object.entries(toggles)) {
+    for (const [id, {storageKey, action}] of Object.entries(toggles)) {
         const toggleElement = document.getElementById(id);
-        chrome.storage.sync.get(id + "Enabled", data => {
-            toggleElement.checked = data[id + "Enabled"] || false;
+        chrome.storage.sync.get(storageKey, data => {
+            toggleElement.checked = data[storageKey] || false;
         });
-        toggleElement.addEventListener("click", () => handleToggle(id, action));
+        toggleElement.addEventListener("click", () => handleToggle(id, storageKey, action));
     }
 
     function setupMainSlider(mainId, childIds) {
