@@ -12,7 +12,18 @@ Follow these steps if you were given Beta access:
 5. Turn on the extension and pin it for accessibility purposes
 6. Test away :D
 
+## Notes
+
+Only the following is currently functional; the rest will be added as soon as I get them done.
+- Mini Crossword
+- The Crossword
+- Connections
+- Sudoku
+- Crosswords Archives
+- Connections Archives
+- Games Menu
+
 ## Credits
 
 Created by Mateo V.
-Have questions/thoughts/feedback? Reach out to me at villmateo07@gmail.com.
+Questions/thoughts/feedback? Reach out to me at villmateo07@gmail.com.
