@@ -219,6 +219,15 @@ function enableMenuDarkMode() {
                 background-color: #0f0f0f;
             }
         }
+
+        .hub-puzzle-group__more-link a {
+            color: black;
+            background: white;
+        }
+
+        .hub-puzzle-group__more-link:hover a {
+            background: #e4e4e4
+        }
     `;
     const style = document.createElement("style");
     style.id = "menustyle";

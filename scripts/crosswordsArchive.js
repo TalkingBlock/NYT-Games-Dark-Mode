@@ -145,6 +145,24 @@ function enableCrosswordsArchiveDarkMode() {
         .pz-page {
             background: #0f0f0f;
         }
+
+        .archive_overlay-gradient--mini-redesign {
+            background: linear-gradient(to bottom, rgba(15, 15, 15, 0.5) 0%, rgb(15, 15, 15) 100%);
+        }
+
+        .archive_overlay-body--mini-redesign {
+            background: #0f0f0f;
+            color: white;
+        }
+
+        .archive_subscribe-button--mini-redesign {
+            background-color: black;
+        }
+
+        .archive_subscribe-button--mini-redesign--login {
+            background-color: white;
+            color: black;
+        }
     `;
     const style = document.createElement("style");
     style.id = "crosswordsarchivestyle";

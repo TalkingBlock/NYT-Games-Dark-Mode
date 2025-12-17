@@ -295,6 +295,10 @@ function enableCrosswordDarkMode() {
         .xwd__cell--cell+circle {
             filter: brightness(0) saturate(100%) invert(8%) sepia(1%) saturate(3049%) hue-rotate(166deg) brightness(94%) contrast(97%);
         }
+
+        .pz-error__message h1, .pz-error__message p, .pz-error__link {
+            color: white;
+        }
     `;
     const style = document.createElement("style");
     style.id = "crosswordstyle";

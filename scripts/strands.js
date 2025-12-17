@@ -192,6 +192,27 @@ function enableStrandsDarkMode() {
         .pz-game-wrapper {
             background-color: #0f0f0f !important;
         }
+
+        .darkPage1Gif, .darkPage3Gif {
+            filter: invert(0.94);
+        }
+
+        .RegiWall-module_regiwall_abstract_stats_legacy__wB9dR {
+            filter: invert(1);
+        }
+
+        body .button-dark-mode-support {
+            background: white;
+            color: black;
+        }
+
+        body .button-dark-mode-support:hover:enabled {
+            background: #e4e4e4;
+        }
+
+        body .RegiWall-module_log_in_link__NlizD {
+            color: white;
+        }
     `;
     const style = document.createElement("style");
     style.id = "strandsstyle";

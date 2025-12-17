@@ -221,6 +221,23 @@ function enableConnectionsDarkMode() {
         .ActionButton-module_button__IlhXt.ActionButton-module_filled__zUShw:disabled {
             background-color: #5a594e
         }
+
+        .Stats-module_regiwall_stats_badges__yjE6J {
+            filter: invert(1);
+        }
+
+        body .button-dark-mode-support {
+            background: white;
+            color: black;
+        }
+
+        body .button-dark-mode-support:hover:enabled {
+            background: #e4e4e4;
+        }
+
+        body .RegiWall-module_log_in_link__NlizD {
+            color: white;
+        }
     `;
     const style = document.createElement("style");
     style.id = "connectionsstyle";

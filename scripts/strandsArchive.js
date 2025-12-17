@@ -96,6 +96,15 @@ function enableStrandsArchiveDarkMode() {
         .ArchiveLayout-module_helpCenterLink__ibGAv {
             color: white;
         }
+
+        .xwd__modal--wrapper .ArchiveModalPaywall-module_modalOverlay__zCxO6 {
+            background: linear-gradient(180deg, rgba(15, 15, 15, 0) 0%, rgba(15, 15, 15, 0) 40%, #0f0f0f 55%);
+        }
+
+        .ArchiveModalPaywall-module_modalBody__QbLIt h3, 
+        .ArchiveModalPaywall-module_modalBody__QbLIt p {
+            color: white;
+        }
     `;
     const style = document.createElement("style");
     style.id = "strandsarchivestyle";
