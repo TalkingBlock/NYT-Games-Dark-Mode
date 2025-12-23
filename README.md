@@ -15,15 +15,17 @@ Follow these steps if you were given Beta access:
 ## Notes
 
 Only the following is currently functional; the rest will be added as soon as I get them done.
-- Mini Crossword
 - The Crossword
+- Mini Crossword
 - Connections
+- Spelling Bee
+- Strands
 - Sudoku
-- Crosswords Archives
-- Connections Archives
+- All Archives
 - Games Menu
 
 ## Credits
 
 Created by Mateo V.
+
 Questions/thoughts/feedback? Reach out to me at villmateo07@gmail.com.

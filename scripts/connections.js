@@ -1,4 +1,5 @@
 function enableConnectionsDarkMode() {
+    const svgURL_Regiwall = chrome.runtime.getURL("svgs/connections-stats-regiwall.svg");
     const connectionsCSS = `
         /* Main Background: #0f0f0f */
 
@@ -223,7 +224,7 @@ function enableConnectionsDarkMode() {
         }
 
         .Stats-module_regiwall_stats_badges__yjE6J {
-            filter: invert(1);
+            background: url(${svgURL_Regiwall}) center no-repeat;
         }
 
         body .button-dark-mode-support {

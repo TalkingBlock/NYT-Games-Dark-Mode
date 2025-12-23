@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", function () {
             storageKey: "connectionsDarkModeEnabled",
             action: "enableConnectionsDarkMode"
         },
+        "spelling-bee": {
+            storageKey: "spellingBeeDarkModeEnabled",
+            action: "enableSpellingBeeDarkMode"
+        },
         "strands": {
             storageKey: "strandsDarkModeEnabled",
             action: "enableStrandsDarkMode"
@@ -27,6 +31,10 @@ document.addEventListener("DOMContentLoaded", function () {
         "archive-connections": {
             storageKey: "connectionsArchiveDarkModeEnabled",
             action: "enableConnectionsArchiveDarkMode"
+        },
+        "archive-spelling-bee": {
+            storageKey: "spellingBeeArchiveDarkModeEnabled",
+            action: "enableSpellingBeeArchiveDarkMode"
         },
         "archive-wordle": {
             storageKey: "wordleArchiveDarkModeEnabled",
