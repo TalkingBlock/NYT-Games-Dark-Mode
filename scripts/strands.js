@@ -1,4 +1,27 @@
+function replaceVideo(selector, newSource) {
+    const video = document.querySelector(selector);
+    if (!video) return;
+    const source = video.querySelector("source");
+    if (!source || source.dataset.replaced) return;
+    source.dataset.originalSource = source.src;
+    source.src = chrome.runtime.getURL(newSource);
+    source.dataset.replaced = "true";
+    video.load();
+}
+
+function restoreVideo(selector) {
+    const video = document.querySelector(selector);
+    if (!video) return;
+    const source = video.querySelector("source");
+    if (!source || !source.dataset.originalSource) return;
+    source.src = source.dataset.originalSource;
+    delete source.dataset.replaced;
+    delete source.dataset.originalSource;
+    video.load();
+}
+
 function enableStrandsDarkMode() {
+    const svgURL_Regiwall = chrome.runtime.getURL("svgs/strands-stats-regiwall.svg");
     const strandsCSS = `
         /* Main Background: #0f0f0f */
 
@@ -193,10 +216,6 @@ function enableStrandsDarkMode() {
             background-color: #0f0f0f !important;
         }
 
-        .darkPage1Gif, .darkPage3Gif {
-            filter: invert(0.94);
-        }
-
         .RegiWall-module_regiwall_abstract_stats_legacy__wB9dR {
             filter: invert(1);
         }
@@ -213,11 +232,79 @@ function enableStrandsDarkMode() {
         body .RegiWall-module_log_in_link__NlizD {
             color: white;
         }
+
+        .TrophyItem-module_name__wbtJx {
+            color: white;
+        }
+
+        .RegiWall-module_regiwall_abstract_stats__L6lxo {
+            background: url(${svgURL_Regiwall}) center no-repeat;
+        }
+
+        .feature-awareness .pz-icon-close {
+            filter: none;
+        }
+
+        .FeatureAwareness-module_ctaContainer__Q4Zve {
+            border: 1px solid #0f0f0f;
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .FeatureAwareness-module_cta__t36d0 {
+            background-color: white;
+            color: black;
+        }
+
+        .hint-module_lightbulb__YfeFm {
+            background: #0f0f0f;
+        }
+
+        .hint-module_lightbulb__YfeFm::before {
+            border: 2px solid #9f9f9f;
+        }
+
+        .hint-module_overlay___9ixH {
+            border: 2px solid white;
+            background-color: #0f0f0f;
+        }
+
+        .hint-module_overlay___9ixH>div {
+            border: none;
+        }
+
+        .BadgeDetail-module_background__Y5IWc, 
+		.pz-moment__frame, .BadgeDetail-module_container__RKO_D {
+			background-color: #0f0f0f;
+		}
+
+		.BadgeDetail-module_background__Y5IWc path {
+			fill: #005b6d !important;
+		}
+
+		.BadgeDetail-module_layeredGridItem__sybv8 {
+			color: white;
+		}
+
+		.BadgeDetailCTAs-module_buttonContainer__Td8eU a.pz-moment__button.secondary.default {
+			color: white;
+			border: 1px solid white;
+		}
+
+		.BadgeDetail-module_helpCenterIcon__ZsJPD, .BadgeDetail-module_closeIcon__pPedP {
+			fill: white;
+		}
     `;
     const style = document.createElement("style");
     style.id = "strandsstyle";
     style.innerText = strandsCSS;
     document.head.appendChild(style);
+
+    const observer = new MutationObserver(() => {
+        replaceVideo(".darkPage1Gif", "mp4s/FirstGIFH2P.mp4");
+        replaceVideo(".darkPage3Gif", "mp4s/ThirdGIFH2P.mp4");
+    });
+    observer.observe(document.body, {childList: true, subtree: true});
 }
 
 function disableStrandsDarkMode() {
@@ -225,6 +312,8 @@ function disableStrandsDarkMode() {
     if (styleElement) {
         styleElement.remove();
     }
+    restoreVideo(".darkPage1Gif");
+    restoreVideo(".darkPage3Gif");
 }
 
 chrome.runtime.onMessage.addListener(function(message) {

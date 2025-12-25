@@ -1,5 +1,6 @@
 function enableSpellingBeeDarkMode() {
     const svgURL_Genius = chrome.runtime.getURL("svgs/sb-stats-genius.svg");
+    const svgURL_Regiwall = chrome.runtime.getURL("svgs/spellingbee-stats-regiwall.svg");
     const spellingBeeCSS = `
         /* Main Background: #0f0f0f */
 
@@ -104,6 +105,10 @@ function enableSpellingBeeDarkMode() {
 
         .hive-action {
             color: white;
+        }
+
+        .hive-action.push-active {
+            background-color: #777777;
         }
 
         .hive-action__shuffle {
@@ -316,6 +321,41 @@ function enableSpellingBeeDarkMode() {
         .GamesCarouselStack-module_gamesStackOuter__hu4_1 {
             color: white;
         }
+
+        .StatsRegiWallBadges-module_regiwall_stats_badges__kDmYK {
+            background: url("${svgURL_Regiwall}") center no-repeat;
+        }
+
+        button.button-dark-mode-support {
+            background-color: white;
+            color: black;
+        }
+
+        button.button-dark-mode-support:hover:enabled {
+            background-color: #777777;
+        }
+
+        .BadgeDetail-module_background__Y5IWc, 
+		.pz-moment__frame, .BadgeDetail-module_container__RKO_D {
+			background-color: #0f0f0f;
+		}
+
+		.BadgeDetail-module_background__Y5IWc path {
+			fill: #a8872cff !important;
+		}
+
+		.BadgeDetail-module_layeredGridItem__sybv8 {
+			color: white;
+		}
+
+		.BadgeDetailCTAs-module_buttonContainer__Td8eU a.pz-moment__button.secondary.default {
+			color: white;
+			border: 1px solid white;
+		}
+
+		.BadgeDetail-module_helpCenterIcon__ZsJPD, .BadgeDetail-module_closeIcon__pPedP {
+			fill: white; 
+		}
     `;
     const style = document.createElement("style");
     style.id = "spellingbeestyle";
