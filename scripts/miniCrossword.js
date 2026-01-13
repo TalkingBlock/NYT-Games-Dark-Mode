@@ -286,6 +286,10 @@ function enableMiniDarkMode() {
         .xwd__cell--cell+circle {
             filter: brightness(0) saturate(100%) invert(8%) sepia(1%) saturate(3049%) hue-rotate(166deg) brightness(94%) contrast(97%);
         }
+
+        .xwd__share-modal_shareLink {
+            color: white;
+        }
     `;
     const style = document.createElement("style");
     style.id = "ministyle";

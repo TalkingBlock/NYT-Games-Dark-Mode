@@ -16,6 +16,10 @@ document.addEventListener("DOMContentLoaded", function () {
             storageKey: "spellingBeeDarkModeEnabled",
             action: "enableSpellingBeeDarkMode"
         },
+        "pips": {
+            storageKey: "pipsDarkModeEnabled",
+            action: "enablePipsDarkMode"
+        },
         "strands": {
             storageKey: "strandsDarkModeEnabled",
             action: "enableStrandsDarkMode"
@@ -47,6 +51,10 @@ document.addEventListener("DOMContentLoaded", function () {
         "games-menu": {
             storageKey: "menuDarkModeEnabled",
             action: "enableMenuDarkMode"
+        },
+        "crossword-stats": {
+            storageKey: "crosswordStatsDarkModeEnabled",
+            action: "enableCrosswordStatsDarkMode"
         }
     };
 
@@ -105,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ]);
     setupMainSlider("misc-main", [
         "games-menu",
-        "statistics",
+        "crossword-stats",
         "custom-wordle",
         "ta-connections"
     ]);

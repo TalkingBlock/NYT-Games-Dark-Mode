@@ -19,10 +19,12 @@ Only the following is currently functional; the rest will be added as soon as I 
 - Mini Crossword
 - Connections
 - Spelling Bee
+- Pips
 - Strands
 - Sudoku
 - All Archives
 - Games Menu
+- Statistics 
 
 ## Credits
 
