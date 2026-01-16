@@ -356,6 +356,16 @@ function enableSpellingBeeDarkMode() {
 		.BadgeDetail-module_helpCenterIcon__ZsJPD, .BadgeDetail-module_closeIcon__pPedP {
 			fill: white; 
 		}
+
+        .ModalFeatureAwareness-module_ctaContainer__NgOhq {
+            border: 1px solid #0f0f0f;
+            background-color: #0f0f0f;
+        }
+
+        .ModalFeatureAwareness-module_button__Le1Ab {
+            background-color: white;
+            color: black;
+        }
     `;
     const style = document.createElement("style");
     style.id = "spellingbeestyle";

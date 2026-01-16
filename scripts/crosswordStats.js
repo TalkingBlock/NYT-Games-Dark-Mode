@@ -101,13 +101,13 @@ function enableCrosswordStatsDarkMode() {
         }
     `;
     const style = document.createElement("style");
-    style.id = "crosswordStatsstyle";
+    style.id = "crosswordstatsstyle";
     style.innerText = crosswordStatsCSS;
     document.head.appendChild(style);
 }
 
 function disableCrosswordStatsDarkMode() {
-    const styleElement = document.getElementById("crosswordStatsstyle");
+    const styleElement = document.getElementById("crosswordstatsstyle");
     if (styleElement) {
         styleElement.remove();
     }
@@ -115,7 +115,7 @@ function disableCrosswordStatsDarkMode() {
 
 chrome.runtime.onMessage.addListener(function(message) {
     if (message.action == "enableCrosswordStatsDarkMode") {
-        if (document.getElementById("crosswordStatsstyle")) {
+        if (document.getElementById("crosswordstatsstyle")) {
             disableCrosswordStatsDarkMode();
         } else {
             enableCrosswordStatsDarkMode();

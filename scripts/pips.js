@@ -255,6 +255,16 @@ function enablePipsDarkMode() {
         .Help-module_pulseOrange__Etbhj {
             color: #d15609;
         }
+
+        button.button-dark-mode-support {
+            background: white;
+            color: black;
+        }
+
+        .Toastify__toast-theme--dark {
+            background: white;
+            color: black;
+        }
     `;
     const style = document.createElement("style");
     style.id = "pipsstyle";

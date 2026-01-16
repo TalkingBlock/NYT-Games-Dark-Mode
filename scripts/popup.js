@@ -55,6 +55,14 @@ document.addEventListener("DOMContentLoaded", function () {
         "crossword-stats": {
             storageKey: "crosswordStatsDarkModeEnabled",
             action: "enableCrosswordStatsDarkMode"
+        },
+        "custom-wordle": {
+            storageKey: "customWordleDarkModeEnabled",
+            action: "enableCustomWordleDarkMode"
+        },
+        "ta-connections": {
+            storageKey: "taConnectionsDarkModeEnabled",
+            action: "enableTAConnectionsDarkMode"
         }
     };
 

@@ -290,6 +290,18 @@ function enableMiniDarkMode() {
         .xwd__share-modal_shareLink {
             color: white;
         }
+
+        .pz-error__message p, .pz-error__message h1 {
+            color: white;
+        }
+
+        .xwd__settings-modal--form {
+            scrollbar-color: white #0f0f0f;
+        }
+
+        .xwd__clue-list--list {
+            scrollbar-color: #0f0f0f white;
+        }
     `;
     const style = document.createElement("style");
     style.id = "ministyle";

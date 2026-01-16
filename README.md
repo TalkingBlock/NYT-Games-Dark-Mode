@@ -14,17 +14,11 @@ Follow these steps if you were given Beta access:
 
 ## Notes
 
-Only the following is currently functional; the rest will be added as soon as I get them done.
-- The Crossword
-- Mini Crossword
-- Connections
-- Spelling Bee
-- Pips
-- Strands
-- Sudoku
-- All Archives
-- Games Menu
-- Statistics 
+Everything is currently functional EXCEPT the following:
+- Letter Boxed
+- Tiles
+
+The only known issue currently are that the mp4s/gifs don't retroactively change when the proper dark mode is enabled or disabled.
 
 ## Credits
 

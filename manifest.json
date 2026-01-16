@@ -1,7 +1,7 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Adds a toggleable dark mode to NYT Games :D",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab", "storage"],
   "action": {
@@ -76,11 +76,19 @@
       "matches": ["https://www.nytimes.com/puzzles/stats"],
       "js": ["scripts/crosswordStats.js"],
       "run_at": "document_start"
+    }, {
+      "matches": ["https://www.nytimes.com/games/create/wordle"],
+      "js": ["scripts/customWordle.js"],
+      "run_at": "document_start"
+    }, {
+      "matches": ["https://www.nytimes.com/athletic/connections-sports-edition/"],
+      "js": ["scripts/taConnections.js"],
+      "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["svgs/*", "mp4s/*"],
+      "resources": ["svgs/*", "mp4s/*", "imgs/*"],
       "matches": ["https://www.nytimes.com/*"]
     }
   ]

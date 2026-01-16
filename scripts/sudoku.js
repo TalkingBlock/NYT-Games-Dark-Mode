@@ -226,6 +226,10 @@ function enableSudokuDarkMode() {
             background: #0f0f0f;
             color: white;
         }
+
+        ._moment_1d9lu_8 {
+            background: #0f0f0f;
+        }
     `;    
     const style = document.createElement("style");
     style.id = "sudokustyle";
