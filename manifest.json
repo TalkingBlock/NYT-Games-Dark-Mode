@@ -1,7 +1,7 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Adds a toggleable dark mode to NYT Games :D",
-  "version": "0.5.5",
+  "version": "0.5.5.1",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab", "storage"],
   "action": {
@@ -73,7 +73,8 @@
       "js": ["scripts/menu.js"],
       "run_at": "document_start"
     }, {
-      "matches": ["https://www.nytimes.com/puzzles/stats"],
+      "matches": ["https://www.nytimes.com/puzzles/stats",
+                  "https://www.nytimes.com/puzzles/stats?login=smartlock&auth=login-smartlock"],
       "js": ["scripts/crosswordStats.js"],
       "run_at": "document_start"
     }, {

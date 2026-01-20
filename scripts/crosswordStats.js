@@ -1,8 +1,13 @@
 function enableCrosswordStatsDarkMode() {
+    const imgURL_UpsellStats = chrome.runtime.getURL("imgs/upsell_stats.png");
     const crosswordStatsCSS = `
-        /* Main Background: #0f0f0f */
+        /* Toolbar */
 
-        #js-global-nav {
+        html .pz-page {
+            background-color: #0f0f0f;
+        }
+
+        .pz-nav {
             background: #0f0f0f;
         }
 
@@ -14,25 +19,22 @@ function enableCrosswordStatsDarkMode() {
             fill: white;
         }
 
-        body .pz-nav__hamburger-inner, body .pz-nav__hamburger-inner::before, body .pz-nav__hamburger-inner::after {
+        .pz-nav__hamburger-inner, .pz-nav__hamburger-inner::before, .pz-nav__hamburger-inner::after {
             background-color: white;
         }
 
-        body .pz-nav__hamburger:focus {
+        .pz-nav__hamburger:focus {
             background-color: #777777;
         }
 
-        body .pz-ad-box {
-            background-color: #0f0f0f;
+        /* Main Sidebar */
+
+        .pz-nav-drawer {
+            scrollbar-color: #0f0f0f white;
         }
 
-        body .pz-footer {
+        .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
             background-color: #0f0f0f;
-            color: white;
-        }
-
-        body .Footer-module_legalLink__saQgH a {
-            color: white;
         }
 
         .DirectLink-module_directLink__description__SPUgJ,
@@ -41,45 +43,63 @@ function enableCrosswordStatsDarkMode() {
             color: white;
         }
 
-        .pz-icon-arrow-down, .pz-icon-arrow-up {
+        .pz-icon-arrow-up, .pz-icon-arrow-down {
             filter: invert(1);
         }
 
-        .CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
-            background: #0f0f0f;
-            border-top: 1px solid white;
-        }
-
-        body .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
-        body .CollapsibleLink-module_isexpanded__AGnRL, 
-        body .DirectLink-module_directLink__kSggP:hover,
-        body .pz-nav-drawer__link:hover {
+        .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
+        .CollapsibleLink-module_isexpanded__AGnRL, 
+        .DirectLink-module_directLink__kSggP:hover,
+        .pz-nav-drawer__link:hover {
             background-color: #777777;
         }
 
-        body .pz-nav-drawer__account {
-            border-top: 1px solid white;
+        .pz-nav-drawer__account {
             background-color: #0f0f0f;
-            color: white;
+            border-top: 1px solid white;
             margin-top: 0px;
         }
 
-        body .pz-nav__button.gray:hover,
-        body .pz-nav__button.white:hover {
+        .pz-nav__button {
+            background-color: white;
+            color: black;
+        }
+
+        .pz-nav__button.white {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .pz-nav__button:hover,
+        .pz-nav__button.white:hover {
             background-color: #e4e4e4;
             color: black;
         }
 
-        html .pz-page {
-            background-color: #0f0f0f;
-        }
+        /* Ads + Loading Bar + Footer */
 
-        #stats-overview, .stats-subheader {
-            color: white;
+        .pz-ad-box {
+            background-color: #0f0f0f;
         }
 
         .xwd--loading-bar__fill {
             background-color: white;
+        }
+
+        .pz-footer {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Footer-module_legalLink__saQgH a {
+            color: white;
+        }
+
+        /* Stats Page */
+
+        #stats-overview, .stats-subheader {
+            color: white;
         }
 
         .day-of-week {
@@ -98,6 +118,27 @@ function enableCrosswordStatsDarkMode() {
 
         #weekly-stats .single-day .no-stats {
             background: repeating-linear-gradient(-45deg, #000, #000 5px, #0f0f0f 5px, #0f0f0f 10px);
+        }
+
+        /* Not Logged In Page */
+
+        .overlay-container {
+            background-color: rgba(0, 0, 0, .8);
+            color: white;
+        }
+
+        .overlay-body {
+            background-color: #0f0f0f;
+            box-shadow: 0 0 20px 0 rgba(255, 255, 255, .1);
+        }
+
+        #stats-root .info-container p {
+            color: white;
+        }
+
+        .image-container {
+            background: url("${imgURL_UpsellStats}") no-repeat;
+            background-size: contain;
         }
     `;
     const style = document.createElement("style");

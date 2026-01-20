@@ -90,6 +90,13 @@ function enableCustomWordleDarkMode() {
             color: black;
         }
 
+        .Welcome-module_buttonContainer__pK1JE button.Welcome-module_secondary__AYpws, 
+        .Welcome-module_buttonContainer__pK1JE a.Welcome-module_secondary__AYpws {
+            background: black;
+            color: white;
+            border: 1px solid white
+        }
+
         #solutionWord-label, #displayName-label, #hint-label {
             color: white;
         }

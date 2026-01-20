@@ -1,4 +1,5 @@
 function enableTAConnectionsDarkMode() {
+    const imgURL_Stats = chrome.runtime.getURL("imgs/sports-connections-stats.png");
     const taConnectionsCSS = `
         /* Toolbar */
 
@@ -23,6 +24,7 @@ function enableTAConnectionsDarkMode() {
         .Nav_drawer__zUJBS {
             background-color: #0f0f0f;
             color: white;
+            scrollbar-color: white #0f0f0f;
         }
 
         .Nav_navItem__c5wKU {
@@ -117,12 +119,31 @@ function enableTAConnectionsDarkMode() {
             background-color: white;
         }
 
+        .Stats_anonGraphic__z2XCn img {
+            content: url("${imgURL_Stats}");
+        }
+
+        .Stats_createAccountButton__KG_FZ {
+            background-color: white;
+            color: black;
+        }
+
         /* Results Page */
 
-        .Congrats_backToPuzzle__aYmfn button, .Difficulty_difficultyContainer__LbXDB,
-        .Difficulty_difficultyPercent__qTzOL, .Difficulty_difficultyRate__9El7j,
-        .MostPopular_header-title__bGfW4, .MostPopular_item-title__YFcDz {
+        .FirstFoundCategoryStat_firstFoundTitleContainer__BTHlv p {
             color: white;
+        }
+
+        .FirstFoundCategoryStat_bordered__6GpVF {
+            border: 2px solid white !important;
+        }
+
+        .FirstFoundCategoryStat_categoryData__gjpCG>legend {
+            background: #0f0f0f;
+        }
+
+        .Congrats_createAccountButton__CaPkb {
+            border: 1px solid white;
         }
 
         .Congrats_actions__UTIPV button {
@@ -130,9 +151,15 @@ function enableTAConnectionsDarkMode() {
             background-color: white;
         }
 
+        .Congrats_backToPuzzle__aYmfn button, .Difficulty_difficultyContainer__LbXDB,
+        .Difficulty_difficultyPercent__qTzOL, .Difficulty_difficultyRate__9El7j,
+        .MostPopular_header-title__bGfW4, .MostPopular_item-title__YFcDz {
+            color: white;
+        }
+            
         .SponsorshipBottomBanner_bottomBanner__gDBu_ {
             box-shadow: 0 0 rgba(255, 255, 255, 0), 0 0 rgba(255, 255, 255, 0), 1px -3px 6px rgba(255, 255, 255, .15)
-        }        
+        }
     `;
     const style = document.createElement("style");
     style.id = "taconnectionsstyle";
