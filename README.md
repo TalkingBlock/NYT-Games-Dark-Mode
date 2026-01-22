@@ -14,11 +14,7 @@ Follow these steps if you were given Beta access:
 
 ## Notes
 
-Everything is currently functional EXCEPT the following:
-- Letter Boxed
-- Tiles
-
-The only known issue currently are that the mp4s/gifs don't retroactively change when the proper dark mode is enabled or disabled.
+The only known major issue is that the mp4s/gifs don't retroactively change when the proper dark mode is enabled or disabled.
 
 ## Credits
 

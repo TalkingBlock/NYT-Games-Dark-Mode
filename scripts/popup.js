@@ -24,6 +24,14 @@ document.addEventListener("DOMContentLoaded", function () {
             storageKey: "strandsDarkModeEnabled",
             action: "enableStrandsDarkMode"
         },
+        "letter-boxed": {
+            storageKey: "letterBoxedDarkModeEnabled",
+            action: "enableLetterBoxedDarkMode"
+        },
+        "tiles": {
+            storageKey: "tilesDarkModeEnabled",
+            action: "enableTilesDarkMode"
+        },
         "sudoku": {
             storageKey: "sudokuDarkModeEnabled",
             action: "enableSudokuDarkMode"

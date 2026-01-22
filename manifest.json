@@ -1,7 +1,7 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Adds a toggleable dark mode to NYT Games :D",
-  "version": "0.5.5.1",
+  "version": "0.6.0",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab", "storage"],
   "action": {
@@ -42,6 +42,14 @@
                   "https://www.nytimes.com/games/strands/20*",
                   "https://www.nytimes.com/games/strands?utm_source=wordle&utm_medium=referral&utm_campaign=wordle_nav"],
       "js": ["scripts/strands.js"],
+      "run_at": "document_start"
+    }, {
+      "matches": ["https://www.nytimes.com/puzzles/letter-boxed"],
+      "js": ["scripts/letterBoxed.js"],
+      "run_at": "document_start"
+    }, {
+      "matches": ["https://www.nytimes.com/puzzles/tiles"],
+      "js": ["scripts/tiles.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/puzzles/sudoku*"],

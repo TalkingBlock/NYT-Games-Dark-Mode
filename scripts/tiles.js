@@ -1,6 +1,5 @@
-function enableCrosswordStatsDarkMode() {
-    const imgURL_UpsellStats = chrome.runtime.getURL("imgs/upsell_stats.png");
-    const crosswordStatsCSS = `
+function enableTilesDarkMode() {
+    const tilesCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -91,7 +90,7 @@ function enableCrosswordStatsDarkMode() {
             color: black;
         }
 
-        /* Ads + Loading Bar + Footer */
+        /* Ads + Loading Bar + Footer + Title */
 
         .pz-ad-box {
             background-color: #0f0f0f;
@@ -110,76 +109,135 @@ function enableCrosswordStatsDarkMode() {
             color: white;
         }
 
-        /* Stats Page */
-
-        #stats-overview, .stats-subheader {
+        .pz-game-title {
             color: white;
         }
 
-        .day-of-week {
-            color: white;
-        }
+        /* Game Toolbar */
 
-        #weekly-stats .single-day.active {
-            box-shadow: 0 0 #0f0f0f, 0 0px #0f0f0f, -4px 0 4px 0px rgba(0, 0, 0, .6), 4px 0 4px 2px rgba(0, 0, 0, .6);
-        }
-
-        @media only screen and (min-width: 768px) {
-            #weekly-stats .single-day.active {
-                box-shadow: 0 0 #0f0f0f, 0 6px #0f0f0f, -4px 0 4px -2px rgba(0, 0, 0, .6), 4px 0 4px -2px rgba(0, 0, 0, .6);
-            }
-        }
-
-        #weekly-stats .single-day .no-stats {
-            background: repeating-linear-gradient(-45deg, #000, #000 5px, #0f0f0f 5px, #0f0f0f 10px);
-        }
-
-        /* Not Logged In Page */
-
-        .overlay-container {
-            background-color: rgba(0, 0, 0, .8);
-            color: white;
-        }
-
-        .overlay-body {
+        .ToolbarAdapter-module_toolbarContainer__Ni4KN, .Game-module_toolbarContainer__PB1iO {
             background-color: #0f0f0f;
-            box-shadow: 0 0 20px 0 rgba(255, 255, 255, .1);
         }
 
-        #stats-root .info-container p {
+        .ToolbarItem-module_toolbarColors__d6naZ, .ToolbarItem-module_toolbar_item__xrBr_ {
+            background-color: #0f0f0f;
             color: white;
         }
 
-        .image-container {
-            background: url("${imgURL_UpsellStats}") no-repeat;
-            background-size: contain;
+        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover, .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
+            background-color: #777777;
         }
+
+        [data-testid="icon-help"] path {
+            fill: white;
+        }
+
+        .Dropdown-module_dropdown__menuItem__FJHMg button, 
+        .Dropdown-module_dropdown__menuItem__FJHMg a, 
+        .Dropdown-module_dropdown__menuItem__FJHMg button {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Dropdown-module_toolbarColorsDesktop__ptWzT:hover, 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover, 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover {
+            background-color: #777777;
+        }
+
+        [data-testid="icon-arrow"] path {
+            fill: white;
+        }
+
+        /* Tileset and How to Play Popup */
+
+        .xwd__modal--overlay {
+            background-color: #00000060;
+        }
+
+        .xwd__modal--body {
+            background-color: #0f0f0f;
+            color: white;
+            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .5);
+        }
+
+        .tlz-palette-button {
+            color: white;
+            border: 1px solid #dddddd;
+        }
+
+        .tlz-palette-button.selected {
+            border: solid 2px white;
+        }
+
+        .pz-icon-close {
+            filter: invert(1);
+        }
+
+        .tlz-bob {
+            border: 1px solid white;
+        }
+
+        .tlz-bob.active {
+            background-color: white;
+        }
+
+        .tlz-palette-arrows {
+            filter: invert(1);
+        }
+
+        .pz-settings-icon path {
+            fill: white;
+        }
+
+        /* Congrats Popup */
+
+        .xwd__modal--body.modal-congrats-body {
+            background: #0f0f0f;
+            color: white;
+        }
+
+        body .css-1lxqcbc {
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+        }
+
+        body .css-1lxqcbc:hover {
+            color: black;
+            background-color: #777777;
+            border: 1px solid #777777;
+        }
+        
+        .css-1k8l6v3 hr {
+            border-top: 2px solid white;
+        } 
     `;
     const style = document.createElement("style");
-    style.id = "crosswordstatsstyle";
-    style.innerText = crosswordStatsCSS;
+    style.id = "tilesstyle";
+    style.innerText = tilesCSS;
     document.head.appendChild(style);
 }
 
-function disableCrosswordStatsDarkMode() {
-    const styleElement = document.getElementById("crosswordstatsstyle");
+function disableTilesDarkMode() {
+    const styleElement = document.getElementById("tilesstyle");
     if (styleElement) {
         styleElement.remove();
     }
 }
 
 chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableCrosswordStatsDarkMode") {
-        if (document.getElementById("crosswordstatsstyle")) {
-            disableCrosswordStatsDarkMode();
+    if (message.action == "enableTilesDarkMode") {
+        if (document.getElementById("tilesstyle")) {
+            disableTilesDarkMode();
         } else {
-            enableCrosswordStatsDarkMode();
+            enableTilesDarkMode();
         }
     }
 });
 
-chrome.storage.sync.get("crosswordStatsDarkModeEnabled", function(data) {
-    if (data.crosswordStatsDarkModeEnabled) {
-        enableCrosswordStatsDarkMode();
+chrome.storage.sync.get("tilesDarkModeEnabled", function(data) {
+    if (data.tilesDarkModeEnabled) {
+        enableTilesDarkMode();
     }
 });
