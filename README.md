@@ -14,7 +14,7 @@ Follow these steps if you were given Beta access:
 
 ## Notes
 
-The only known major issue is that the mp4s/gifs don't retroactively change when the proper dark mode is enabled or disabled.
+This is still in the BETA version! All things are subjected to change.
 
 ## Credits
 

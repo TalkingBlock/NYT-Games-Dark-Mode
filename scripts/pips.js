@@ -265,14 +265,26 @@ function enablePipsDarkMode() {
             background: white;
             color: black;
         }
+
+        .pz-nav__button.gray:hover {
+            background-color: #777777;
+            border: 1px solid #777777;
+        }
     `;
     const style = document.createElement("style");
     style.id = "pipsstyle";
     style.innerText = pipsCSS;
     document.head.appendChild(style);
 
-    const observer = new MutationObserver(() => {replaceVideo(".Help-module_howToPlayGif__S5Kic", "mp4s/h2p-gif-slowed.mp4");});
+    applyDarkModeVideoIfEnabled();
+    const observer = new MutationObserver(() => {applyDarkModeVideoIfEnabled();});
     observer.observe(document.body, {childList: true, subtree: true});
+    window.strandsObserver = observer;
+}
+
+function applyDarkModeVideoIfEnabled() {
+    if (document.getElementById("strandsstyle")) return;
+    replaceVideo(".Help-module_howToPlayGif__S5Kic", "mp4s/h2p-gif-slowed.mp4");
 }
 
 function disablePipsDarkMode() {
@@ -280,7 +292,12 @@ function disablePipsDarkMode() {
     if (styleElement) {
         styleElement.remove();
     }
+
     restoreVideo(".Help-module_howToPlayGif__S5Kic");
+    if (window.strandsObserver) {
+        window.strandsObserver.disconnect();
+        window.strandsObserver = null;
+    }
 }
 
 chrome.runtime.onMessage.addListener(function(message) {

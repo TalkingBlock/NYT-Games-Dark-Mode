@@ -216,8 +216,20 @@ function enableCrosswordDarkMode() {
             color: black;
         }
 
-        body .mini__congrats-modal--content {
+        .xwd__modal--body .xwd__congrats-modal {
             color: white;
+        }
+
+        .css-1t3yyr2 {
+            background: white;
+            color: black;
+            border: 1px solid white;
+        }
+        
+        .css-1t3yyr2.secondary {
+            background: black;
+            color: white;
+            border: 1px solid white;
         }
 
         body .xwd__modal--close:hover {

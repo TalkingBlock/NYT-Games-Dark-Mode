@@ -2,9 +2,13 @@ function enableCustomWordleDarkMode() {
     const imgURL_Hint1 = chrome.runtime.getURL("imgs/cywp-hint-1.png");
     const imgURL_Hint2 = chrome.runtime.getURL("imgs/cywp-hint-2.png");
     const customWordleCSS = `
-        /* Main Background: #0f0f0f */
+        /* Toolbar */
 
-        #js-global-nav {
+        html .pz-page {
+            background-color: #0f0f0f;
+        }
+
+        .pz-nav {
             background: #0f0f0f;
         }
 
@@ -16,72 +20,103 @@ function enableCustomWordleDarkMode() {
             fill: white;
         }
 
-        body .pz-nav__hamburger-inner, body .pz-nav__hamburger-inner::before, body .pz-nav__hamburger-inner::after {
+        .pz-nav__hamburger-inner, .pz-nav__hamburger-inner::before, .pz-nav__hamburger-inner::after {
             background-color: white;
         }
 
-        body .pz-nav__hamburger:focus {
+        .pz-nav__hamburger:focus {
             background-color: #777777;
         }
 
-        body .pz-ad-box {
-            background-color: #0f0f0f;
+        body .css-1igzjy9 {
+            background-color: white;
         }
 
-        body .pz-footer {
-            background-color: #0f0f0f;
-            color: white;
+        body .css-1igzjy9 a {
+            color: black;
         }
 
-        body .Footer-module_legalLink__saQgH a {
-            color: white;
+        body .css-1igzjy9:hover {
+            background-color: #777777;
+        }
+
+        /* Main Sidebar */
+
+        .pz-nav-drawer {
+            scrollbar-color: #0f0f0f white;
+        }
+
+        .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
+            background-color: #0f0f0f;
         }
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
-        body .ExpansionButton-module_ExpansionButton__lqTjh {
+        body .ExpansionButton-module_ExpansionButton__lqTjh,
+        .pz-nav-drawer__heading,
+        .pz-nav-drawer__account .pz-nav-drawer__link {
             color: white;
         }
 
-        .pz-icon-arrow-down, .pz-icon-arrow-up {
+        .pz-icon-arrow-up, .pz-icon-arrow-down {
             filter: invert(1);
         }
 
-        .CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
-            background: #0f0f0f;
-            border-top: 1px solid white;
-        }
-
-        body .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
-        body .CollapsibleLink-module_isexpanded__AGnRL, 
-        body .DirectLink-module_directLink__kSggP:hover,
-        body .pz-nav-drawer__link:hover {
+        .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
+        .CollapsibleLink-module_isexpanded__AGnRL, 
+        .DirectLink-module_directLink__kSggP:hover,
+        .pz-nav-drawer__link:hover {
             background-color: #777777;
         }
 
-        body .pz-nav-drawer__account {
-            border-top: 1px solid white;
+        .pz-nav-drawer__account {
             background-color: #0f0f0f;
-            color: white;
+            border-top: 1px solid white;
             margin-top: 0px;
         }
 
-        body .pz-nav__button.gray:hover,
-        body .pz-nav__button.white:hover {
+        .pz-nav__button {
+            background-color: white;
+            color: black;
+        }
+
+        .pz-nav__button.white {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .pz-nav__button:hover,
+        .pz-nav__button.white:hover {
             background-color: #e4e4e4;
             color: black;
         }
 
-        html .pz-page {
+        /* Ads + Loading Bar + Footer */
+
+        .pz-ad-box {
             background-color: #0f0f0f;
         }
+
+        .xwd--loading-bar__fill {
+            background-color: white;
+        }
+
+        .pz-footer {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Footer-module_legalLink__saQgH a {
+            color: white;
+        }
+
+        /* Starting Page */
 
         .Welcome-module_welcomeWrapper__Gv8Mi {
-            background-image: linear-gradient(to right, #333 1.5px, transparent 2.5px),linear-gradient(to bottom, #333 1.5px, transparent 2.5px);
+            background-image: linear-gradient(to right, #333 1.5px, transparent 2.5px),
+                              linear-gradient(to bottom, #333 1.5px, transparent 2.5px);
             background-color: #0f0f0f;
-        }
-
-        .Welcome-module_contentContainer___oG64 {
             color: white;
         }
 
@@ -94,51 +129,32 @@ function enableCustomWordleDarkMode() {
         .Welcome-module_buttonContainer__pK1JE a.Welcome-module_secondary__AYpws {
             background: black;
             color: white;
-            border: 1px solid white
+            border: 1px solid white;
         }
 
-        #solutionWord-label, #displayName-label, #hint-label {
-            color: white;
+        /* Create Wordle Toolbar */
+
+        .ToolbarItem-module_toolbar_item__xrBr_ {
+            background-color: #0f0f0f;
         }
 
-        .FormInput-module_inputField__inIfE {
-            border: 1px solid #5a5a5a;
-            background: #0f0f0f;
-            color: white;
-        }
-
-        .CreationForm-module_legalDisclaimer__yFK6d {
-            color: white;
-        }
-
-        .CreationForm-module_submitButton__jezRS:disabled {
-            background: #777777;
-            color: #ffffff50;
-        }
-
-        .ToolbarItem-module_toolbarColors__d6naZ, .ToolbarItem-module_toolbar_item__xrBr_ {
-            background: #0f0f0f;
-        }
-
-        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover, .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
-            background: #777777;
-        }
-
-        .Icon-module_iconWrapper__ZfKPm path {
+        .ToolbarItem-module_toolbar_item__xrBr_ path {
             fill: white;
+        }
+
+        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover, 
+        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
+            background-color: #777777;
         }
 
         .xwd__modal--overlay {
             background-color: #00000060;
         }
 
-        .modal-rules-body.cywp__modal--help, .cywp__modal--help.modal-stats-body {
-            background: #0f0f0f;
-            color: white;
-        }
+        /* Help Popup */
 
-        .Tile-module_tile__UWEHN[data-state=tbd] {
-            background-color: #0f0f0f;
+        .modal-rules-body.cywp__modal--help {
+            background: #0f0f0f;
             color: white;
         }
 
@@ -150,30 +166,67 @@ function enableCustomWordleDarkMode() {
             content: url("${imgURL_Hint2}");
         }
 
-        .pz-icon-close {
+        .xwd__modal--close .pz-icon {
             filter: invert(1);
         }
 
-        .create-wordle-end-body {
-            background: #0f0f0f;
+        .xwd__modal--body {
+            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .3);
+            scrollbar-color: white #0f0f0f;
+            background-color: #0f0f0f;
             color: white;
+        }
+
+        /* Create Wordle Page */
+
+        .CreationForm-module_formWrapper__xYext, .CreationForm-module_legalDisclaimer__yFK6d {
+            color: white;
+        }
+
+        .FormInput-module_inputField__inIfE {
+            border: 1px solid white;
+            color: white;
+            background-color: #0f0f0f;
+        }
+
+        .CreationForm-module_submitButton__jezRS:disabled {
+            background: #777777;
+            color: #ffffff50;
+        }
+
+        /* Wordle Created Page */ 
+        
+        .create-wordle-end-body {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .xwd__modal--close:hover {
+            color: #c9c9c9;
+        }
+
+        .End-module_endTile__GG9e1 {
+            border: 1.5px solid #6aaa64;
+        }
+
+        .End-module_shareButton__HNoMA {
+            background: white;
+            color: black;
+        }
+
+        .End-module_puzzleLink__k_CND {
+            background: black;
+            color: white;
+            border: 1px solid white;        
         }
 
         .End-module_feedbackLink__MlJcR {
             border-bottom: 1px solid white;
         }
 
-        .End-module_endTile__GG9e1 {
-            border: 1.5px solid #0f0f0f;
-        }
-
         .Toast-module_toast__iiVsN {
             background-color: white;
             color: black;
-        }
-
-        .xwd__modal--close:hover {
-            color: #777777;
         }
     `;
     const style = document.createElement("style");

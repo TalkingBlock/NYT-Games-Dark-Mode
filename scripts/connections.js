@@ -191,6 +191,11 @@ function enableConnectionsDarkMode() {
 
         body .css-1wqvipx:hover:enabled, body .css-kkbic9:hover:enabled, body .css-zoyaaz:hover:enabled {
             background: #777777;
+            border: 1px solid #777777;
+            color: white;
+        }
+
+        .css-14e81d0 h4 {
             color: white;
         }
 

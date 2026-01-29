@@ -90,6 +90,11 @@ function enableLetterBoxedDarkMode() {
             color: black;
         }
 
+        .pz-nav__button.gray:hover {
+            background-color: #777777;
+            border: 1px solid #777777;
+        }
+
         /* Ads + Loading Bar + Footer + Title */
 
         .pz-ad-box {

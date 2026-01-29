@@ -2,9 +2,13 @@ function enableSpellingBeeArchiveDarkMode() {
     const svgURL_Swirl = chrome.runtime.getURL("svgs/path-swirl.svg");
     const svgURL_Wavy = chrome.runtime.getURL("svgs/path-wavy.svg");
     const spellingBeeArchiveCSS = `
-        /* Main Background: #0f0f0f */
+        /* Toolbar */
 
-        #js-global-nav {
+        html .pz-page {
+            background-color: #0f0f0f;
+        }
+
+        .pz-nav {
             background: #0f0f0f;
         }
 
@@ -16,90 +20,130 @@ function enableSpellingBeeArchiveDarkMode() {
             fill: white;
         }
 
-        body .pz-nav__hamburger-inner, body .pz-nav__hamburger-inner::before, body .pz-nav__hamburger-inner::after {
+        .pz-nav__hamburger-inner, .pz-nav__hamburger-inner::before, .pz-nav__hamburger-inner::after {
             background-color: white;
         }
 
-        body .pz-nav__hamburger:focus {
+        .pz-nav__hamburger:focus {
             background-color: #777777;
         }
 
-        body .pz-ad-box {
-            background-color: #0f0f0f;
+        body .css-1igzjy9 {
+            background-color: white;
         }
 
-        body .pz-footer {
-            background-color: #0f0f0f;
-            color: white;
+        body .css-1igzjy9 a {
+            color: black;
         }
 
-        body .Footer-module_legalLink__saQgH a {
-            color: white;
+        body .css-1igzjy9:hover {
+            background-color: #777777;
+        }
+
+        /* Main Sidebar */
+
+        .pz-nav-drawer {
+            scrollbar-color: #0f0f0f white;
+        }
+
+        .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
+            background-color: #0f0f0f;
         }
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
-        body .ExpansionButton-module_ExpansionButton__lqTjh {
+        body .ExpansionButton-module_ExpansionButton__lqTjh,
+        .pz-nav-drawer__heading,
+        .pz-nav-drawer__account .pz-nav-drawer__link {
             color: white;
         }
 
-        .pz-icon-arrow-down, .pz-icon-arrow-up {
+        .pz-icon-arrow-up, .pz-icon-arrow-down {
             filter: invert(1);
         }
 
-        .CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
-            background: #0f0f0f;
-            border-top: 1px solid white;
-        }
-
-        body .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
-        body .CollapsibleLink-module_isexpanded__AGnRL, 
-        body .DirectLink-module_directLink__kSggP:hover,
-        body .pz-nav-drawer__link:hover {
+        .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
+        .CollapsibleLink-module_isexpanded__AGnRL, 
+        .DirectLink-module_directLink__kSggP:hover,
+        .pz-nav-drawer__link:hover {
             background-color: #777777;
         }
 
-        body .pz-nav-drawer__account {
-            border-top: 1px solid white;
+        .pz-nav-drawer__account {
             background-color: #0f0f0f;
-            color: white;
+            border-top: 1px solid white;
             margin-top: 0px;
         }
 
-        body .pz-nav__button.gray:hover,
-        body .pz-nav__button.white:hover {
+        .pz-nav__button {
+            background-color: white;
+            color: black;
+        }
+
+        .pz-nav__button.white {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .pz-nav__button:hover,
+        .pz-nav__button.white:hover {
             background-color: #e4e4e4;
             color: black;
         }
 
-        html .pz-page {
+        /* Ads + Loading Bar + Footer */
+
+        .pz-ad-box {
             background-color: #0f0f0f;
         }
 
-        .pz-row {
-            color: white;
-            background-color: #0f0f0f;
+        .xwd--loading-bar__fill {
+            background-color: white;
         }
 
-        .pz-game-field {
-            background: #0f0f0f;
+        .pz-footer {
+            background-color: #0f0f0f;
             color: white;
         }
+
+        .Footer-module_legalLink__saQgH a {
+            color: white;
+        }
+
+        /* Today's Puzzle Section */
 
         .Layout-module_outerWrapper__kO4JV {
             background-image: url("${svgURL_Swirl}"), url("${svgURL_Wavy}"),
-                              linear-gradient(to bottom, #121212 377px, #0f0f0f 377px);
+                              linear-gradient(to bottom, #0f0f0f 377px, #151515 377px);
         }
 
-        .TodayHero-module_todaysPuzzle__SWZ4c,
-        .PastPuzzlesSections-module_pastPuzzlesHeaderContainer__Vrv7H,
-        .PastPuzzlesSections-module_weekHeaderSection__BKBJM {
+        @media (max-width: 991.98px) {
+            .Layout-module_outerWrapper__kO4JV {
+                background-image: url("${svgURL_Swirl}"), url("${svgURL_Wavy}"),
+                                  linear-gradient(to bottom, #0f0f0f 332px, #151515 332px);
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .Layout-module_outerWrapper__kO4JV {
+                background-image: none, none, linear-gradient(to bottom, #0f0f0f 306px, #151515 306px);
+            }
+        }
+
+        /* Rest of Page */
+
+        .Layout-module_outerWrapper__kO4JV .Layout-module_innerWrapper__J9ldt {
             color: white;
         }
 
-        .PastPuzzlesSections-module_pastPuzzlesContent__KwLBJ
+        .PastPuzzlesSections-module_pastPuzzlesContent__KwLBJ 
         .PastPuzzlesSections-module_weekSectionContainer__LNvJi {
             border-top: 2px solid white;
+        }
+
+        .HeroCard-module_heroCard___sPDU {
+            color: black;
         }
     `;
     const style = document.createElement("style");

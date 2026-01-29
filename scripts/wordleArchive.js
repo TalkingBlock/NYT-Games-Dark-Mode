@@ -1,8 +1,13 @@
 function enableWordleArchiveDarkMode() {
+    const svgURL_DateArrow = chrome.runtime.getURL("svgs/date-picker-arrow.svg");
     const wordleArchiveCSS = `
-        /* Main Background: #0f0f0f */
+        /* Toolbar */
 
-        #js-global-nav {
+        html .pz-page {
+            background-color: #0f0f0f;
+        }
+
+        .pz-nav {
             background: #0f0f0f;
         }
 
@@ -14,88 +19,138 @@ function enableWordleArchiveDarkMode() {
             fill: white;
         }
 
-        body .pz-nav__hamburger-inner, body .pz-nav__hamburger-inner::before, body .pz-nav__hamburger-inner::after {
+        .pz-nav__hamburger-inner, .pz-nav__hamburger-inner::before, .pz-nav__hamburger-inner::after {
             background-color: white;
         }
 
-        body .pz-nav__hamburger:focus {
+        .pz-nav__hamburger:focus {
             background-color: #777777;
         }
 
-        body .pz-ad-box {
-            background-color: #0f0f0f;
+        body .css-1igzjy9 {
+            background-color: white;
         }
 
-        body .pz-footer {
-            background-color: #0f0f0f;
-            color: white;
+        body .css-1igzjy9 a {
+            color: black;
         }
 
-        body .Footer-module_legalLink__saQgH a {
-            color: white;
+        body .css-1igzjy9:hover {
+            background-color: #777777;
+        }
+
+        /* Main Sidebar */
+
+        .pz-nav-drawer {
+            scrollbar-color: #0f0f0f white;
+        }
+
+        .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
+            background-color: #0f0f0f;
         }
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
-        body .ExpansionButton-module_ExpansionButton__lqTjh {
+        body .ExpansionButton-module_ExpansionButton__lqTjh,
+        .pz-nav-drawer__heading,
+        .pz-nav-drawer__account .pz-nav-drawer__link {
             color: white;
         }
 
-        .pz-icon-arrow-down, .pz-icon-arrow-up {
+        .pz-icon-arrow-up, .pz-icon-arrow-down {
             filter: invert(1);
         }
 
-        .CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
-            background: #0f0f0f;
-            border-top: 1px solid white;
-        }
-
-        body .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
-        body .CollapsibleLink-module_isexpanded__AGnRL, 
-        body .DirectLink-module_directLink__kSggP:hover,
-        body .pz-nav-drawer__link:hover {
+        .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
+        .CollapsibleLink-module_isexpanded__AGnRL, 
+        .DirectLink-module_directLink__kSggP:hover,
+        .pz-nav-drawer__link:hover {
             background-color: #777777;
         }
 
-        body .pz-nav-drawer__account {
-            border-top: 1px solid white;
+        .pz-nav-drawer__account {
             background-color: #0f0f0f;
-            color: white;
+            border-top: 1px solid white;
             margin-top: 0px;
         }
 
-        body .pz-nav__button.gray:hover,
-        body .pz-nav__button.white:hover {
+        .pz-nav__button {
+            background-color: white;
+            color: black;
+        }
+
+        .pz-nav__button.white {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .pz-nav__button:hover,
+        .pz-nav__button.white:hover {
             background-color: #e4e4e4;
             color: black;
         }
 
-        html .pz-page {
+        /* Ads + Loading Bar + Footer */
+
+        .pz-ad-box {
             background-color: #0f0f0f;
         }
 
-        .Header-module_archiveHeader__rjL9u {
-            border-bottom: 1px solid white;
+        .xwd--loading-bar__fill {
+            background-color: white;
+        }
+
+        .pz-footer {
             background-color: #0f0f0f;
             color: white;
         }
 
-        .ArchiveLayout-module_wrapper__agJhw {
-            background-color: #0f0f0f;
+        .Footer-module_legalLink__saQgH a {
+            color: white;
         }
 
-        .ArchiveCalendarItem-module_dateContainer__Op4ma {
+        /* Calendar Page */
+
+        .Header-module_archiveHeader__rjL9u {
+            color: white;
+            border-bottom: 1px solid white;
+        }
+
+        .ArchiveLayout-module_wrapper__agJhw {
+            background-color: #0f0f0f;
             color: white;
         }
 
         .ArchiveCalendarGrid-module_daysOfWeekContainer__LjX8P {
             border-bottom: 1px solid white;
-            color: white;
         }
 
-        .ArchiveLayout-module_helpCenterLink__ibGAv {
-            color: white;
+        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH {
+            border: 1px solid white;
+            background: #0f0f0f;
         }
+
+        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH:disabled {
+            border: 1px solid #777777;
+        }
+
+        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH path {
+            fill: white;
+        }
+
+        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH:disabled path {
+            fill: #777777;
+        }
+
+        select.ArchiveDatePicker-module_dropDownSelect__BqLa6 {
+            border: 1px solid white;
+            color: white;
+            background: url("${svgURL_DateArrow}") no-repeat #0f0f0f;
+            background-position: calc(100% - .75rem) center
+        }
+
+        /* Not Logged In Popup */
 
         .xwd__modal--wrapper .ArchiveModalPaywall-module_modalOverlay__zCxO6 {
             background: linear-gradient(180deg, rgba(15, 15, 15, 0) 0%, rgba(15, 15, 15, 0) 40%, #0f0f0f 55%);

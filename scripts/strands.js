@@ -294,26 +294,47 @@ function enableStrandsDarkMode() {
 		.BadgeDetail-module_helpCenterIcon__ZsJPD, .BadgeDetail-module_closeIcon__pPedP {
 			fill: white;
 		}
+
+        .pz-moment__close_text .inner-text {
+            color: white;
+        }
+
+        .BadgeCarousel-module_badgeHeader__H_g5M h3 {
+            color: white;
+        }
     `;
     const style = document.createElement("style");
     style.id = "strandsstyle";
     style.innerText = strandsCSS;
     document.head.appendChild(style);
 
+    applyDarkModeVideosIfEnabled();
     const observer = new MutationObserver(() => {
-        replaceVideo(".darkPage1Gif", "mp4s/FirstGIFH2P.mp4");
-        replaceVideo(".darkPage3Gif", "mp4s/ThirdGIFH2P.mp4");
+        applyDarkModeVideosIfEnabled();
     });
     observer.observe(document.body, {childList: true, subtree: true});
+    window.strandsObserver = observer;
 }
+
+function applyDarkModeVideosIfEnabled() {
+    if (!document.getElementById("strandsstyle")) return;
+    replaceVideo(".darkPage1Gif", "mp4s/FirstGIFH2P.mp4");
+    replaceVideo(".darkPage3Gif", "mp4s/ThirdGIFH2P.mp4");
+}
+
 
 function disableStrandsDarkMode() {
     const styleElement = document.getElementById("strandsstyle");
     if (styleElement) {
         styleElement.remove();
     }
+
     restoreVideo(".darkPage1Gif");
     restoreVideo(".darkPage3Gif");
+    if (window.strandsObserver) {
+        window.strandsObserver.disconnect();
+        window.strandsObserver = null;
+    }
 }
 
 chrome.runtime.onMessage.addListener(function(message) {

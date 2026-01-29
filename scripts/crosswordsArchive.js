@@ -1,8 +1,13 @@
 function enableCrosswordsArchiveDarkMode() {
+    const svgURL_Arrow = chrome.runtime.getURL("svgs/arrow.svg");
     const crosswordsArchiveCSS = `
-        /* Main Background: #0f0f0f */
+        /* Toolbar */
 
-        #js-global-nav {
+        html .pz-page {
+            background-color: #0f0f0f;
+        }
+
+        .pz-nav {
             background: #0f0f0f;
         }
 
@@ -14,154 +19,247 @@ function enableCrosswordsArchiveDarkMode() {
             fill: white;
         }
 
-        body .pz-nav__hamburger-inner, body .pz-nav__hamburger-inner::before, body .pz-nav__hamburger-inner::after {
+        .pz-nav__hamburger-inner, .pz-nav__hamburger-inner::before, .pz-nav__hamburger-inner::after {
             background-color: white;
         }
 
-        body .pz-nav__hamburger:focus {
+        .pz-nav__hamburger:focus {
             background-color: #777777;
         }
 
-        body .pz-ad-box {
-            background-color: #0f0f0f;
+        body .css-1igzjy9 {
+            background-color: white;
         }
 
-        body .pz-footer {
-            background-color: #0f0f0f;
-            color: white;
+        body .css-1igzjy9 a {
+            color: black;
         }
 
-        body .Footer-module_legalLink__saQgH a {
-            color: white;
+        body .css-1igzjy9:hover {
+            background-color: #777777;
+        }
+
+        /* Main Sidebar */
+
+        .pz-nav-drawer {
+            scrollbar-color: #0f0f0f white;
+        }
+
+        .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
+            background-color: #0f0f0f;
         }
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
-        body .ExpansionButton-module_ExpansionButton__lqTjh {
+        body .ExpansionButton-module_ExpansionButton__lqTjh,
+        .pz-nav-drawer__heading,
+        .pz-nav-drawer__account .pz-nav-drawer__link {
             color: white;
         }
 
-        .pz-icon-arrow-down, .pz-icon-arrow-up {
+        .pz-icon-arrow-up, .pz-icon-arrow-down {
             filter: invert(1);
         }
 
-        .CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
-            background: #0f0f0f;
-            border-top: 1px solid white;
-        }
-
-        body .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
-        body .CollapsibleLink-module_isexpanded__AGnRL, 
-        body .DirectLink-module_directLink__kSggP:hover,
-        body .pz-nav-drawer__link:hover {
+        .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
+        .CollapsibleLink-module_isexpanded__AGnRL, 
+        .DirectLink-module_directLink__kSggP:hover,
+        .pz-nav-drawer__link:hover {
             background-color: #777777;
         }
 
-        body .pz-nav-drawer__account {
-            border-top: 1px solid white;
+        .pz-nav-drawer__account {
             background-color: #0f0f0f;
-            color: white;
+            border-top: 1px solid white;
             margin-top: 0px;
         }
 
-        body .pz-nav__button.gray:hover,
-        body .pz-nav__button.white:hover {
+        .pz-nav__button {
+            background-color: white;
+            color: black;
+        }
+
+        .pz-nav__button.white {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .pz-nav__button:hover,
+        .pz-nav__button.white:hover {
             background-color: #e4e4e4;
             color: black;
         }
 
-        .pz-game-screen {
+        /* Ads + Loading Bar + Footer */
+
+        .pz-ad-box {
             background-color: #0f0f0f;
         }
 
-        body .tab__tabGroup .tab__tab>.active {
+        .xwd--loading-bar__fill {
+            background-color: white;
+        }
+
+        .pz-footer {
             background-color: #0f0f0f;
-            color: white;
-            border-color: #777777;
-        }
-
-        body .tab__tabGroup .tab__tab {
-            background-color: #222222;
-        }
-
-        body .tab__tabGroup .tab__tab:hover {
             color: white;
         }
 
-        .expandToRow {
-            background-color: #0f0f0f;
+        .Footer-module_legalLink__saQgH a {
+            color: white;
         }
 
-        body .tab__tabGroup .tab__tabNav {
-            border: 1px solid #777777;
-            background-color: #222222;
-        }
+        /* Calendar Toolbar */
 
         .archive_date-selector-container {
             background-color: #0f0f0f;
         }
 
-        .archive_date-selector-container select {
+        .tab__tabGroup .tab__tab>.active {
+            border: 1px solid #777777;
             color: white;
-            background: #0f0f0f;
+            background-color: #0f0f0f;
+            border-bottom: none;
         }
+
+        .tab__tabGroup .tab__tab {
+            color: #777777;
+            background: #222222;
+        }
+
+        .tab__tabGroup .tab__tab:hover {
+            color: white;
+        }
+
+        .tab__tabGroup .tab__tabNav {
+            background-color: #0f0f0f;
+            border: 1px solid #777777;
+        }
+
+        /* Calendar Buttons + Text */
+
+        .archive_viewer button {
+            background-color: #0f0f0f;
+            border: 1px solid white;
+            color: white;
+        }
+
+        .archive_viewer button.archive_next:hover, 
+        .archive_viewer button.archive_prev:hover, 
+        .archive_viewer button.archive_today:hover,
+        .archive_viewer button.archive_next:disabled:hover,
+        .archive_viewer button.archive_today:disabled:hover {
+            background-color: #777777;
+        }
+
+        .archive_viewer button.archive_next {
+            background-image: url("${svgURL_Arrow}");
+        }
+
+        .archive_viewer button.archive_prev {
+            background-image: url("${svgURL_Arrow}");
+            transform: scale(-1, 1);
+        }
+
+        .archive_date-selector-container select {
+            background-color: #0f0f0f;
+            color: white;
+            border: 1px solid white;
+        }
+
+        .archive_calendar-header, .calendar.puzzleInfo .date {
+            color: white;
+        }
+
+        /* Calendar Icons */
 
         .progressIconContent.puzzleProgress0,
         .progressIconContent.miniProgress0 {
             border: 1px solid white;
         }
 
-        .calendar.puzzleInfo .date {
-            color: white;
+        .print {
+            filter: brightness(3);
+        }
+
+        .island .print {
+            filter: none;
+        }
+
+        .cardRibbon.brandNew {
+            filter: invert(1);
         }
 
         .calendar.puzzleInfo .printTool {
             background-color: #0f0f0f;
         }
 
-        .print:hover,
-        .cardRibbon.brandNew {
-            filter: invert(1);
-        }
+        /* List View */
 
-        .island .print:hover {
-            filter: invert(0);
-        }
-
-        .archive_list-item .archive_title, .archive_list-item .archive_date, .archive_list-item 
-        .archive_author, .archive_list-item .archive_puzzle-actions, .archive_list-item .archive_title>a,
+        .archive_mobile-list-item, .archive_list-item, .archive_list-item .archive_title>a,
         .archive_list-columns {
             color: white;
         }
 
-        .archive_list-item .archive_puzzle-actions a:visited {
-            color: mediumpurple;
+        /* Print Popup */
+
+        .pzm-modals-wrapper {
+            background: rgba(0, 0, 0, .85);
         }
 
-        .archive_calendar-item {
+        .pzm-modal {
+            background: #0f0f0f;
+            border: 1px solid #0f0f0f;
+            box-shadow: 0 4px 23px 0 rgba(255, 255, 255, .08);
             color: white;
         }
 
-        .pz-page {
-            background: #0f0f0f;
+        .hub-print-modal-content .hub-print-modal-cell-darkness 
+        .hub-print-modal-opacity-icon .hub-print-modal-user-opacity {
+            border: 1px solid white;
         }
 
+        .pzm-modal-ex {
+            color: white;
+        }
+
+        .pz-modal__button.dark {
+            background-color: white;
+            color: black;
+            border: 1px solid white;
+        }
+
+        .pz-modal__button.dark:hover {
+            background-color: #e4e4e4;
+        }
+
+        /* No Puzzles Yet Text */
+
+        .archive_empty-state-message {
+            color: white;
+        }
+
+        /* Not Logged In Page */
+
         .archive_overlay-gradient--mini-redesign {
-            background: linear-gradient(to bottom, rgba(15, 15, 15, 0.5) 0%, rgb(15, 15, 15) 100%);
+            background: linear-gradient(to bottom, rgba(15, 15, 15, 0.4) 0%, rgb(15, 15, 15) 100%)
         }
 
         .archive_overlay-body--mini-redesign {
-            background: #0f0f0f;
+            background-color: #0f0f0f;
             color: white;
         }
 
         .archive_subscribe-button--mini-redesign {
-            background-color: black;
+            background-color: white;
+            color: black
         }
 
         .archive_subscribe-button--mini-redesign--login {
-            background-color: white;
-            color: black;
+            background-color: black;
+            color: white;
+            border: 1px solid white;
         }
     `;
     const style = document.createElement("style");
