@@ -35,7 +35,7 @@ function enableTilesDarkMode() {
         }
 
         body .css-1igzjy9:hover {
-            background-color: #777777;
+            background-color: #e4e4e4;
         }
 
         /* Main Sidebar */
@@ -73,9 +73,13 @@ function enableTilesDarkMode() {
             margin-top: 0px;
         }
 
-        .pz-nav__button {
+        .pz-nav-drawer__account-actions .pz-nav__button {
             background-color: white;
             color: black;
+        }
+
+        .pz-nav__button:hover {
+            background-color: #e4e4e4;
         }
 
         .pz-nav__button.white {
@@ -84,16 +88,24 @@ function enableTilesDarkMode() {
             border-color: white;
         }
 
-        .pz-nav__button:hover,
         .pz-nav__button.white:hover {
+            background-color: #777777;
+            color: white;
+        }
+
+        .pz-nav__button.gray:hover {
             background-color: #e4e4e4;
-            color: black;
         }
 
         /* Ads + Loading Bar + Footer + Title */
 
         .pz-ad-box {
             background-color: #0f0f0f;
+        }
+
+        .pz-ad-box::before {
+            color: white;
+            border: 1px solid white;
         }
 
         .xwd--loading-bar__fill {
@@ -119,12 +131,12 @@ function enableTilesDarkMode() {
             background-color: #0f0f0f;
         }
 
-        .ToolbarItem-module_toolbarColors__d6naZ, .ToolbarItem-module_toolbar_item__xrBr_ {
+        .ToolbarItem-module_toolbar_item__xrBr_ {
             background-color: #0f0f0f;
             color: white;
         }
 
-        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover, .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
+        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
             background-color: #777777;
         }
 
@@ -139,7 +151,6 @@ function enableTilesDarkMode() {
             color: white;
         }
 
-        .Dropdown-module_toolbarColorsDesktop__ptWzT:hover, 
         .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover, 
         .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover {
             background-color: #777777;

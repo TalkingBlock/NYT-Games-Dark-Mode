@@ -22,9 +22,13 @@ function restoreVideo(selector) {
 
 function enablePipsDarkMode() {
     const pipsCSS = `
-        /* Main Background: #0f0f0f */
+        /* Toolbar */
 
-        #js-global-nav {
+        html .pz-page {
+            background-color: #0f0f0f;
+        }
+
+        .pz-nav {
             background: #0f0f0f;
         }
 
@@ -36,119 +40,160 @@ function enablePipsDarkMode() {
             fill: white;
         }
 
-        body .pz-nav__hamburger-inner, body .pz-nav__hamburger-inner::before, body .pz-nav__hamburger-inner::after {
+        .pz-nav__hamburger-inner, .pz-nav__hamburger-inner::before, .pz-nav__hamburger-inner::after {
             background-color: white;
         }
 
-        body .pz-nav__hamburger:focus {
+        .pz-nav__hamburger:focus {
             background-color: #777777;
         }
 
-        body .pz-ad-box {
-            background-color: #0f0f0f;
+        body .css-1igzjy9 {
+            background-color: white;
         }
 
-        body .pz-footer {
-            background-color: #0f0f0f;
-            color: white;
+        body .css-1igzjy9 a {
+            color: black;
         }
 
-        body .Footer-module_legalLink__saQgH a {
-            color: white;
+        body .css-1igzjy9:hover {
+            background-color: #e4e4e4;
+        }
+
+        /* Main Sidebar */
+
+        .pz-nav-drawer {
+            scrollbar-color: #0f0f0f white;
+        }
+
+        .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
+            background-color: #0f0f0f;
         }
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
-        body .ExpansionButton-module_ExpansionButton__lqTjh {
+        body .ExpansionButton-module_ExpansionButton__lqTjh,
+        .pz-nav-drawer__heading,
+        .pz-nav-drawer__account .pz-nav-drawer__link {
             color: white;
         }
 
-        .pz-icon-arrow-down, .pz-icon-arrow-up {
+        .pz-icon-arrow-up, .pz-icon-arrow-down {
             filter: invert(1);
         }
 
-        .CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
-            background: #0f0f0f;
-            border-top: 1px solid white;
-        }
-
-        body .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
-        body .CollapsibleLink-module_isexpanded__AGnRL, 
-        body .DirectLink-module_directLink__kSggP:hover,
-        body .pz-nav-drawer__link:hover {
+        .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
+        .CollapsibleLink-module_isexpanded__AGnRL, 
+        .DirectLink-module_directLink__kSggP:hover,
+        .pz-nav-drawer__link:hover {
             background-color: #777777;
         }
 
-        body .pz-nav-drawer__account {
-            border-top: 1px solid white;
+        .pz-nav-drawer__account {
             background-color: #0f0f0f;
-            color: white;
+            border-top: 1px solid white;
             margin-top: 0px;
         }
 
-        body .pz-nav__button.gray:hover,
-        body .pz-nav__button.white:hover {
-            background-color: #e4e4e4;
+        .pz-nav-drawer__account-actions .pz-nav__button {
+            background-color: white;
             color: black;
         }
 
-        html .pz-page {
+        .pz-nav__button:hover {
+            background-color: #e4e4e4;
+        }
+
+        .pz-nav__button.white {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .pz-nav__button.white:hover {
+            background-color: #777777;
+            color: white;
+        }
+
+        .pz-nav__button.gray:hover {
+            background-color: #e4e4e4;
+        }
+
+        /* Ads + Loading Bar + Footer + Title */
+
+        .pz-ad-box {
             background-color: #0f0f0f;
         }
 
-        .pz-game-screen, .pz-game-field {
-            background-color: #0f0f0f;
+        .pz-ad-box::before {
+            color: white;
+            border: 1px solid white;
         }
 
-        .pz-content {
+        .xwd--loading-bar__fill {
+            background-color: white;
+        }
+
+        .pz-footer {
             background-color: #0f0f0f;
             color: white;
         }
+
+        .Footer-module_legalLink__saQgH a {
+            color: white;
+        }
+
+        .pz-module {
+            color: white;
+        }
+
+        /* Game Toolbar */
 
         .ToolbarItem-module_toolbar_item__xrBr_ {
             background-color: #0f0f0f;
             color: white;
         }
 
-        .Toolbar-module_toolbar__DGjo1 svg {
-            filter: invert(1);
-        }
-
         .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
             background-color: #777777;
         }
 
+        .ToolbarItem-module_toolbar_item__xrBr_ path,
+        .Toolbar-module_toolbarRight__VADxO .game-icon,
+        [data-testid="icon-arrow"] path {
+            fill: white;
+        }
+
+        .Dropdown-module_dropdown__menuItem__FJHMg a,
+        .Dropdown-module_dropdown__menuItem__FJHMg button {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover,
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover {
+            background-color: #777777;
+        }
+
+        .Timer-module_timerValue__pF6nA {
+            color: white;
+        }
+            
+        /* Pause, Reference, Settings and Reveal Popups */
+
         .xwd__modal--overlay {
-            background-color: #00000060
+            background-color: #00000060;
         }
 
         .xwd__modal--body {
-            background: #0f0f0f;
+            background-color: #0f0f0f;
             color: white;
             box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .3);
-        }
-
-        .xwd__modal--close .pz-icon {
-            filter: invert(1);
         }
 
         .Button-module_button__WxR62 {
             background-color: white;
             color: black;
-        }
-
-        .GameMoment-module_instructions__ZW7Et {
-            color: white;
-            background-color: #0f0f0f;
-        }
-
-        .GameMoment-module_gameContainer__Vuha8 {
-            background-color: #0f0f0f;
-        }
-
-        .Tray-module_trayContainer__zSWYr {
-            background-color: #0f0f0f;
-            border-top: 1px solid white;
         }
 
         .Help-module_iconSymbol__YNX_q {
@@ -164,71 +209,39 @@ function enablePipsDarkMode() {
             filter: invert(1);
         }
 
-        .Dropdown-module_dropdown__menuItem__FJHMg a,
-        .Dropdown-module_dropdown__menuItem__FJHMg button {
-            background-color: #0f0f0f;
-            color: white;
-        }
-
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover,
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover {
-            background-color: #777777;
-        }
-
-        .RevealToggle-module_revealToggle__jY3Zi
-        .RevealToggle-module_revealToggleButton__eiwR8.RevealToggle-module_active__BjM6H {
-            background-color: #0f0f0f;
-            color: white;
-        }
-
-        .RevealToggle-module_revealToggle__jY3Zi .RevealToggle-module_revealToggleButton__eiwR8 {
-            background-color: #222222;
-            border: 1px solid #959595;
-            color: #959595;
+        .pz-icon-close {
+            filter: invert(1);
         }
 
         .SettingsModal-module_title__aR9bD {
             color: white;
         }
 
-        .RevealModal-module_secondary__kAuqv,
-        .CongratsModal-module_congratsModalBody__v1jMi .button-secondary {
-            border: 1px solid white;
-            color: white;
-            background-color: #0f0f0f;
+        ._footNote_kbfjk_1 {
+            color: #8b8b8b;
         }
 
-        button.button-secondary:hover:enabled {
-            background-color: #1f1f1f;
-            color: white;
-        }
-
-        .RevealModal-module_primary__Uass7,
-        .CongratsModal-module_primary__eycd1 {
+        .RevealModal-module_primary__Uass7 {
             color: black;
             background-color: white;
         }
 
-        .Tray-module_emptyTraySlot__KQ6Lo {
-            background-color: #444445;
-        }
-
-        .Timer-module_timerValue__pF6nA {
+        .RevealModal-module_secondary__kAuqv {
+            border: 1px solid white;
             color: white;
+            background-color: black;
         }
 
-        .xwd__modal--content p, .Help-module_regionTransitions__iXxh3 {
-            color: white;
-        }
+        /* How To Play Popup */
 
-        .Help-module_iconSymbol__YNX_q.Help-module_small__T1hni {
-            background-color: white;
+        .Help-module_helpContent__z9yZl, .carousel-module_carouselNavigation__WPAci {
+            background-color: #0f0f0f;
         }
 
         .carousel-module_buttonsWrapper__xuzls button {
-            background: #0f0f0f;
             border: 1px solid white;
             color: white;
+            background-color: black;
         }
 
         .carousel-module_buttonsWrapper__xuzls button.carousel-module_play__RzWpB {
@@ -236,12 +249,8 @@ function enablePipsDarkMode() {
             color: black;
         }
 
-        .carousel-module_carouselNavigation__WPAci,
-        .carousel-module_carouselPage__ZEB4H>*,
-        .carousel-module_carouselWrapper__CHZQn,
-        .TutorialPuzzle-module_tutorialScrim__azZoc,
-        .Tray-module_trayContainer__zSWYr.Tray-module_isTutorial__oBYJI {
-            background-color: #0f0f0f;
+        .Help-module_regionTransitions__iXxh3 {
+            color: white;
         }
 
         .Help-module_pulseTeal__vD2oj {
@@ -256,9 +265,27 @@ function enablePipsDarkMode() {
             color: #d15609;
         }
 
-        button.button-dark-mode-support {
-            background: white;
-            color: black;
+        .carousel-module_swipe__ZyaWm, 
+        .carousel-module_carouselPage__ZEB4H,
+        .TutorialPuzzle-module_tutorialScrim__azZoc,
+        .Tray-module_trayContainer__zSWYr.Tray-module_isTutorial__oBYJI {
+            background-color: #0f0f0f;
+        }
+
+        /* Game Page */
+
+        .GameMoment-module_gameContainer__Vuha8 {
+            background-color: #0f0f0f;
+        }
+
+        .GameMoment-module_instructions__ZW7Et {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Tray-module_trayContainer__zSWYr {
+            background-color: #0f0f0f;
+            border-top: 1px solid white;
         }
 
         .Toastify__toast-theme--dark {
@@ -266,9 +293,32 @@ function enablePipsDarkMode() {
             color: black;
         }
 
-        .pz-nav__button.gray:hover {
-            background-color: #777777;
-            border: 1px solid #777777;
+        /* Congrats Page */
+
+        .CongratsModal-module_backToPuzzle__aBXu5 button {
+            color: white
+        }
+
+        .CongratsModal-module_primary__eycd1 {
+            color: black;
+            background-color: white;
+        }
+
+        .CongratsModal-module_congratsModalBody__v1jMi .button-secondary {
+            color: white;
+            background-color: black;
+            border: 1px solid white;
+        }
+
+        button.button-secondary:hover:enabled {
+            background: black;
+            color: white;
+            opacity: .85;
+        }
+
+        button.button-dark-mode-support {
+            background: white;
+            color: black;
         }
     `;
     const style = document.createElement("style");

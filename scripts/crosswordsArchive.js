@@ -36,7 +36,7 @@ function enableCrosswordsArchiveDarkMode() {
         }
 
         body .css-1igzjy9:hover {
-            background-color: #777777;
+            background-color: #e4e4e4;
         }
 
         /* Main Sidebar */
@@ -74,9 +74,13 @@ function enableCrosswordsArchiveDarkMode() {
             margin-top: 0px;
         }
 
-        .pz-nav__button {
+        .pz-nav-drawer__account-actions .pz-nav__button {
             background-color: white;
             color: black;
+        }
+
+        .pz-nav__button:hover {
+            background-color: #e4e4e4;
         }
 
         .pz-nav__button.white {
@@ -85,10 +89,13 @@ function enableCrosswordsArchiveDarkMode() {
             border-color: white;
         }
 
-        .pz-nav__button:hover,
         .pz-nav__button.white:hover {
+            background-color: #777777;
+            color: white;
+        }
+
+        .pz-nav__button.gray:hover {
             background-color: #e4e4e4;
-            color: black;
         }
 
         /* Ads + Loading Bar + Footer */
@@ -97,6 +104,11 @@ function enableCrosswordsArchiveDarkMode() {
             background-color: #0f0f0f;
         }
 
+        .pz-ad-box::before {
+            color: white;
+            border: 1px solid white;
+        }
+                    
         .xwd--loading-bar__fill {
             background-color: white;
         }
@@ -251,13 +263,12 @@ function enableCrosswordsArchiveDarkMode() {
             color: white;
         }
 
-        .archive_subscribe-button--mini-redesign {
-            background-color: white;
-            color: black
+        ._momentButton_e4jbe_2._primary_e4jbe_37 {
+            background: white;
+            color: black;
         }
 
-        .archive_subscribe-button--mini-redesign--login {
-            background-color: black;
+        ._momentButton_e4jbe_2._secondary_e4jbe_42 {
             color: white;
             border: 1px solid white;
         }

@@ -35,7 +35,7 @@ function enableLetterBoxedDarkMode() {
         }
 
         body .css-1igzjy9:hover {
-            background-color: #777777;
+            background-color: #e4e4e4;
         }
 
         /* Main Sidebar */
@@ -73,9 +73,13 @@ function enableLetterBoxedDarkMode() {
             margin-top: 0px;
         }
 
-        .pz-nav__button {
+        .pz-nav-drawer__account-actions .pz-nav__button {
             background-color: white;
             color: black;
+        }
+
+        .pz-nav__button:hover {
+            background-color: #e4e4e4;
         }
 
         .pz-nav__button.white {
@@ -84,21 +88,24 @@ function enableLetterBoxedDarkMode() {
             border-color: white;
         }
 
-        .pz-nav__button:hover,
         .pz-nav__button.white:hover {
-            background-color: #e4e4e4;
-            color: black;
+            background-color: #777777;
+            color: white;
         }
 
         .pz-nav__button.gray:hover {
-            background-color: #777777;
-            border: 1px solid #777777;
+            background-color: #e4e4e4;
         }
 
         /* Ads + Loading Bar + Footer + Title */
 
         .pz-ad-box {
             background-color: #0f0f0f;
+        }
+
+        .pz-ad-box::before {
+            color: white;
+            border: 1px solid white;
         }
 
         .xwd--loading-bar__fill {

@@ -1,8 +1,13 @@
 function enableSudokuDarkMode() {
+    const svgURL_IconClose = chrome.runtime.getURL("svgs/icon-close-2.svg");
     const sudokuCSS = `
-        /* Main Background: #0f0f0f */
+        /* Toolbar */
 
-        #js-global-nav {
+        html .pz-page {
+            background-color: #0f0f0f;
+        }
+
+        .pz-nav {
             background: #0f0f0f;
         }
 
@@ -14,199 +19,135 @@ function enableSudokuDarkMode() {
             fill: white;
         }
 
-        body .pz-nav__hamburger-inner, body .pz-nav__hamburger-inner::before, body .pz-nav__hamburger-inner::after {
+        .pz-nav__hamburger-inner, .pz-nav__hamburger-inner::before, .pz-nav__hamburger-inner::after {
             background-color: white;
         }
 
-        body .pz-nav__hamburger:focus {
+        .pz-nav__hamburger:focus {
             background-color: #777777;
         }
 
-        body .pz-ad-box {
-            background-color: #0f0f0f;
+        body .css-1igzjy9 {
+            background-color: white;
         }
 
-        body .pz-footer {
-            background-color: #0f0f0f;
-            color: white;
+        body .css-1igzjy9 a {
+            color: black;
         }
 
-        body .Footer-module_legalLink__saQgH a {
-            color: white;
+        body .css-1igzjy9:hover {
+            background-color: #e4e4e4;
+        }
+
+        /* Main Sidebar */
+
+        .pz-nav-drawer {
+            scrollbar-color: #0f0f0f white;
+        }
+
+        .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
+            background-color: #0f0f0f;
         }
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
-        body .ExpansionButton-module_ExpansionButton__lqTjh {
+        body .ExpansionButton-module_ExpansionButton__lqTjh,
+        .pz-nav-drawer__heading,
+        .pz-nav-drawer__account .pz-nav-drawer__link {
             color: white;
         }
 
-        .pz-icon-arrow-down, .pz-icon-arrow-up {
+        .pz-icon-arrow-up, .pz-icon-arrow-down {
             filter: invert(1);
         }
 
-        .CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
-            background: #0f0f0f;
-            border-top: 1px solid white;
-        }
-
-        body .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
-        body .CollapsibleLink-module_isexpanded__AGnRL, 
-        body .DirectLink-module_directLink__kSggP:hover,
-        body .pz-nav-drawer__link:hover {
+        .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
+        .CollapsibleLink-module_isexpanded__AGnRL, 
+        .DirectLink-module_directLink__kSggP:hover,
+        .pz-nav-drawer__link:hover {
             background-color: #777777;
         }
 
-        body .pz-nav-drawer__account {
-            border-top: 1px solid white;
+        .pz-nav-drawer__account {
             background-color: #0f0f0f;
-            color: white;
+            border-top: 1px solid white;
             margin-top: 0px;
         }
 
-        body .pz-nav__button.gray:hover,
-        body .pz-nav__button.white:hover {
-            background-color: #e4e4e4;
+        .pz-nav-drawer__account-actions .pz-nav__button {
+            background-color: white;
             color: black;
         }
 
-        html .pz-page {
+        .pz-nav__button:hover {
+            background-color: #e4e4e4;
+        }
+
+        .pz-nav__button.white {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .pz-nav__button.white:hover {
+            background-color: #777777;
+            color: white;
+        }
+
+        .pz-nav__button.gray:hover {
+            background-color: #e4e4e4;
+        }
+
+        /* Ads + Loading Bar + Footer + Title */
+
+        .pz-ad-box {
             background-color: #0f0f0f;
+        }
+
+        .pz-ad-box::before {
+            color: white;
+            border: 1px solid white;
+        }
+
+        .xwd--loading-bar__fill {
+            background-color: white;
+        }
+
+        .pz-footer {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Footer-module_legalLink__saQgH a {
+            color: white;
         }
 
         .pz-module {
             color: white;
         }
 
-        .gameContainer {
-            background-color: #0f0f0f;
-        }
-
-        .su-keyboard__auto [role="button"] {
-            color: white;
-        }
-
-        .su-cell {
-            background-color: #0f0f0f;
-        }
-
-        .su-cell.prefilled {
-            background-color: #434342;
-        }
-
-        .su-cell:not(.selected).highlighted {
-            background-color: #5c5639;
-        }
-
-        .su-cell:not(.selected).highlighted.prefilled {
-            background-color: #413a25;
-        }
-
-        .su-cell.selected.highlighted {
-            background-color: #fc9b00;
-        }
-
-        .su-cell.prefilled.highlightedSameNumber {
-            background-color: #9f6f21;
-        }
-
-        .su-cell:not(.selected).highlightedSameNumber {
-            background-color: #9e6708;
-        }
-
-        .su-cell:not(.selected).highlightedSameNumber.prefilled {
-            background-color: #563b0a
-        }   
-        
-        .su-cell__value>path, .selected .su-cell__value>path {
-            fill: white;
-        }
-
-        .su-board__frame {
-            outline: 0px solid white;
-        }
-
-        .su-candidates>svg>path {
-            fill: lightgray; 
-        }
-
-        .xwd__modal--overlay {
-            background-color: #0f0f0f;
-        }
-
-        .modal-pause-body.su-modal-pause {
-            background: #0f0f0f;
-            color: white;
-        }
-
-        .pz-modal__button.primary {
-            background-color: white;
-            color: black;
-        }
-
-        .pz-modal__button.primary:hover {
-            background-color: #e4e4e4;
-        }
-
-        .xwd__modal--body {
-            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .1);
-        }
-
-        .su-keyboard__mode {
-            background-color: #0f0f0f;
-            color: #e4e4e4;
-            border: 1px solid #e4e4e4;
-        }
-
-        .su-keyboard__mode.candidateMode, .su-keyboard__mode.normalMode {
-            background-color: white;
-            color: black;
-        }
+        /* Game Toolbar */
 
         .ToolbarAdapter-module_toolbarContainer__Ni4KN {
             background-color: #0f0f0f;
-        }
-
-        .toolbarDesktopInfo, .ToolbarItem-module_toolbar_itemText__jnF3y {
             color: white;
-        }
-
-        .su-timer__value {
-            color: white;
-        }
-
-        .su-timer__pause-icon {
-            filter: invert(1);
         }
 
         .ToolbarItem-module_toolbar_item__xrBr_ {
             background: #0f0f0f;
+            color: white;
+        }
+
+        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
+            background: #777777;
         }
 
         .Icon-module_iconWrapper__ZfKPm path {
             fill: white;
         }
 
-        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover, .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
-            background-color: #777777
-        }
-
-        .xwd__modal--body.modal-congrats-body {
-            background: #0f0f0f;
+        .su-timer__value {
             color: white;
-        }
-
-        body .css-1299j98 {
-            background: white;
-            color: black;
-        }
-
-        body .css-1299j98:hover:enabled {
-            background: #e4e4e4;
-        }
-        
-        .confirmed .su-cell__value>path {
-            fill: #b5cdff;
         }
 
         .Dropdown-module_dropdown__menuItem__FJHMg a, .Dropdown-module_dropdown__menuItem__FJHMg button {
@@ -214,21 +155,141 @@ function enableSudokuDarkMode() {
             color: white;
         }
 
-        .Dropdown-module_dropdown__menuItem__FJHMg button:hover {
+        .Dropdown-module_dropdown__menuItem__FJHMg a:hover, .Dropdown-module_dropdown__menuItem__FJHMg button:hover {
             background-color: #777777;
         }
 
-        .pz-icon-close, .kebab-icon {
-            filter: invert(1);
+        /* How to Play, Settings, Pause Popups */
+
+        .xwd__modal--overlay {
+            background-color: #00000060;
         }
 
-        .xwd__modal--body.modal-settings-body, .xwd__modal--body.modal-rules-body {
+        .modal-rules-body.su-modal-help, .su-modal-help.modal-stats-body,
+        .modal-settings-body.su-modal-settings, .modal-pause-body.su-modal-pause {
             background: #0f0f0f;
             color: white;
         }
 
+        .xwd__modal--body {
+            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .3);
+        }
+
+        .xwd__modal--close .pz-icon, .kebab-icon {
+            filter: invert(1);
+        }
+
+        .pz-modal__button.primary {
+            background-color: white;
+            color: black;
+        }
+
+        /* Game Page */
+
         ._moment_1d9lu_8 {
+            background-color: #0f0f0f;
+        }
+
+        .su-keyboard__mode.candidateMode, .su-keyboard__mode.normalMode {
+            background-color: white;
+            color: black;
+        }
+
+        .su-keyboard__mode {
+            background-color: #0f0f0f;
+            border: 1px solid #777777;
+            color: #979797;
+        }
+
+        .su-keyboard__undo, .su-keyboard__delete, .su-keyboard__number {
+            background-color: #434342;
+        }
+
+        .su-keyboard__undo:active, .su-keyboard__delete:active, .su-keyboard__number:active {
+            background-color: #0f0f0f;
+            color: #979797;
+        }
+
+        .su-keyboard__svg {
+            fill: white;
+        }
+
+        .su-keyboard__delete {
+            background-image: url("${svgURL_IconClose}");
+        }
+
+        .su-keyboard__undo {
+            color: white;
+        }
+
+        .su-keyboard__auto [role="button"] {
+            color: white;
+        }
+
+        .su-board__frame {
+            outline: 0px solid white;
+        }
+
+        /* Sudoku Board Colors (these will be changable!) */
+
+        .su-cell /* Empty cell */ { 
+            background-color: #0f0f0f;
+        }
+
+        .su-cell.prefilled /* Prefilled cell */ {
+            background-color: #434342;
+        }
+
+        .su-cell:not(.selected).highlighted /* Cell that will be affected with no number in cell */ {
+            background-color: #5c5639;
+        }
+
+        .su-cell:not(.selected).highlighted.prefilled /* Cell that will be affected with a number in cell */ {
+            background-color: #413a25;
+        }
+
+        .su-cell.selected.highlighted /* Cell currently selected */ {
+            background-color: #fc9b00;
+        }
+
+        .su-cell.prefilled.highlightedSameNumber /* User filled cell with same number as selected cell */ {
+            background-color: #9f6f21;
+        }
+
+        .su-cell:not(.selected).highlightedSameNumber /* Cell with same number as selected cell */ {
+            background-color: #9e6708;
+        }
+
+        .su-cell:not(.selected).highlightedSameNumber.prefilled /* Prefilled cell with same number as selected cell */ {
+            background-color: #563b0a;
+        }   
+
+        .su-cell__value>path, .selected .su-cell__value>path /* All filled/prefilled numbers */ {
+            fill: white;
+        }
+
+        .selected .su-cell__value>path /* Number with selected cell */ {
+            fill: black;
+        }
+
+        .su-candidates>svg>path /* Candidate numbers */ {
+            fill: lightgray; 
+        }
+
+        /* Congrats Popup */
+
+        .xwd__modal--body.modal-congrats-body {
             background: #0f0f0f;
+            color: white;
+        }
+
+        button.css-1299j98 {
+            background: white;
+            color: black;
+        }
+
+        button.css-1299j98:hover:enabled {
+            background: #e4e4e4;
         }
     `;    
     const style = document.createElement("style");

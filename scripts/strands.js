@@ -23,9 +23,13 @@ function restoreVideo(selector) {
 function enableStrandsDarkMode() {
     const svgURL_Regiwall = chrome.runtime.getURL("svgs/strands-stats-regiwall.svg");
     const strandsCSS = `
-        /* Main Background: #0f0f0f */
+        /* Toolbar */
 
-        #js-global-nav {
+        html .pz-page {
+            background-color: #0f0f0f;
+        }
+
+        .pz-nav {
             background: #0f0f0f;
         }
 
@@ -37,70 +41,266 @@ function enableStrandsDarkMode() {
             fill: white;
         }
 
-        body .pz-nav__hamburger-inner, body .pz-nav__hamburger-inner::before, body .pz-nav__hamburger-inner::after {
+        .pz-nav__hamburger-inner, .pz-nav__hamburger-inner::before, .pz-nav__hamburger-inner::after {
             background-color: white;
         }
 
-        body .pz-nav__hamburger:focus {
+        .pz-nav__hamburger:focus {
             background-color: #777777;
         }
 
-        body .pz-ad-box {
-            background-color: #0f0f0f;
+        body .css-1igzjy9 {
+            background-color: white;
         }
 
-        body .pz-footer {
-            background-color: #0f0f0f;
-            color: white;
+        body .css-1igzjy9 a {
+            color: black;
         }
 
-        body .Footer-module_legalLink__saQgH a {
-            color: white;
+        body .css-1igzjy9:hover {
+            background-color: #e4e4e4;
+        }
+
+        /* Main Sidebar */
+
+        .pz-nav-drawer {
+            scrollbar-color: #0f0f0f white;
+        }
+
+        .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
+            background-color: #0f0f0f;
         }
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
-        body .ExpansionButton-module_ExpansionButton__lqTjh {
+        body .ExpansionButton-module_ExpansionButton__lqTjh,
+        .pz-nav-drawer__heading,
+        .pz-nav-drawer__account .pz-nav-drawer__link {
             color: white;
         }
 
-        .pz-icon-arrow-down, .pz-icon-arrow-up {
+        .pz-icon-arrow-up, .pz-icon-arrow-down {
             filter: invert(1);
         }
 
-        .CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
-            background: #0f0f0f;
-            border-top: 1px solid white;
-        }
-
-        body .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
-        body .CollapsibleLink-module_isexpanded__AGnRL, 
-        body .DirectLink-module_directLink__kSggP:hover,
-        body .pz-nav-drawer__link:hover {
+        .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
+        .CollapsibleLink-module_isexpanded__AGnRL, 
+        .DirectLink-module_directLink__kSggP:hover,
+        .pz-nav-drawer__link:hover {
             background-color: #777777;
         }
 
-        body .pz-nav-drawer__account {
-            border-top: 1px solid white;
+        .pz-nav-drawer__account {
             background-color: #0f0f0f;
-            color: white;
+            border-top: 1px solid white;
             margin-top: 0px;
         }
 
-        body .pz-nav__button.gray:hover,
-        body .pz-nav__button.white:hover {
-            background-color: #e4e4e4;
+        .pz-nav-drawer__account-actions .pz-nav__button {
+            background-color: white;
             color: black;
         }
 
-        html .pz-page {
+        .pz-nav__button:hover {
+            background-color: #e4e4e4;
+        }
+
+        .pz-nav__button.white {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .pz-nav__button.white:hover {
+            background-color: #777777;
+            color: white;
+        }
+
+        .pz-nav__button.gray:hover {
+            background-color: #e4e4e4;
+        }
+
+        /* Ads + Loading Bar + Footer + Title */
+
+        .pz-ad-box {
             background-color: #0f0f0f;
         }
 
-        .pz-row {
+        .pz-ad-box::before {
             color: white;
+            border: 1px solid white;
+        }
+
+        .xwd--loading-bar__fill {
+            background-color: white;
+        }
+
+        .pz-footer {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Footer-module_legalLink__saQgH a {
+            color: white;
+        }
+
+        .pz-module {
+            color: white;
+        }
+
+        /* Game Toolbar */
+
+        .pz-row {
             background-color: #0f0f0f;
         }
+
+        .ToolbarItem-module_toolbar_item__xrBr_ {
+            background-color: #0f0f0f;
+        }
+
+        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
+            background-color: #777777;
+        }
+
+        .Icon-module_iconWrapper__ZfKPm path {
+            fill: white;
+        }
+
+        .Dropdown-module_dropdown__menuItem__FJHMg a, .Dropdown-module_dropdown__menuItem__FJHMg button {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover,
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover {
+            background-color: #777777;
+        }
+
+        /* Stats Popup */
+
+        .xwd__modal--overlay {
+            background: #00000060;
+        }
+
+        .strands__modal {
+            background-color: #0f0f0f;
+        }
+
+        .xwd__modal--body {
+            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .3);
+        }
+
+        .Stats-module_wrapper__zUfh0 {
+            color: white;
+            background: #0f0f0f;
+        }
+
+        .Stats-module_stats__CB23r {
+            border-top: 1px solid white;
+        }
+
+        .Stat-module_stats__row__xnktL {
+            border-bottom: 1px solid white;
+        }
+
+        .TrophyItem-module_name__wbtJx {
+            color: white;
+        }
+
+        .ProgressBar-module_progressBar__MOWb7 {
+            background-color: black !important;
+            border: 1px solid white !important;
+        }
+
+        .ProgressBar-module_progressBarFill__E7Rrg {
+            border-color: black !important;
+            background-color: white !important;
+        }
+
+        .xwd__modal--close .pz-icon, .Stats-module_inline_carrot__icon__G2cbk {
+            filter: invert(1);
+        }
+
+        .modal-stats-body .xwd__modal--content {
+            color: white;
+        }
+
+        .RegiWall-module_regiwall_abstract_stats__L6lxo {
+            background: url(${svgURL_Regiwall}) center no-repeat;
+        }
+
+        button.button-dark-mode-support {
+            background: white;
+            color: black;
+        }
+
+        button.button-dark-mode-support:hover:enabled {
+            background: #e4e4e4;
+        }
+
+        button.RegiWall-module_log_in_link__NlizD {
+            color: white;
+        }
+
+        /* Badges Page */
+
+        .pz-moment__badgeDetail, .BadgeDetail-module_container__RKO_D {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .BadgeDetail-module_background__Y5IWc path {
+			fill: #005b6d !important;
+		}
+
+        .BadgeDetail-module_helpCenterIcon__ZsJPD {
+            fill: white;
+        }
+
+        .BadgeDetailCTAs-module_buttonContainer__Td8eU button.pz-moment__button.secondary.default, 
+        .BadgeDetailCTAs-module_buttonContainer__Td8eU a.pz-moment__button.secondary.default {
+            color: white;
+            border: 1px solid white;
+        }
+
+        .BadgeDetail-module_arrowButton__LtZ8v {
+            background-color: #0f0f0f;
+            border: 1px solid white;
+        }
+
+        .BadgeDetail-module_arrowButton__LtZ8v path {
+            fill: white;
+        }
+
+        .BadgeDetail-module_arrowButton__LtZ8v:disabled {
+            border: 1px solid #777777;
+        }
+
+        .BadgeDetail-module_closeIcon__pPedP {
+            fill: white;
+        }
+
+        .pz-moment__frame, .BadgeDetail-module_background__Y5IWc {
+            background-color: #0f0f0f;
+        }
+
+        /* How to Play Popup */
+
+        .Help-module_title___5yTv, .carousel-module_wrapper__ZdPMF {
+            background: #0f0f0f;
+            color: white;
+        }
+
+        .carousel-module_buttonsWrapper__sEp8T button {
+            border: 1px solid white;
+            color: white;
+        }
+
+        .carousel-module_currentDot__hbt8i {
+            background-color: white;
+        }
+
+        /* Game Page */
 
         .pz-game-field {
             background: #0f0f0f;
@@ -111,87 +311,37 @@ function enableStrandsDarkMode() {
             color: white;
         }
 
+        .hint-module_lightbulb__YfeFm {
+            background: #0f0f0f;
+            border: 3px solid #9f9f9f;
+        }
+
+        .hint-module_overlay___9ixH>div {
+            border: 3px solid #0f0f0f;
+            transform: none;
+        }
+
+        .hint-module_overlay___9ixH {
+            border: 3px solid white;
+        }
+
         .hint-module_bluebulb__QtJ5d {
             color: black !important;
             background: white;
+            border: 2px solid white;
         }
 
-        .styles-module_word__LwKKp.styles-module_invalidshake__KMQkk {
+        .styles-module_invalidshake__KMQkk {
             color: white !important;
         }
 
-        .ToolbarItem-module_toolbar_item__xrBr_ {
-            background-color: #0f0f0f;
+        .pz-game-wrapper {
+            background-color: #0f0f0f !important;
         }
 
-        .Icon-module_iconWrapper__ZfKPm path {
-            fill: white;
-        }
+        /* Congrats Page */
 
-        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover, .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
-            background-color: #777777
-        }
-
-        .xwd__modal--overlay {
-			background-color: #0f0f0f;
-		}
-
-        body .xwd__modal--body {
-            background-color: #0f0f0f;
-            color: white;
-            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .1);
-        }
-
-        .Hints-module_confirmButton__PyF6x {
-            background-color: white;
-            color: black;
-        }
-        
-        .pz-icon-close {
-            filter: invert(1);
-        }
-
-        .Stats-module_wrapper__zUfh0 {
-            background: #0f0f0f;
-            color: white;
-        }
-
-        .Stat-module_stats__row__xnktL {
-            border-bottom: 1px solid white;
-        }
-
-        .Stats-module_stats__CB23r {
-            border-top: 1px solid white;
-        }
-
-        .Stats-module_inline_carrot__icon__YCGc0 {
-            filter: invert(1);
-        }
-
-        .Dropdown-module_dropdown__menuItem__FJHMg a, .Dropdown-module_dropdown__menuItem__FJHMg button {
-            background-color: #0f0f0f;
-            color: white;
-        }
-
-        .Dropdown-module_dropdown__menuItem__FJHMg a:hover, .Dropdown-module_dropdown__menuItem__FJHMg button:hover {
-            background-color: #777777;
-        }
-
-        .carousel-module_buttonsWrapper__sEp8T button {
-            border: 1px solid white;
-            color: white;
-        }
-
-        .carousel-module_wrapper__ZdPMF, .Help-module_title___5yTv {
-            background: #0f0f0f;
-            color: white;
-        }
-
-        .carousel-module_currentDot__hbt8i {
-            background-color: white;
-        }
-
-        .pz-moment {
+        .pz-moment__congrats .pz-moment {
             background-color: #0f0f0f !important;
         }
 
@@ -199,108 +349,34 @@ function enableStrandsDarkMode() {
             color: white;
         }
 
-        .Stats-module_inline_right_caret___XXBU {
+        .Congrats-module_closeButton__e7oha {
             filter: invert(1);
         }
 
-        body .css-27fpwl {
+        .Congrats-module_createAccountButton__bQp7F.Congrats-module_wide__SD0k5, button.css-27fpwl {
             background: white;
             color: black;
+            border: 1px solid white;
         }
 
-        body .css-27fpwl:hover {
-            outline: #e4e4e4 solid 3px;
-        }
-
-        .pz-game-wrapper {
-            background-color: #0f0f0f !important;
-        }
-
-        .RegiWall-module_regiwall_abstract_stats_legacy__wB9dR {
-            filter: invert(1);
-        }
-
-        body .button-dark-mode-support {
-            background: white;
-            color: black;
-        }
-
-        body .button-dark-mode-support:hover:enabled {
-            background: #e4e4e4;
-        }
-
-        body .RegiWall-module_log_in_link__NlizD {
-            color: white;
-        }
-
-        .TrophyItem-module_name__wbtJx {
-            color: white;
-        }
-
-        .RegiWall-module_regiwall_abstract_stats__L6lxo {
-            background: url(${svgURL_Regiwall}) center no-repeat;
-        }
-
-        .feature-awareness .pz-icon-close {
-            filter: none;
-        }
-
-        .FeatureAwareness-module_ctaContainer__Q4Zve {
-            border: 1px solid #0f0f0f;
+        button.css-15cgz6j {
             background-color: #0f0f0f;
             color: white;
+            border: 1px solid white;
         }
 
-        .FeatureAwareness-module_cta__t36d0 {
+        .Congrats-module_createAccountButton__bQp7F.Congrats-module_wide__SD0k5:hover {
+            background: #e4e4e4 !important;
+            border: 1px solid #e4e4e4;
+        }
+
+        button.css-27fpwl:hover {
+            outline: #b4b4b4 solid 3px;
+        }
+
+        .Toast-module_toast__q1i0d {
             background-color: white;
             color: black;
-        }
-
-        .hint-module_lightbulb__YfeFm {
-            background: #0f0f0f;
-        }
-
-        .hint-module_lightbulb__YfeFm::before {
-            border: 2px solid #9f9f9f;
-        }
-
-        .hint-module_overlay___9ixH {
-            border: 2px solid white;
-            background-color: #0f0f0f;
-        }
-
-        .hint-module_overlay___9ixH>div {
-            border: none;
-        }
-
-        .BadgeDetail-module_background__Y5IWc, 
-		.pz-moment__frame, .BadgeDetail-module_container__RKO_D {
-			background-color: #0f0f0f;
-		}
-
-		.BadgeDetail-module_background__Y5IWc path {
-			fill: #005b6d !important;
-		}
-
-		.BadgeDetail-module_layeredGridItem__sybv8 {
-			color: white;
-		}
-
-		.BadgeDetailCTAs-module_buttonContainer__Td8eU a.pz-moment__button.secondary.default {
-			color: white;
-			border: 1px solid white;
-		}
-
-		.BadgeDetail-module_helpCenterIcon__ZsJPD, .BadgeDetail-module_closeIcon__pPedP {
-			fill: white;
-		}
-
-        .pz-moment__close_text .inner-text {
-            color: white;
-        }
-
-        .BadgeCarousel-module_badgeHeader__H_g5M h3 {
-            color: white;
         }
     `;
     const style = document.createElement("style");
