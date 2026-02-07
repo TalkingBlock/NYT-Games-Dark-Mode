@@ -94,6 +94,10 @@
       "matches": ["https://www.nytimes.com/athletic/connections-sports-edition/"],
       "js": ["scripts/taConnections.js"],
       "run_at": "document_start"
+    }, {
+      "matches": ["https://www.nytimes.com/games/crossplay"],
+      "js": ["scripts/miscPages.js"],
+      "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [

@@ -1,18 +1,13 @@
 function enableMenuDarkMode() {
     const menuCSS = `
-        /* Main Background: #0f0f0f */
+        /* Toolbar */
 
-        .pz-row {
-            background: #0f0f0f;
-            color: white;
+        html .pz-page {
+            background-color: #0f0f0f;
         }
 
-        #js-global-nav {
+        .pz-nav {
             background: #0f0f0f;
-        }
-
-        .pz-content {
-            background: #0f0f0f
         }
 
         .pz-nav__logo rect {
@@ -23,167 +18,341 @@ function enableMenuDarkMode() {
             fill: white;
         }
 
-        body .pz-nav__hamburger-inner, body .pz-nav__hamburger-inner::before, body .pz-nav__hamburger-inner::after {
+        .pz-nav__hamburger-inner, .pz-nav__hamburger-inner::before, .pz-nav__hamburger-inner::after {
             background-color: white;
         }
 
-        body .pz-nav__hamburger:focus {
+        .pz-nav__hamburger:focus {
             background-color: #777777;
         }
 
-        body .pz-ad-box {
+        body .css-1igzjy9 {
+            background-color: white;
+            border: 1px solid white;
+        }
+
+        body .css-1igzjy9 a {
+            color: black;
+        }
+
+        body .css-1igzjy9:hover {
+            background-color: #e4e4e4;
+        }
+
+        /* Main Sidebar */
+
+        .pz-nav-drawer {
+            scrollbar-color: #0f0f0f white;
+        }
+
+        .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
             background-color: #0f0f0f;
         }
 
-        body .pz-footer {
-            background-color: #0f0f0f;
-            color: white;
-        }
-
-        body .Footer-module_legalLink__saQgH a {
-            color: white;
-        }
+        .pz-icon-nyt {
+            filter: invert(1);
+        }        
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
-        body .ExpansionButton-module_ExpansionButton__lqTjh {
+        body .ExpansionButton-module_ExpansionButton__lqTjh,
+        .pz-nav-drawer__heading,
+        .pz-nav-drawer__account .pz-nav-drawer__link {
             color: white;
         }
 
-        .pz-icon-arrow-down, .pz-icon-arrow-up {
+        .pz-icon-arrow-up, .pz-icon-arrow-down {
             filter: invert(1);
         }
 
-        .CustomNav-module_customNav__RX0TG, body .pz-nav-drawer {
-            background: #0f0f0f;
-            border-top: 1px solid white;
-        }
-
-        body .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
-        body .CollapsibleLink-module_isexpanded__AGnRL, 
-        body .DirectLink-module_directLink__kSggP:hover,
-        body .pz-nav-drawer__link:hover {
+        .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
+        .CollapsibleLink-module_isexpanded__AGnRL, 
+        .DirectLink-module_directLink__kSggP:hover,
+        .pz-nav-drawer__link:hover {
             background-color: #777777;
         }
 
-        body .pz-nav-drawer__account {
-            border-top: 1px solid white;
+        .pz-nav-drawer__account {
             background-color: #0f0f0f;
-            color: white;
+            border-top: 1px solid white;
             margin-top: 0px;
         }
 
-        body .pz-nav__button.gray:hover,
-        body .pz-nav__button.white:hover {
-            background-color: #e4e4e4;
+        .pz-nav-drawer__account-actions .pz-nav__button {
+            background-color: white;
             color: black;
         }
 
-        .section__header, .progress__sectionHeader, .hub-section-header, 
-        body .progress__playMoreLink, .oneLiner, .date {
+        .pz-nav__button:hover {
+            background-color: #e4e4e4;
+        }
+
+        .pz-nav__button.white {
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+
+        .pz-nav__button.white:hover {
+            background-color: #777777;
             color: white;
         }
 
-        body .featured .date, body .island .date {
-            color: black;
+        .pz-nav__button.gray:hover {
+            background-color: #e4e4e4;
         }
 
-        body .progress__playMoreLink:hover {
-            background-color: #777777;
+        /* Ads + Loading Bar + Footer */
+
+        .pz-ad-box {
+            background-color: #0f0f0f;
         }
 
-        body .thumb .printTool {
+        .pz-ad-box::before {
+            color: white;
+            border: 1px solid white;
+        }
+
+        .xwd--loading-bar__fill {
+            background-color: white;
+        }
+
+        .pz-footer {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Footer-module_legalLink__saQgH a {
+            color: white;
+        }
+
+        /* Featured Cards */
+
+        .hub-welcome-loading {
+            background-color: #0f0f0f;
+        }
+
+        .featured.standard, .featured.primary, .hub-stats-card__puzzle-info, .hub-promo-card {
             background: #0f0f0f;
         }
 
-        .print:hover {
-            filter: invert(1);
+        .hub-promo-card:hover {
+            background: #0f0f0f;
         }
 
-        body .tab__tabGroup .tab__tab>.active {
+        @media (min-width: 992px) {
+            .featured.standard:hover, .featured.primary:hover, .hub-stats-card__puzzle-info:hover, .hub-promo-card:hover {
+                background-color: #181818;
+            }
+        }
+
+        .hub-welcome-sections h3.title, .hub-welcome-sections div.date, div.hub-stats-card__title,
+        .hub-stats-card__streak-title, .hub-stats-card__streak-info:first-child, 
+        .hub-stats-card__streak-info, div.hub-stats-card__more-stats, .featured .title, h3.hub-promo-card__title {
+            color: white;
+        }
+
+        .hub-stats-card__streak-block {
+            border-top: none;
+        }
+
+        .upsell .copy {
+            color: #777777;
+        }
+
+        /* Game Cards */
+
+        .section__header {
+            color: white;
+        }
+
+        .hub-game-card {
+            background: #0f0f0f;
+            border: solid 1px #777777;
+        }
+
+        .hub-game-card__button {
+            color: white;
+            border: 1px solid #777777;
+        }
+
+        .hub-game-card.hub-dual-link:hover .hub-game-card__button {
+            background: #0f0f0f;
+        }
+
+        .hub-game-card.hub-dual-link .hub-game-card__button:hover {
+            background: #333333;
+        }
+
+        .hub-game-card:hover .hub-game-card__button {
+            background: #333333;
+        }
+
+        .hub-game-card:hover {
+            box-shadow: 2px 2px 0 0 #555555;
+        }
+
+        /* Recent Crosswords + Print Popup */
+
+        .tab__tabGroup .tab__tab>.active {
             background-color: #0f0f0f;
             color: white;
             border-color: #777777;
         }
 
-        body .tab__tabGroup .tab__tab {
+        .tab__tabGroup .tab__tab {
             background-color: #222222;
         }
 
-        body .tab__tabGroup .tab__tab:hover {
+        .tab__tabGroup .tab__tab:hover {
             color: white;
         }
 
-        .expandToRow {
-            background-color: #0f0f0f;
-        }
-
-        body .tab__tabGroup .tab__tabNav {
+        .tab__tabGroup .tab__tabNav {
             border: 1px solid #777777;
             background-color: #0f0f0f;
         }
 
-        body .hub-game-card {
-            border-color: #0f0f0f;
-        }
-
-        body .hub-game-card:hover.pips,
-        body .hub-game-card:hover.letter-boxed,
-        body .hub-game-card:hover.tiles,
-        body .hub-game-card:hover.sudoku {
-            border-right-color: #cccccc;
-            border-bottom-color:#cccccc;
-        }
-
-        body .hub-game-card__button {
-            border-color: #cccccc;
-        }
-
-        .featured .print:hover,
-        .island .print:hover {
-            filter: invert(0);
-        }
-
-        .island.loadingDay {
-            background-color: #0f0f0f;
-        }
-
-        .accordion__drawerContent, .section__container {
-            background-color: #0f0f0f;
-        }
-
-        .moar-games-variant .hub-welcome__title {
+        .progress__sectionHeader, .oneLiner, .thumb .date, .progress__playMoreLink {
             color: white;
+        }
+
+        .progressIconContent {
+            border: 1px solid white;
+        }
+
+        .progress__playMoreLink:hover {
+            background: #777777
+        }
+
+        .thumb .printTool {
+            background-color: #0f0f0f;
+        }
+
+        @media (min-width: 992px) {
+            .print:hover {
+                filter: invert(1);
+            }
+        }
+
+        .pzm-modals-wrapper {
+            background: rgba(0, 0, 0, .85);
+        }
+
+        .pzm-modal {
+            background: #0f0f0f;
+            border: 1px solid white;
+            box-shadow: 0 4px 23px 0 rgba(255, 255, 255, .1);
+            color: white;
+        }
+
+        .pzm-modal-ex {
+            color: white;
+        }
+
+        .hub-print-modal-content .hub-print-modal-cell-darkness 
+        .hub-print-modal-opacity-icon .hub-print-modal-user-opacity {
+            border: 1px solid white;
+        }
+
+        .pz-modal__button.dark {
+            background-color: white;
+            color: black;
+        }
+
+        .pz-modal__button.dark:hover {
+            background-color: #e4e4e4;
+        }
+
+        /* Monthly Bonus + Featured Article */
+
+        .section__container .puzzleInfo .puzzleInfoContent {
+            color: white;
+        }
+
+        .island {
+            background-color: #0f0f0f;
+            border: 1px solid #777777
+        }
+
+        .island:hover {
+            box-shadow: 2px 2px 0 0 #555555;
+        }
+
+        .island:hover .printTool {
+            background-color: #0f0f0f;
+            border-top: 1px solid #777777;
+        }
+
+        .hub-section-header {
+            color: white;
+        }
+
+        .hub-guide-promo-card {
+            border: solid 1px #777777;
+        }
+
+        .hub-guide-promo-card-content {
+            background: #0f0f0f;
+        }
+
+        .hub-guide-promo-card-content h2 {
+            color: white;
+        }
+
+        .hub-guide-promo-card:hover {
+            box-shadow: 2px 2px 0 0 #555555;
+        }
+
+        .hub-puzzle-group__more-link a {
+            color: white;
+            background: #222222;
+        }
+
+        .hub-puzzle-group__more-link a:hover {
+            background: #555555;
+        }
+
+        /* Smaller Than 767.99 Pixels Page */
+
+        @media (max-width: 767.98px) {
+            .moar-games-variant.hub-welcome {
+                background-color: #0f0f0f;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .moar-games-variant .featured {
+                border: solid 1px #777777;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .moar-games-variant .hub-welcome__title {
+                color: white;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .moar-games-variant .hub-wordplay-link {
+                color: white;
+                background-color: #0f0f0f;
+                border: 1px solid #777777;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .moar-games-variant .hub-wordplay-link:hover {
+                background-color: #333333;
+            }
         }
 
         .alternate-card-phone.moar-games-variant {
             background-color: #0f0f0f;
-            margin-bottom: 0px;
-            border-bottom: 12px solid #0f0f0f;
         }
 
-        .accordion__drawerTitle {
+        .alternate-card-phone .date {
             color: white;
-            background-color: black;
-            border-top: 1px solid white;
-            border-bottom: 1px solid white;
-        }
-
-        .accordion__drawerTitle:active {
-            background: #777777;
-        }    
-
-        .hub-mobile-stats__container {
-            color: white;
-            background-color: #0f0f0f;
-        }
-
-        .hub-mobile-stats__time {
-            color: white;
-        }
-
-        body .alternate-card-phone.loading-card {
-            background-color: #0f0f0f;
         }
 
         @media (max-width: 767.98px) {
@@ -192,43 +361,41 @@ function enableMenuDarkMode() {
             }
         }
 
-        .progressIconContent {
-            border: 1px solid white;
+        .accordion__drawerContent {
+            background-color: #0f0f0f;
         }
 
-        .pz-page {
+        .accordion__drawerTitle {
+            background-color: #222222;
+            color: white;
+        }
+
+        .accordion__drawerTitle:hover {
+            background: #777777;
+        }
+
+        .hub-mobile-stats__container {
             background: #0f0f0f;
+            color: white;
         }
 
-        .hub-welcome {
-            background-color: #4d88f9;
+        .hub-mobile-stats__no-stats {
+            background-color: #333333;
         }
 
-        .moar-games-variant .hub-game-card {
-            border: solid 1px #dcdcdc;
+        .hub-mobile-stats__stats-more {
+            color: white;
+            background-color: #333333;
         }
 
-        @media (min-width: 767.98px) {
-            .moar-games-variant .hub-our-games__content {
-                background-color: #4688f9;
-            }
+        .hub-mobile-stats__bars-block .grey {
+            background-color: #777777;
         }
 
-        @media (max-width: 767.98px) {
-            .moar-games-variant.hub-welcome {
-                background-color: #0f0f0f;
-            }
+        .hub-mobile-stats__bars-block .grey:nth-child(1), .hub-mobile-stats__bars-block .grey:nth-child(2) {
+            border-right: 2px solid #0f0f0f;
         }
-
-        .hub-puzzle-group__more-link a {
-            color: black;
-            background: white;
-        }
-
-        .hub-puzzle-group__more-link:hover a {
-            background: #e4e4e4
-        }
-    `;
+    `;  
     const style = document.createElement("style");
     style.id = "menustyle";
     style.innerText = menuCSS;

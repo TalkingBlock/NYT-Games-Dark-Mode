@@ -49,6 +49,10 @@ function enableCrosswordsArchiveDarkMode() {
             background-color: #0f0f0f;
         }
 
+        .pz-icon-nyt {
+            filter: invert(1);
+        }        
+
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
         body .ExpansionButton-module_ExpansionButton__lqTjh,
@@ -244,6 +248,30 @@ function enableCrosswordsArchiveDarkMode() {
 
         .pz-modal__button.dark:hover {
             background-color: #e4e4e4;
+        }
+
+        /* Bonus Page */
+
+        .island {
+            background-color: #0f0f0f;
+            border: 1px solid #777777;
+        }
+
+        .island:hover {
+            box-shadow: 2px 2px 0 0 #555555;
+        }
+
+        .island:hover .printTool {
+            background-color: #0f0f0f;
+            border-top: 1px solid #777777;
+        }
+
+        .island .print {
+            filter: brightness(3);
+        }
+
+        .puzzleInfo .puzzleInfoContent {
+            color: white;
         }
 
         /* No Puzzles Yet Text */

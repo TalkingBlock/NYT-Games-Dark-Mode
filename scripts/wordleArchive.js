@@ -49,6 +49,10 @@ function enableWordleArchiveDarkMode() {
             background-color: #0f0f0f;
         }
 
+        .pz-icon-nyt {
+            filter: invert(1);
+        }        
+
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
         body .ExpansionButton-module_ExpansionButton__lqTjh,

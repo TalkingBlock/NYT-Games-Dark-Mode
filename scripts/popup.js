@@ -71,6 +71,10 @@ document.addEventListener("DOMContentLoaded", function () {
         "ta-connections": {
             storageKey: "taConnectionsDarkModeEnabled",
             action: "enableTAConnectionsDarkMode"
+        },
+        "misc-pages": {
+            storageKey: "miscPagesDarkModeEnabled",
+            action: "enableMiscPagesDarkMode"
         }
     };
 
@@ -131,6 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "games-menu",
         "crossword-stats",
         "custom-wordle",
-        "ta-connections"
+        "ta-connections",
+        "misc-pages"
     ]);
 });

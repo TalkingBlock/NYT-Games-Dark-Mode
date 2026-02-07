@@ -1,5 +1,5 @@
-function enableTilesDarkMode() {
-    const tilesCSS = `
+function enableMiscPagesDarkMode() {
+    const miscPagesCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -28,6 +28,7 @@ function enableTilesDarkMode() {
 
         body .css-1igzjy9 {
             background-color: white;
+            border: 1px solid white;
         }
 
         body .css-1igzjy9 a {
@@ -101,7 +102,7 @@ function enableTilesDarkMode() {
             background-color: #e4e4e4;
         }
 
-        /* Ads + Loading Bar + Footer + Title */
+        /* Ads + Loading Bar + Footer */
 
         .pz-ad-box {
             background-color: #0f0f0f;
@@ -125,134 +126,45 @@ function enableTilesDarkMode() {
             color: white;
         }
 
-        .pz-game-title {
+        /* ----------------- */
+        /* PAGE 1: CROSSPLAY */
+        /* ----------------- */
+
+        @media only screen and (max-width: 1024px) and (orientation: portrait) {
+            [data-app-variant=crossplay] .column-left, [data-app-variant=locked] .column-left {
+                color: white;
+            }
+        }
+
+        .column {
             color: white;
         }
-
-        /* Game Toolbar */
-
-        .ToolbarAdapter-module_toolbarContainer__Ni4KN, .Game-module_toolbarContainer__PB1iO {
-            background-color: #0f0f0f;
-        }
-
-        .ToolbarItem-module_toolbar_item__xrBr_ {
-            background-color: #0f0f0f;
-            color: white;
-        }
-
-        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
-            background-color: #777777;
-        }
-
-        [data-testid="icon-help"] path {
-            fill: white;
-        }
-
-        .Dropdown-module_dropdown__menuItem__FJHMg button, 
-        .Dropdown-module_dropdown__menuItem__FJHMg a, 
-        .Dropdown-module_dropdown__menuItem__FJHMg button {
-            background-color: #0f0f0f;
-            color: white;
-        }
-
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover, 
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover {
-            background-color: #777777;
-        }
-
-        [data-testid="icon-arrow"] path {
-            fill: white;
-        }
-
-        /* Tileset and How to Play Popup */
-
-        .xwd__modal--overlay {
-            background-color: #00000060;
-        }
-
-        .xwd__modal--body {
-            background-color: #0f0f0f;
-            color: white;
-            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .5);
-        }
-
-        .tlz-palette-button {
-            color: white;
-            border: 1px solid #dddddd;
-        }
-
-        .tlz-palette-button.selected {
-            border: solid 2px white;
-        }
-
-        .pz-icon-close {
-            filter: invert(1);
-        }
-
-        .tlz-bob {
-            border: 1px solid white;
-        }
-
-        .tlz-bob.active {
-            background-color: white;
-        }
-
-        .tlz-palette-arrows {
-            filter: invert(1);
-        }
-
-        .pz-settings-icon path {
-            fill: white;
-        }
-
-        /* Congrats Popup */
-
-        .xwd__modal--body.modal-congrats-body {
-            background: #0f0f0f;
-            color: white;
-        }
-
-        body .css-1lxqcbc {
-            color: black;
-            background-color: white;
-            border: 1px solid white;
-        }
-
-        body .css-1lxqcbc:hover {
-            color: black;
-            background-color: #777777;
-            border: 1px solid #777777;
-        }
-        
-        .css-1k8l6v3 hr {
-            border-top: 2px solid white;
-        } 
-    `;
+    `;  
     const style = document.createElement("style");
-    style.id = "tilesstyle";
-    style.innerText = tilesCSS;
+    style.id = "miscpagesstyle";
+    style.innerText = miscPagesCSS;
     document.head.appendChild(style);
 }
 
-function disableTilesDarkMode() {
-    const styleElement = document.getElementById("tilesstyle");
+function disableMiscPagesDarkMode() {
+    const styleElement = document.getElementById("miscpagesstyle");
     if (styleElement) {
         styleElement.remove();
     }
 }
 
 chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableTilesDarkMode") {
-        if (document.getElementById("tilesstyle")) {
-            disableTilesDarkMode();
+    if (message.action == "enableMiscPagesDarkMode") {
+        if (document.getElementById("miscpagesstyle")) {
+            disableMiscPagesDarkMode();
         } else {
-            enableTilesDarkMode();
+            enableMiscPagesDarkMode();
         }
     }
 });
 
-chrome.storage.sync.get("tilesDarkModeEnabled", function(data) {
-    if (data.tilesDarkModeEnabled) {
-        enableTilesDarkMode();
+chrome.storage.sync.get("miscPagesDarkModeEnabled", function(data) {
+    if (data.miscPagesDarkModeEnabled) {
+        enableMiscPagesDarkMode();
     }
 });

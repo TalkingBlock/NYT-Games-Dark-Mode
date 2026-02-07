@@ -2,6 +2,9 @@ function enableSpellingBeeDarkMode() {
     const svgURL_Genius = chrome.runtime.getURL("svgs/sb-stats-genius.svg");
     const svgURL_Regiwall = chrome.runtime.getURL("svgs/spellingbee-stats-regiwall.svg");
     const svgURL_Checkmark = chrome.runtime.getURL("svgs/check-standard.svg")
+    const svgURL_Error404Small = chrome.runtime.getURL("svgs/error404-illustration-s.svg");
+    const svgURL_Error404Medium = chrome.runtime.getURL("svgs/error404-illustration-m.svg");
+    const svgURL_Error404XL = chrome.runtime.getURL("svgs/error404-illustration-xl.svg");
     const spellingBeeCSS = `
         /* Toolbar */
 
@@ -51,6 +54,10 @@ function enableSpellingBeeDarkMode() {
         .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
             background-color: #0f0f0f;
         }
+
+        .pz-icon-nyt {
+            filter: invert(1);
+        }        
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
@@ -500,6 +507,40 @@ function enableSpellingBeeDarkMode() {
 
         .sb-share__tout-image {
             filter: invert(0.94) hue-rotate(183deg);
+        }
+
+        /* Error Page */
+
+        .pz-error__message h1 {
+            color: white;
+        }
+
+        .pz-error__button {
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+        }
+
+        .pz-error-img-1 {
+            background-image: url("${svgURL_Error404Small}");
+        }
+
+        @media (min-width: 444px) {
+            .pz-error-img-1 {
+                background-image: url("${svgURL_Error404Small}");
+            }   
+        }
+
+        @media (min-width: 768px) {
+            .pz-error-img-1 {
+                background-image: url("${svgURL_Error404Medium}");
+            }
+        }
+
+        @media (min-width: 992px) {
+            .pz-error-img-1 {
+                background-image: url("${svgURL_Error404XL}");
+            }
         }
     `;
     const style = document.createElement("style");

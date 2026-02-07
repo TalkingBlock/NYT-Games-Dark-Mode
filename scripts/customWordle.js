@@ -46,6 +46,10 @@ function enableCustomWordleDarkMode() {
             scrollbar-color: #0f0f0f white;
         }
 
+        .pz-icon-nyt {
+            filter: invert(1);
+        }
+
         .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
             background-color: #0f0f0f;
         }
