@@ -2,6 +2,8 @@
 
 A Chrome extension allowing for a dark mode appearance on the NYT Games website.
 
+Will soon allow for custom colors within the crossword and sudoku games.
+
 ## How to Download
 
 Follow these steps if you were given Beta access:
@@ -20,4 +22,4 @@ This is still in the BETA version! All things are subjected to change.
 
 Created by Mateo V.
 
-Questions/thoughts/feedback? Reach out to me at villmateo07@gmail.com.
+If any problems or questions regarding the google extension arise, feel free to reach out to me at villmateo07@gmail.com.
