@@ -1,3 +1,109 @@
+const sdColorsStorageKey = "sudoku_colors_settings";
+const defaultSudokuColors = {
+    sd_board_frame:               "#FFFFFF",
+    sd_empty_cell:                "#0F0F0F",
+    sd_prefilled_cell:            "#434342",
+    sd_affected_no_number_cell:   "#5C5639",
+    sd_affected_number_cell:      "#413A25",
+    sd_selected_cell:             "#FC9B00",
+    sd_filled_selected_number:    "#9F6F21",
+    sd_selected_number:           "#9E6708",
+    sd_prefilled_selected_number: "#563B0A",
+    sd_numbers:                   "#FFFFFF",
+    sd_number_selected_cell:      "#000000",
+    sd_candidate_number:          "#D3D3D3"
+};
+
+function getSudokuColors(customColors = {}) {
+    return {
+        ...defaultSudokuColors,
+        ...customColors
+    };
+}
+
+function buildSudokuColorsCSS(customColors = {}) {
+    const sdColors = getSudokuColors(customColors);
+    return `
+        /* Sudoku Board Colors */
+
+        .su-board__frame /* Board Frame */{
+            outline: 0px solid ${sdColors.sd_board_frame};
+        }
+
+        .su-cell /* Empty cell */ { 
+            background-color: ${sdColors.sd_empty_cell};
+        }
+
+        .su-cell.prefilled /* Prefilled cell */ {
+            background-color: ${sdColors.sd_prefilled_cell};
+        }
+
+        .su-cell:not(.selected).highlighted /* Cell that will be affected with no number in cell */ {
+            background-color: ${sdColors.sd_affected_no_number_cell};
+        }
+
+        .su-cell:not(.selected).highlighted.prefilled /* Cell that will be affected with a number in cell */ {
+            background-color: ${sdColors.sd_affected_number_cell};
+        }
+
+        .su-cell.selected.highlighted /* Cell currently selected */ {
+            background-color: ${sdColors.sd_selected_cell};
+        }
+
+        .su-cell.prefilled.highlightedSameNumber /* User filled cell with same number as selected cell */ {
+            background-color: ${sdColors.sd_filled_selected_number};
+        }
+
+        .su-cell:not(.selected).highlightedSameNumber /* Cell with same number as selected cell */ {
+            background-color: ${sdColors.sd_selected_number};
+        }
+
+        .su-cell:not(.selected).highlightedSameNumber.prefilled /* Prefilled cell with same number as selected cell */ {
+            background-color: ${sdColors.sd_prefilled_selected_number};
+        }   
+
+        .su-cell__value>path, .selected .su-cell__value>path /* All filled/prefilled numbers */ {
+            fill: ${sdColors.sd_numbers};
+        }
+
+        .selected .su-cell__value>path /* Number with selected cell */ {
+            fill: ${sdColors.sd_number_selected_cell};
+        }
+
+        .su-candidates>svg>path /* Candidate numbers */ {
+            fill: ${sdColors.sd_candidate_number};
+        }
+    `;
+}
+
+function applySudokuColors(customColors = {}) {
+    let style = document.getElementById("nyt-sudoku-color-style");
+    if (!style) {
+        style = document.createElement("style");
+        style.id = "nyt-sudoku-color-style";
+        document.head.appendChild(style);
+    }
+    style.textContent = buildSudokuColorsCSS(customColors);
+}
+
+function removeSudokuColors() {
+    const style = document.getElementById("nyt-sudoku-color-style");
+    if (style) {
+        style.remove();
+    }
+}
+
+function loadStoredSudokuColors() {
+    chrome.storage.sync.get(sdColorsStorageKey, (data) => {
+        const saved = data?.[sdColorsStorageKey]?.sudoku || {};
+        const colors = {};
+        for (const [key, value] of Object.entries(saved)) {
+            colors[key] = value?.hex || defaultSudokuColors[key];
+        }
+        applySudokuColors(colors);
+    });
+}
+
 function enableSudokuDarkMode() {
     const svgURL_IconClose = chrome.runtime.getURL("svgs/icon-close-2.svg");
     const svgURL_Error404Small = chrome.runtime.getURL("svgs/error404-illustration-s.svg");
@@ -233,56 +339,6 @@ function enableSudokuDarkMode() {
             color: white;
         }
 
-        .su-board__frame {
-            outline: 0px solid white;
-        }
-
-        /* Sudoku Board Colors (these will be changable!) */
-
-        .su-cell /* Empty cell */ { 
-            background-color: #0f0f0f;
-        }
-
-        .su-cell.prefilled /* Prefilled cell */ {
-            background-color: #434342;
-        }
-
-        .su-cell:not(.selected).highlighted /* Cell that will be affected with no number in cell */ {
-            background-color: #5c5639;
-        }
-
-        .su-cell:not(.selected).highlighted.prefilled /* Cell that will be affected with a number in cell */ {
-            background-color: #413a25;
-        }
-
-        .su-cell.selected.highlighted /* Cell currently selected */ {
-            background-color: #fc9b00;
-        }
-
-        .su-cell.prefilled.highlightedSameNumber /* User filled cell with same number as selected cell */ {
-            background-color: #9f6f21;
-        }
-
-        .su-cell:not(.selected).highlightedSameNumber /* Cell with same number as selected cell */ {
-            background-color: #9e6708;
-        }
-
-        .su-cell:not(.selected).highlightedSameNumber.prefilled /* Prefilled cell with same number as selected cell */ {
-            background-color: #563b0a;
-        }   
-
-        .su-cell__value>path, .selected .su-cell__value>path /* All filled/prefilled numbers */ {
-            fill: white;
-        }
-
-        .selected .su-cell__value>path /* Number with selected cell */ {
-            fill: black;
-        }
-
-        .su-candidates>svg>path /* Candidate numbers */ {
-            fill: lightgray; 
-        }
-
         /* Congrats Popup */
 
         .xwd__modal--body.modal-congrats-body {
@@ -337,6 +393,7 @@ function enableSudokuDarkMode() {
     style.id = "sudokustyle";
     style.innerText = sudokuCSS;
     document.head.appendChild(style);
+    loadStoredSudokuColors
 }
 
 function disableSudokuDarkMode() {
@@ -353,6 +410,9 @@ chrome.runtime.onMessage.addListener(function(message) {
         } else {
             enableSudokuDarkMode();
         }
+    }
+    if (message.action === "applySudokuColors") {
+        applySudokuColors(message.colors || {});
     }
 });
 

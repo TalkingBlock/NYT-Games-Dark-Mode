@@ -1,9 +1,9 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Adds a toggleable dark mode to NYT Games :D",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "manifest_version": 3,
-  "permissions": ["scripting", "activeTab", "storage"],
+  "permissions": ["scripting", "activeTab", "storage", "clipboardRead", "clipboardWrite"],
   "action": {
     "default_popup": "popup.html"
   },
@@ -16,6 +16,10 @@
       "matches": ["https://www.nytimes.com/crosswords/game/daily*",
                   "https://www.nytimes.com/crosswords/game/bonus*"],
       "js": ["scripts/theCrossword.js"],
+      "run_at": "document_start"
+    }, {
+      "matches": ["https://www.nytimes.com/crosswords/game/midi*"],
+      "js": ["scripts/midiCrossword.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/crosswords/game/mini*"],

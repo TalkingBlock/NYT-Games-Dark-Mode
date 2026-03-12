@@ -1,196 +1,492 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
     <head>
         <title>NYT Games Dark Mode</title>
         <link rel="stylesheet" href="popup.css">
-        <script src="scripts/popup.js" defer></script>
+        <script type="module" src="scripts/popup/popup.js"></script>
     </head>
     <body>
-        <header class="header">
+        <header>
             <div class="logo">
                 <img src="icons/nytdark48.png">
             </div>
-            <h1>NYT Games Dark Mode :D</h1>
+            <h1>NYT Games Dark Mode</h1>
         </header>
-        <main class="content">
-            <section class="dark-mode">
-                <h2>Dark Mode</h2>
-                <div class="darkmode-box scrollable">
-                    <div class="section-header">
-                        <p>Games</p>
-                        <label class="switch big">
-                            <input type="checkbox" id="games-main">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="sub-toggles">
-                        <div class="toggle-line small">
-                            <p>The Crossword</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="the-crossword">
+        <div class="page-buttons center">
+            <div class="dark-mode-button enabled">
+                <button class="center" data-page="dark-mode-button">
+                    <img src="svgs/popup/moon.svg">
+                    Dark Mode
+                </button>
+            </div>
+            <div class="custom-colors-button">
+                <button class="center" data-page="custom-colors-button">
+                    <img src="svgs/popup/palette.svg">
+                    Custom Colors
+                </button>
+            </div>
+            <div class="extra-features-button">
+                <button class="center" data-page="extra-features-button">
+                    <img src="svgs/popup/tools.svg">
+                    Extra Features
+                </button>
+            </div>
+        </div>
+        <div class="extension-pages center">
+            <div class="dark-mode-page center">
+                <div class="wrap">
+                    <div class="games-sliders">
+                        <div class="section-header">
+                            <p>Games</p>
+                            <label class="switch big">
+                                <input type="checkbox" id="games-main" />
                                 <span class="slider"></span>
                             </label>
                         </div>
-                        <div class="toggle-line small">
-                            <p>Mini Crossword</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="mini-crossword">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Connections</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="connections">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Spelling Bee</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="spelling-bee">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Pips</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="pips">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Strands</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="strands">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Letter Boxed</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="letter-boxed">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Tiles</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="tiles">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Sudoku</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="sudoku">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="section-header">
-                        <p>Archives</p>
-                        <label class="switch big">
-                            <input type="checkbox" id="archives-main">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="sub-toggles">
-                        <div class="toggle-line small">
-                            <p>Crosswords</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="archive-crosswords">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Connections</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="archive-connections">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Spelling Bee</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="archive-spelling-bee">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Wordle</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="archive-wordle">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Strands</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="archive-strands">
-                                <span class="slider"></span>
-                            </label>
+                        <div class="sub-toggles">
+                            <div class="toggle-line small">
+                                <p>The Crossword</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="the-crossword" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Midi Crossword</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="midi-crossword" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Mini Crossword</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="mini-crossword" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Connections</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="connections" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Spelling Bee</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="spelling-bee" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Pips</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="pips" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Strands</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="strands" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Letter Boxed</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="letter-boxed" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Tiles</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="tiles" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Sudoku</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="sudoku" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                    <div class="section-header">
-                        <p>Misc</p>
-                        <label class="switch big">
-                            <input type="checkbox" id="misc-main">
-                            <span class="slider"></span>
-                        </label>
+                    <div class="archives-sliders">
+                        <div class="section-header">
+                            <p>Archives</p>
+                            <label class="switch big">
+                                <input type="checkbox" id="archives-main" />
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="sub-toggles">
+                            <div class="toggle-line small">
+                                <p>Crosswords</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="archive-crosswords" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Connections</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="archive-connections" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Spelling Bee</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="archive-spelling-bee" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Wordle</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="archive-wordle" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Strands</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="archive-strands" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="sub-toggles">
-                        <div class="toggle-line small">
-                            <p>Games Menu</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="games-menu">
+                    <div class="misc-sliders">
+                        <div class="section-header">
+                            <p>Misc.</p>
+                            <label class="switch big">
+                                <input type="checkbox" id="misc-main" />
                                 <span class="slider"></span>
                             </label>
                         </div>
-                        <div class="toggle-line small">
-                            <p>Statistics</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="crossword-stats">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Custom Wordle</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="custom-wordle">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>TA Connections</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="ta-connections">
-                                <span class="slider"></span>
-                            </label>
-                        </div>
-                        <div class="toggle-line small">
-                            <p>Misc Pages</p>
-                            <label class="switch small">
-                                <input type="checkbox" id="misc-pages">
-                                <span class="slider"></span>
-                            </label>
+                        <div class="sub-toggles">
+                            <div class="toggle-line small">
+                                <p>Games Menu</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="games-menu" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Statistics</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="crossword-stats" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Custom Wordle</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="custom-wordle" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>The Athletic Connections</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="ta-connections" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-line small">
+                                <p>Misc Pages</p>
+                                <label class="switch small">
+                                    <input type="checkbox" id="misc-pages" />
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
-            <section class="custom-color">
-                <h2>Color Customization</h2>
-                <div class="color-box">
-                    <p>Will eventually allow you to customize the colors of crosswords.<br><br><br>
-                       Misc will also do something... Eventually...</p>
+            </div>
+            <div class="custom-colors-page center hidden">
+                <div class="wrap">
+                    <div class="color-picker">
+                        <div class="wrap">
+                            <div class="top">
+                                <div class="sv" id="sv" aria-label="Saturation Value Picker">
+                                    <div class="sv-mask" aria-hidden="true"></div>
+                                    <div class="sv-cursor" id="svCursor"></div>
+                                </div>
+                                <div class="below">
+                                    <div class="preview" id="preview" aria-label="Selected Color Preview"></div>
+                                    <div class="hue" id="hue" aria-label="Hue Slider">
+                                        <div class="hue-cursor" id="hueCursor"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bottom">
+                                <div class="row hex-row">
+                                    <div class="value" id="hexOut">
+                                        <span class="hex-text">#FF0000</span>
+                                        <span class="hex-actions">
+                                            <button id="copyHex" title="Copy Hexcode"><img src="svgs/popup/copy.svg"></button>
+                                            <button id="pasteHex" title="Paste Hexcode"><img src="svgs/popup/paste.svg"></button>
+                                            <button id="resetHex" title="Reset Hexcode"><img src="svgs/popup/reset.svg"></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="color-info">
+                        <div class="wrap">
+                            <div class="color-info-tabs">
+                                <button class="color-info-tab enabled" data-color-panel="crosswords">Crosswords</button>
+                                <button class="color-info-tab" data-color-panel="sudoku">Sudoku</button>
+                                <button class="color-info-help">?</button>
+                            </div>
+                            <div class="color-info-panels">
+                                <div class="color-info-panel" id="panel-crosswords">
+                                    <label class="color-option" data-key="cw_cell_borders">
+                                        <span class="color-option-text">Cell Borders</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio" checked>
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cw_letter_in_cell">
+                                        <span class="color-option-text">Letter In Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cw_correct_letter_in_cell">
+                                        <span class="color-option-text">Correct Letter in Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cw_empty_cell">
+                                        <span class="color-option-text">Empty Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cw_prefilled_cell">
+                                        <span class="color-option-text">Prefilled Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cw_shaded_cell">
+                                        <span class="color-option-text">Shaded Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cw_related_cell_clue">
+                                        <span class="color-option-text">Related Cell + Clue</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cw_highlighted_cell_clue">
+                                        <span class="color-option-text">Highlighted Cell + Clue</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cw_shaded_highlighted_cell">
+                                        <span class="color-option-text">Shaded + Highlighted Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cw_selected_cell_clue">
+                                        <span class="color-option-text">Selected Cell + Clue</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>                                                                                                                
+                                    <label class="color-option" data-key="cw_shaded_selected_cell">
+                                        <span class="color-option-text">Shaded + Selected Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label> 
+                                    <label class="color-option" data-key="cw_circle_within_cell">
+                                        <span class="color-option-text">Circle within Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>                   
+                                    <label class="color-option" data-key="cw_main_selected_clue">
+                                        <span class="color-option-text">Main Selected Clue</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                </div>
+                                <div class="color-info-panel hidden" id="panel-sudoku">
+                                    <label class="color-option" data-key="sd_board_frame">
+                                        <span class="color-option-text">Board Frame</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_empty_cell">
+                                        <span class="color-option-text">Empty Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_prefilled_cell">
+                                        <span class="color-option-text">Prefilled Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_affected_no_number_cell">
+                                        <span class="color-option-text">Affected + No Number Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_affected_number_cell">
+                                        <span class="color-option-text">Affected + Number Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_selected_cell">
+                                        <span class="color-option-text">Selected Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_filled_selected_number">
+                                        <span class="color-option-text">Filled + Selected Number</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_selected_number">
+                                        <span class="color-option-text">Selected Number</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_prefilled_selected_number">
+                                        <span class="color-option-text">Prefilled + Selected Number</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_numbers">
+                                        <span class="color-option-text">Numbers</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_number_selected_cell">
+                                        <span class="color-option-text">Number + Selected Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_candidate_number">
+                                        <span class="color-option-text">Candidate Numbers</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </section>
-            <section class="misc">
-                <h2>Miscellaneous</h2>
-                <div class="misc-box">
-                    <p>supppppppppppppp (WIP)</p>
+            </div>
+            <div class="extra-features-page center hidden">
+                <div class="wrap">
+                    <div class="extra-features-box">Extra Features Coming Soon!</div>
                 </div>
-            </section>
-        </main>
+            </div>
+        </div>
     </body>
 </html>

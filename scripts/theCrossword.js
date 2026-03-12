@@ -1,3 +1,127 @@
+const cwColorsStorageKey = "crossword_colors_settings";
+const defaultCrosswordColors = {
+    cw_cell_borders:            "#161718",
+    cw_letter_in_cell:          "#FFFFFF",
+    cw_correct_letter_in_cell:  "#A9D6FE",
+    cw_empty_cell:              "#585863",
+    cw_prefilled_cell:          "#161718",
+    cw_shaded_cell:             "#383840",
+    cw_related_cell_clue:       "#596D83",
+    cw_highlighted_cell_clue:   "#483F80",
+    cw_shaded_highlighted_cell: "#383361",
+    cw_selected_cell_clue:      "#4678AA",
+    cw_shaded_selected_cell:    "#476E93",
+    cw_circle_within_cell:      "#161718",
+    cw_main_selected_clue:      "#393361"
+};
+
+function getCrosswordColors(customColors = {}) {
+    return {
+        ...defaultCrosswordColors,
+        ...customColors
+    };
+}
+
+function buildCrosswordColorsCSS(customColors = {}) {
+    const cwColors = getCrosswordColors(customColors);
+    return `
+        /* Crossword Board + Clue Colors */
+
+        [data-group="grid"] rect, [data-group="grid"] path /* Cell borders */ {
+            stroke: ${cwColors.cw_cell_borders};
+        }
+
+        .xwd__cell text /* Letter in cell */ {
+            fill: ${cwColors.cw_letter_in_cell};
+        }
+
+        .xwd__assistance--confirmed~text:last-of-type /* Correct letter in cell */ {
+            fill: ${cwColors.cw_correct_letter_in_cell};
+        }
+        
+        .xwd__cell--cell /* Empty cell */ {
+            fill: ${cwColors.cw_empty_cell};
+        }
+
+        .xwd__cell--block /* Prefilled cell */ {
+            fill: ${cwColors.cw_prefilled_cell};
+        }
+
+        .xwd__cell--shaded /* Shaded cell */ {
+            fill: ${cwColors.cw_shaded_cell};
+        }
+
+        .xwd__cell--related /* Clue related cell */ {
+            fill: ${cwColors.cw_related_cell_clue};
+        }
+
+        .xwd__cell--highlighted, .xwd__cell--related.xwd__cell--highlighted /* Highlighted word cell */ {
+            fill: ${cwColors.cw_highlighted_cell_clue};
+        }
+
+        .xwd__cell--highlighted.xwd__cell--shaded /* Shaded + highlighted cell */ {
+            fill: ${cwColors.cw_shaded_highlighted_cell};
+        }
+
+        .xwd__cell--selected, .xwd__cell--related.xwd__cell--highlighted.xwd__cell--selected /* Selected cell */ {
+            fill: ${cwColors.cw_selected_cell_clue};
+        }
+
+        .xwd__cell--selected.xwd__cell--shaded /* Shaded + selected cell */{
+            fill: ${cwColors.cw_shaded_selected_cell};
+        }
+
+        .xwd__cell--cell+circle, .xwd__cell--cell+path /* Circle within cell */ {
+            stroke: ${cwColors.cw_circle_within_cell};
+        }
+
+        .xwd__clue--highlighted /* Highlighted clue */ {
+            border-left-color: ${cwColors.cw_highlighted_cell_clue};
+        }
+
+        .xwd__clue--related /* Related clue */ {
+            background-color: ${cwColors.cw_related_cell_clue};
+        }
+
+        .xwd__clue--selected /* Selected clue */ {
+            background-color: ${cwColors.cw_selected_cell_clue};
+        }
+
+        .xwd__clue-bar-desktop--bar /* Main selected clue */ {
+            background: ${cwColors.cw_main_selected_clue};
+            color: white;
+        }
+    `;
+}
+
+function applyCrosswordColors(customColors = {}) {
+    let style = document.getElementById("nyt-crossword-color-style");
+    if (!style) {
+        style = document.createElement("style");
+        style.id = "nyt-crossword-color-style";
+        document.head.appendChild(style);
+    }
+    style.textContent = buildCrosswordColorsCSS(customColors);
+}
+
+function removeCrosswordColors() {
+    const style = document.getElementById("nyt-crossword-color-style");
+    if (style) {
+        style.remove();
+    }
+}
+
+function loadStoredCrosswordColors() {
+    chrome.storage.sync.get(cwColorsStorageKey, (data) => {
+        const saved = data?.[cwColorsStorageKey]?.crosswords || {};
+        const colors = {};
+        for (const [key, value] of Object.entries(saved)) {
+            colors[key] = value?.hex || defaultCrosswordColors[key];
+        }
+        applyCrosswordColors(colors);
+    });
+}
+
 function enableCrosswordDarkMode() {
     const svgURL_Settings = chrome.runtime.getURL("svgs/settings-black.svg");
     const svgURL_Help = chrome.runtime.getURL("svgs/help.svg");
@@ -266,10 +390,6 @@ function enableCrosswordDarkMode() {
             scrollbar-color: black white;
         }
 
-        [data-group="grid"] rect, [data-group="grid"] path {
-            stroke: #161718;
-        }
-
         .xwd__clue--filled span {
             color: #959595;
         }
@@ -313,69 +433,6 @@ function enableCrosswordDarkMode() {
         .xwd__print-modal--printModalContent .xwd__print-modal--cellDarkness 
         .xwd__print-modal--opacityIcon .xwd__print-modal--userOpacity {
             border: 1px solid white;
-        }
-
-        /* Crossword Board + Clue Colors (These will be changable!) */
-
-        .xwd__cell text /* Letter in cell */ {
-            fill: white;
-        }
-
-        .xwd__assistance--confirmed~text:last-of-type /* Correct letter in cell */ {
-            fill: #a9d6fe;
-        }
-        
-        .xwd__cell--cell /* Empty cell */ {
-            fill: #585863;
-        }
-
-        .xwd__cell--block /* Prefilled cell */ {
-            fill: #161718;
-        }
-
-        .xwd__cell--shaded /* Shaded cell */ {
-            fill: #383840;
-        }
-
-        .xwd__cell--related /* Clue related cell */ {
-            fill: #596d83;
-        }
-
-        .xwd__cell--highlighted, .xwd__cell--related.xwd__cell--highlighted /* Highlighted word cell */ {
-            fill: #483f80;
-        }
-
-        .xwd__cell--highlighted.xwd__cell--shaded /* Shaded + highlighted cell */ {
-            fill: #383361;
-        }
-
-        .xwd__cell--selected, .xwd__cell--related.xwd__cell--highlighted.xwd__cell--selected /* Selected cell */ {
-            fill: #4678aa;
-        }
-
-        .xwd__cell--selected.xwd__cell--shaded /* Shaded + selected cell */{
-            fill: #476e93;
-        }
-
-        .xwd__cell--cell+circle, .xwd__cell--cell+path /* Circle within cell */ {
-            stroke: #161718;
-        }
-
-        .xwd__clue--highlighted /* Highlighted clue */ {
-            border-left-color: #483f80;
-        }
-
-        .xwd__clue--related /* Related clue */ {
-            background-color: #596d83;
-        }
-
-        .xwd__clue--selected /* Selected clue */ {
-            background-color: #483f80;
-        }
-
-        .xwd__clue-bar-desktop--bar /* Main selected clue */ {
-            background: #393361;
-            color: white;
         }
 
         /* Congrats Page */
@@ -446,6 +503,7 @@ function enableCrosswordDarkMode() {
     style.id = "crosswordstyle";
     style.innerText = crosswordCSS;
     document.head.appendChild(style);
+    loadStoredCrosswordColors();
 }
 
 function disableCrosswordDarkMode() {
@@ -462,6 +520,9 @@ chrome.runtime.onMessage.addListener(function(message) {
         } else {
             enableCrosswordDarkMode();
         }
+    }
+    if (message.action === "applyCrosswordColors") {
+        applyCrosswordColors(message.colors || {});
     }
 });
 

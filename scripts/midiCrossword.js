@@ -122,7 +122,7 @@ function loadStoredCrosswordColors() {
     });
 }
 
-function enableMiniDarkMode() {
+function enableMidiDarkMode() {
     const svgURL_Settings = chrome.runtime.getURL("svgs/settings-black.svg");
     const svgURL_Help = chrome.runtime.getURL("svgs/help.svg");
     const svgURL_Pencil = chrome.runtime.getURL("svgs/pencil-black.svg");
@@ -132,7 +132,7 @@ function enableMiniDarkMode() {
     const svgURL_Error404Small = chrome.runtime.getURL("svgs/error404-illustration-s.svg");
     const svgURL_Error404Medium = chrome.runtime.getURL("svgs/error404-illustration-m.svg");
     const svgURL_Error404XL = chrome.runtime.getURL("svgs/error404-illustration-xl.svg");
-    const miniCSS = `
+    const midiCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -283,7 +283,7 @@ function enableMiniDarkMode() {
             color: white;
         }
 
-        .xwd__start-modal--icon.mini {
+        .xwd__start-modal--icon.midi {
             border: 3px solid white;
             border-radius: 10px;
         }
@@ -399,6 +399,21 @@ function enableMiniDarkMode() {
             color: #777777;
         }
 
+        .xwd__editorial-content--subGameplayGrid .xwd__editorial-content--header {
+            border-top: solid 6px white;
+        }
+
+        .xwd__editorial-content--subGameplayGrid .xwd__editorial-content--header a,
+        .xwd__editorial-content--editorialCard .xwd__editorial-content--kicker,
+        .xwd__editorial-content--editorialCard .xwd__editorial-content--meta {
+            color: white;
+        }
+
+        .xwd__editorial-content--subGameplayGrid .xwd__editorial-content--header a::after {
+            border-right: 2px solid white;
+            border-top: 2px solid white;
+        }
+
         /* Congrats Page */
 
         .xwd__congrats-modal--content, .mini__congrats-modal--content {
@@ -417,27 +432,13 @@ function enableMiniDarkMode() {
             color: white;
         }
 
-        .midi-cta {
-            border: 1px solid white;
-        }
-            
-        .midi-cta .new-label {
-            background-color: white;
-            color: black;
-        }
-
-        .midi-cta .midi-icon {
-            border: 2px solid white;
-            border-radius: 6px;
-        }
-
         .xwd__share-modal_shareLinkButton.xwd__share-modal_copiedLink {
             background-image: url("${svgURL_Checkmark}");
         }
 
         /* Subscribe Popup */
 
-        .xwd__modal--button-container .mini-welcome-subscribe-anon-cta_button {
+        .xwd__modal--button-container .midi-welcome-subscribe-anon-cta_button {
             background-color: #0f0f0f;
             border: 2px solid white;
             color: white;
@@ -478,25 +479,25 @@ function enableMiniDarkMode() {
         }
     `;
     const style = document.createElement("style");
-    style.id = "ministyle";
-    style.innerText = miniCSS;
+    style.id = "midistyle";
+    style.innerText = midiCSS;
     document.head.appendChild(style);
     loadStoredCrosswordColors();
 }
 
-function disableMiniDarkMode() {
-    const styleElement = document.getElementById("ministyle");
+function disableMidiDarkMode() {
+    const styleElement = document.getElementById("midistyle");
     if (styleElement) {
         styleElement.remove();
     }
 }
 
 chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableMiniDarkMode") {
-        if (document.getElementById("ministyle")) {
-            disableMiniDarkMode();
+    if (message.action == "enableMidiDarkMode") {
+        if (document.getElementById("midistyle")) {
+            disableMidiDarkMode();
         } else {
-            enableMiniDarkMode();
+            enableMidiDarkMode();
         }
     }
     if (message.action === "applyCrosswordColors") {
@@ -504,8 +505,8 @@ chrome.runtime.onMessage.addListener(function(message) {
     }
 });
 
-chrome.storage.sync.get("miniDarkModeEnabled", function(data) {
-    if (data.miniDarkModeEnabled) {
-        enableMiniDarkMode();
+chrome.storage.sync.get("midiDarkModeEnabled", function(data) {
+    if (data.midiDarkModeEnabled) {
+        enableMidiDarkMode();
     } 
 });

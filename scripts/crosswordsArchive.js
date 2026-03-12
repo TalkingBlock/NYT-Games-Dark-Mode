@@ -191,16 +191,20 @@ function enableCrosswordsArchiveDarkMode() {
         /* Calendar Icons */
 
         .progressIconContent.puzzleProgress0,
+        .progressIconContent.midiProgress0,
         .progressIconContent.miniProgress0 {
-            border: 1px solid white;
+            border: 2px solid white;
+            border-radius: 7px;
         }
 
         .print {
-            filter: brightness(3);
+            filter: brightness(1.5);
         }
 
-        .island .print {
-            filter: none;
+        @media (min-width: 992px) {
+            .print:hover {
+                filter: invert(1);
+            }
         }
 
         .cardRibbon.brandNew {
@@ -264,10 +268,6 @@ function enableCrosswordsArchiveDarkMode() {
         .island:hover .printTool {
             background-color: #0f0f0f;
             border-top: 1px solid #777777;
-        }
-
-        .island .print {
-            filter: brightness(3);
         }
 
         .puzzleInfo .puzzleInfoContent {

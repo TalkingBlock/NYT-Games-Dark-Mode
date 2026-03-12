@@ -140,6 +140,11 @@ function enableMenuDarkMode() {
             background: #0f0f0f;
         }
 
+        .progressIconContent {
+            border: 2px solid white;
+            border-radius: 11px;
+        }
+
         @media (min-width: 992px) {
             .featured.standard:hover, .featured.primary:hover, .hub-stats-card__puzzle-info:hover, .hub-promo-card:hover {
                 background-color: #181818;
@@ -158,6 +163,10 @@ function enableMenuDarkMode() {
 
         .upsell .copy {
             color: #777777;
+        }
+
+        .hub-stats-card__time, .hub-stats-card__day-of-week {
+            color: white;
         }
 
         /* Game Cards */
@@ -217,8 +226,8 @@ function enableMenuDarkMode() {
             color: white;
         }
 
-        .progressIconContent {
-            border: 1px solid white;
+        .section__section .progressIconContent {
+            border-radius: 8px;
         }
 
         .progress__playMoreLink:hover {
@@ -313,7 +322,13 @@ function enableMenuDarkMode() {
             background: #555555;
         }
 
-        /* Smaller Than 767.99 Pixels Page */
+        /* Color Changes when Certain Width */
+
+        @media (max-width: 991.98px) {
+            .hub-welcome-midi {
+                background-color: #1f1f1f;
+            }
+        }
 
         @media (max-width: 767.98px) {
             .moar-games-variant.hub-welcome {
@@ -386,6 +401,10 @@ function enableMenuDarkMode() {
         .hub-mobile-stats__stats-more {
             color: white;
             background-color: #333333;
+        }
+
+        .hub-mobile-stats__time {
+            color: white;
         }
 
         .hub-mobile-stats__bars-block .grey {
