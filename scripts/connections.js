@@ -42,15 +42,60 @@ function enableConnectionsDarkMode() {
         /* Main Sidebar */
 
         .pz-nav-drawer {
-            scrollbar-color: #0f0f0f white;
+            background: #0f0f0f;
+            scrollbar-color: white #0f0f0f;
         }
 
         .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
             background-color: #0f0f0f;
         }
 
-        .pz-icon-nyt {
+        .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
+        }       
+
+        .pz-icon-daily {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
+        }
+        
+        .pz-icon-midi {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Midi-Icon-Normalized-Color.svg");
+        }
+        
+        .pz-icon-mini {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Mini-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-connections {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Connections-Icon-Dark-Mode.svg");
+        }
+
+        .pz-icon-spelling-bee {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/SpellingBee-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-wordle {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/wordle-icon-padded.svg");
+        }
+
+        .pz-icon-pips {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Pips-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-strands {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Strands-Icon-Normalized-Color.svg")
+        }
+
+        .pz-icon-letter-boxed {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/LetterBoxed-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-tiles {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Tiles-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-sudoku {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Sudoku-Icon-Normalized-Color.svg");
         }
 
         .DirectLink-module_directLink__description__SPUgJ,
@@ -70,6 +115,11 @@ function enableConnectionsDarkMode() {
         .DirectLink-module_directLink__kSggP:hover,
         .pz-nav-drawer__link:hover {
             background-color: #777777;
+        }
+
+        .DirectLink-module_directLink__pill__lFxm9 {
+            background-color: white;
+            color: black;
         }
 
         .pz-nav-drawer__account {
@@ -295,6 +345,10 @@ function enableConnectionsDarkMode() {
             background-color: white;
         }
 
+        .Mistakes-module_mistakesContent__nlijY.Mistakes-module_indicatorDisabled___J578 {
+            color: white;
+        }
+
         .ActionButton-module_button__IlhXt {
             background-color: #0f0f0f;
             color: white;
@@ -313,9 +367,32 @@ function enableConnectionsDarkMode() {
             color: black;
         }
 
+        .ActionButton-module_button__IlhXt.ActionButton-module_filled__zUShw, 
+        .ActionButton-module_button__IlhXt.ActionButton-module_filled__zUShw:disabled {
+            border: 1px solid white;
+        }
+
         .Toast-module_toast__YAoDa {
             background-color: white;
             color: black;
+        }
+
+        /* Track your Stats Not Logged In Popup */
+
+        .pz-moment:has(.LoginPrompt-module_lireContainer__Iqekx) {
+            background-color: #0f0f0f !important;
+        }
+
+        .pz-moment:has(.pz-moment__container) {
+            background-color: rgb(179, 167, 254) !important;
+        }
+
+        .pz-icon-close {
+            filter: invert(1);
+        }
+
+        .LoginPrompt-module_title__mWQeD, .LoginPrompt-module_subtitle__xO56q {
+            color: white;
         }
 
         /* Congrats Page */
@@ -328,25 +405,47 @@ function enableConnectionsDarkMode() {
             border-bottom: 1px solid white;
         }
 
-        button.css-1wqvipx, button.css-zoyaaz {
-            background: white;
+        .BadgeCarousel-module_badgeHeader__H_g5M h3, .BadgeCarouselItem-module_displayName__GrwKg {
+            color: white;
+        }
+
+        .BadgeCarouselItem-module_badge__YWm7f {
+            background-color: #0f0f0f;
+            border: 1px solid white;
+        }
+
+        .BotLinkCTA-module_botLink__QjG6_.BotLinkCTA-module_bordered__Hlfnq{
+            border-top: 1px solid white;
+            border-bottom: 1px solid white;
+        }
+
+        button.button-primary {
+            background-color: white;
             color: black;
         }
 
-        button.css-1wqvipx:hover:enabled, button.css-zoyaaz:hover:enabled {
-            background: #e4e4e4;
-            color: black;
+        button.button-primary:hover:enabled {
+            background-color: #e4e4e4;
         }
 
-        button.css-kkbic9 {
+        button.button-transparent {
             color: white;
             border: 1px solid white;
         }
 
-        button.css-kkbic9:hover:enabled {
+        button.button-transparent:hover:enabled {
             color: white;
         }
 
+        .GamesCarouselStack-module_frictionMitigationContent__sfyQO 
+        .GamesCarouselStack-module_carouselStackContainer__ogcQ6 hr {
+            border-color: #777777;border-top: solid 2px white;
+        }
+
+        .GamesCarouselStack-module_frictionMitigationContent__sfyQO h4 {
+            color: white;
+        }
+            
         .pz-moment__close_text.Congrats-module_closeButton__KtTXC {
             filter: invert(1);
         }

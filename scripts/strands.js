@@ -1,23 +1,46 @@
+const strandsSourceObservers = {};
+let strandsReplaceTimeout = null;
+
 function replaceVideo(selector, newSource) {
     const video = document.querySelector(selector);
     if (!video) return;
     const source = video.querySelector("source");
-    if (!source || source.dataset.replaced) return;
-    source.dataset.originalSource = source.src;
-    source.src = chrome.runtime.getURL(newSource);
-    source.dataset.replaced = "true";
+    if (!source) return;
+    const newSrc = chrome.runtime.getURL(newSource);
+    if (source.src === newSrc) {
+        video.style.visibility = 'visible';
+        return;
+    }
+    if (!source.dataset.originalSource) {
+        source.dataset.originalSource = source.src || "";
+    }
+    source.src = newSrc;
     video.load();
+    video.style.visibility = 'visible';
+
+    if (strandsSourceObservers[selector]) strandsSourceObservers[selector].disconnect();
+    strandsSourceObservers[selector] = new MutationObserver(() => {
+        if (!source.isConnected) return;
+        if (source.src !== newSrc) {
+            source.src = newSrc;
+        }
+    });
+    strandsSourceObservers[selector].observe(source, {attributes: true, attributeFilter: ["src"]});
 }
 
 function restoreVideo(selector) {
+    if (strandsSourceObservers[selector]) {
+        strandsSourceObservers[selector].disconnect();
+        delete strandsSourceObservers[selector];
+    }
     const video = document.querySelector(selector);
     if (!video) return;
     const source = video.querySelector("source");
     if (!source || !source.dataset.originalSource) return;
     source.src = source.dataset.originalSource;
-    delete source.dataset.replaced;
     delete source.dataset.originalSource;
     video.load();
+    video.style.visibility = '';
 }
 
 function enableStrandsDarkMode() {
@@ -64,16 +87,61 @@ function enableStrandsDarkMode() {
         /* Main Sidebar */
 
         .pz-nav-drawer {
-            scrollbar-color: #0f0f0f white;
+            background: #0f0f0f;
+            scrollbar-color: white #0f0f0f;
         }
 
         .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
             background-color: #0f0f0f;
         }
 
-        .pz-icon-nyt {
+        .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
         }        
+
+        .pz-icon-daily {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
+        }
+        
+        .pz-icon-midi {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Midi-Icon-Normalized-Color.svg");
+        }
+        
+        .pz-icon-mini {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Mini-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-connections {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Connections-Icon-Dark-Mode.svg");
+        }
+
+        .pz-icon-spelling-bee {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/SpellingBee-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-wordle {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/wordle-icon-padded.svg");
+        }
+
+        .pz-icon-pips {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Pips-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-strands {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Strands-Icon-Normalized-Color.svg")
+        }
+
+        .pz-icon-letter-boxed {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/LetterBoxed-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-tiles {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Tiles-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-sudoku {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Sudoku-Icon-Normalized-Color.svg");
+        }
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
@@ -92,6 +160,11 @@ function enableStrandsDarkMode() {
         .DirectLink-module_directLink__kSggP:hover,
         .pz-nav-drawer__link:hover {
             background-color: #777777;
+        }
+
+        .DirectLink-module_directLink__pill__lFxm9 {
+            background-color: white;
+            color: black;
         }
 
         .pz-nav-drawer__account {
@@ -158,6 +231,10 @@ function enableStrandsDarkMode() {
             background-color: #0f0f0f;
         }
 
+        .ToolbarAdapter-module_toolbarContainer__Ni4KN {
+            background-color: #0f0f0f;
+        }
+
         .ToolbarItem-module_toolbar_item__xrBr_ {
             background-color: #0f0f0f;
         }
@@ -219,6 +296,10 @@ function enableStrandsDarkMode() {
         .ProgressBar-module_progressBarFill__E7Rrg {
             border-color: black !important;
             background-color: white !important;
+        }
+
+        .Stats-module_inline_carrot__icon__YCGc0 {
+            filter: invert(1);
         }
 
         .xwd__modal--close .pz-icon, .Stats-module_inline_carrot__icon__G2cbk {
@@ -288,6 +369,12 @@ function enableStrandsDarkMode() {
             background-color: #0f0f0f;
         }
 
+        /* Hide How to Play videos until dark mode versions are loaded */
+
+        .darkPage1Gif, .darkPage3Gif {
+            visibility: hidden;
+        }
+
         /* How to Play Popup */
 
         .Help-module_title___5yTv, .carousel-module_wrapper__ZdPMF {
@@ -343,9 +430,22 @@ function enableStrandsDarkMode() {
             background-color: #0f0f0f !important;
         }
 
+        /* Hint Popup */
+
+        .strands-hint-modal {
+            background: #0f0f0f;
+            color: white;
+            border: none;
+        }
+
+        .Hints-module_confirmButton__PyF6x {
+            background-color: white;
+            color: black;
+        }
+
         /* Congrats Page */
 
-        .pz-moment__congrats .pz-moment {
+        .pz-moment.Congrats-module_wrapper__QikSo {
             background-color: #0f0f0f !important;
         }
 
@@ -357,21 +457,29 @@ function enableStrandsDarkMode() {
             filter: invert(1);
         }
 
-        .Congrats-module_createAccountButton__bQp7F.Congrats-module_wide__SD0k5, button.css-27fpwl {
+        .BadgeCarousel-module_badgeHeader__H_g5M h3, .BadgeCarouselItem-module_displayName__GrwKg {
+            color: white;
+        }
+
+        .BadgeCarouselItem-module_badge__YWm7f {
+            background-color: #0f0f0f;
+            border: 1px solid white;
+        }
+
+        button.button-primary {
             background: white;
             color: black;
             border: 1px solid white;
+        }
+
+        button.button-primary:hover:enabled {
+            background: #e4e4e4;
         }
 
         button.css-15cgz6j {
             background-color: #0f0f0f;
             color: white;
             border: 1px solid white;
-        }
-
-        .Congrats-module_createAccountButton__bQp7F.Congrats-module_wide__SD0k5:hover {
-            background: #e4e4e4 !important;
-            border: 1px solid #e4e4e4;
         }
 
         button.css-27fpwl:hover {
@@ -390,9 +498,10 @@ function enableStrandsDarkMode() {
 
     applyDarkModeVideosIfEnabled();
     const observer = new MutationObserver(() => {
-        applyDarkModeVideosIfEnabled();
+        clearTimeout(strandsReplaceTimeout);
+        strandsReplaceTimeout = setTimeout(() => applyDarkModeVideosIfEnabled(), 0);
     });
-    observer.observe(document.body, {childList: true, subtree: true});
+    observer.observe(document.documentElement, {childList: true, subtree: true});
     window.strandsObserver = observer;
 }
 
@@ -409,6 +518,8 @@ function disableStrandsDarkMode() {
         styleElement.remove();
     }
 
+    clearTimeout(strandsReplaceTimeout);
+    strandsReplaceTimeout = null;
     restoreVideo(".darkPage1Gif");
     restoreVideo(".darkPage3Gif");
     if (window.strandsObserver) {

@@ -151,16 +151,61 @@ function enableSudokuDarkMode() {
         /* Main Sidebar */
 
         .pz-nav-drawer {
-            scrollbar-color: #0f0f0f white;
+            background: #0f0f0f;
+            scrollbar-color: white #0f0f0f;
         }
 
         .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
             background-color: #0f0f0f;
         }
 
-        .pz-icon-nyt {
+        .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
-        }        
+        }     
+            
+        .pz-icon-daily {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
+        }
+        
+        .pz-icon-midi {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Midi-Icon-Normalized-Color.svg");
+        }
+        
+        .pz-icon-mini {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Mini-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-connections {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Connections-Icon-Dark-Mode.svg");
+        }
+
+        .pz-icon-spelling-bee {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/SpellingBee-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-wordle {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/wordle-icon-padded.svg");
+        }
+
+        .pz-icon-pips {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Pips-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-strands {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Strands-Icon-Normalized-Color.svg")
+        }
+
+        .pz-icon-letter-boxed {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/LetterBoxed-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-tiles {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Tiles-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-sudoku {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Sudoku-Icon-Normalized-Color.svg");
+        }
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
@@ -179,6 +224,11 @@ function enableSudokuDarkMode() {
         .DirectLink-module_directLink__kSggP:hover,
         .pz-nav-drawer__link:hover {
             background-color: #777777;
+        }
+
+        .DirectLink-module_directLink__pill__lFxm9 {
+            background-color: white;
+            color: black;
         }
 
         .pz-nav-drawer__account {
@@ -346,13 +396,13 @@ function enableSudokuDarkMode() {
             color: white;
         }
 
-        button.css-1299j98 {
-            background: white;
-            color: black;
+        .pz-modal__button.primary:hover {
+            background-color: #e4e4e4;
         }
 
-        button.css-1299j98:hover:enabled {
-            background: #e4e4e4;
+        .GamesCarouselStack-module_frictionMitigationContent__sfyQO 
+        .GamesCarouselStack-module_carouselStackContainer__ogcQ6 hr {
+            border-color: #777777;border-top: solid 2px white;
         }
 
         /* Error Page */

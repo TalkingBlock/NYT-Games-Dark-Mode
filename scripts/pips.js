@@ -1,23 +1,46 @@
+let pipsSourceObserver = null;
+let pipsReplaceTimeout = null;
+
 function replaceVideo(selector, newSource) {
     const video = document.querySelector(selector);
     if (!video) return;
     const source = video.querySelector("source");
-    if (!source || source.dataset.replaced) return;
-    source.dataset.originalSource = source.src;
-    source.src = chrome.runtime.getURL(newSource);
-    source.dataset.replaced = "true";
+    if (!source) return;
+    const newSrc = chrome.runtime.getURL(newSource);
+    if (source.src === newSrc) {
+        video.style.visibility = 'visible';
+        return;
+    }
+    if (!source.dataset.originalSource) {
+        source.dataset.originalSource = source.src || "";
+    }
+    source.src = newSrc;
     video.load();
+    video.style.visibility = 'visible';
+
+    if (pipsSourceObserver) pipsSourceObserver.disconnect();
+    pipsSourceObserver = new MutationObserver(() => {
+        if (!source.isConnected) return;
+        if (source.src !== newSrc) {
+            source.src = newSrc;
+        }
+    });
+    pipsSourceObserver.observe(source, {attributes: true, attributeFilter: ["src"]});
 }
 
 function restoreVideo(selector) {
+    if (pipsSourceObserver) {
+        pipsSourceObserver.disconnect();
+        pipsSourceObserver = null;
+    }
     const video = document.querySelector(selector);
     if (!video) return;
     const source = video.querySelector("source");
     if (!source || !source.dataset.originalSource) return;
     source.src = source.dataset.originalSource;
-    delete source.dataset.replaced;
     delete source.dataset.originalSource;
     video.load();
+    video.style.visibility = '';
 }
 
 function enablePipsDarkMode() {
@@ -63,16 +86,61 @@ function enablePipsDarkMode() {
         /* Main Sidebar */
 
         .pz-nav-drawer {
-            scrollbar-color: #0f0f0f white;
+            background: #0f0f0f;
+            scrollbar-color: white #0f0f0f;
         }
 
         .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
             background-color: #0f0f0f;
         }
 
-        .pz-icon-nyt {
+        .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
         }        
+
+        .pz-icon-daily {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
+        }
+        
+        .pz-icon-midi {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Midi-Icon-Normalized-Color.svg");
+        }
+        
+        .pz-icon-mini {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Mini-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-connections {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Connections-Icon-Dark-Mode.svg");
+        }
+
+        .pz-icon-spelling-bee {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/SpellingBee-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-wordle {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/page-icons/wordle-icon-padded.svg");
+        }
+
+        .pz-icon-pips {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Pips-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-strands {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Strands-Icon-Normalized-Color.svg")
+        }
+
+        .pz-icon-letter-boxed {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/LetterBoxed-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-tiles {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Tiles-Icon-Normalized-Color.svg");
+        }
+
+        .pz-icon-sudoku {
+            background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Sudoku-Icon-Normalized-Color.svg");
+        }
 
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
@@ -91,6 +159,11 @@ function enablePipsDarkMode() {
         .DirectLink-module_directLink__kSggP:hover,
         .pz-nav-drawer__link:hover {
             background-color: #777777;
+        }
+
+        .DirectLink-module_directLink__pill__lFxm9 {
+            background-color: white;
+            color: black;
         }
 
         .pz-nav-drawer__account {
@@ -276,6 +349,12 @@ function enablePipsDarkMode() {
             background-color: #0f0f0f;
         }
 
+        /* Hide tutorial video until dark mode version is loaded */
+
+        .Help-module_howToPlayGif__S5Kic {
+            visibility: hidden;
+        }
+
         /* Game Page */
 
         .GameMoment-module_gameContainer__Vuha8 {
@@ -331,13 +410,16 @@ function enablePipsDarkMode() {
     document.head.appendChild(style);
 
     applyDarkModeVideoIfEnabled();
-    const observer = new MutationObserver(() => {applyDarkModeVideoIfEnabled();});
-    observer.observe(document.body, {childList: true, subtree: true});
+    const observer = new MutationObserver(() => {
+        clearTimeout(pipsReplaceTimeout);
+        pipsReplaceTimeout = setTimeout(() => applyDarkModeVideoIfEnabled(), 0);
+    });
+    observer.observe(document.documentElement, {childList: true, subtree: true});
     window.strandsObserver = observer;
 }
 
 function applyDarkModeVideoIfEnabled() {
-    if (document.getElementById("strandsstyle")) return;
+    if (!document.getElementById("pipsstyle")) return;
     replaceVideo(".Help-module_howToPlayGif__S5Kic", "mp4s/h2p-gif-slowed.mp4");
 }
 
@@ -347,6 +429,8 @@ function disablePipsDarkMode() {
         styleElement.remove();
     }
 
+    clearTimeout(pipsReplaceTimeout);
+    pipsReplaceTimeout = null;
     restoreVideo(".Help-module_howToPlayGif__S5Kic");
     if (window.strandsObserver) {
         window.strandsObserver.disconnect();

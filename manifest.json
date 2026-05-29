@@ -1,7 +1,7 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Adds a toggleable dark mode to NYT Games :D",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab", "storage", "clipboardRead", "clipboardWrite"],
   "action": {
@@ -102,6 +102,11 @@
       "matches": ["https://www.nytimes.com/games/crossplay"],
       "js": ["scripts/miscPages.js"],
       "run_at": "document_start"
+    }, {
+      "matches": ["https://myaccount.nytimes.com/auth/iframe/*"],
+      "js": ["scripts/iframe.js"],
+      "run_at": "document_start",
+      "all_frames": true
     }
   ],
   "web_accessible_resources": [
