@@ -393,6 +393,10 @@ function enableStrandsDarkMode() {
 
         /* Game Page */
 
+        .bubbles-module_hider__zoPog {
+            background-color: #0f0f0f;
+        }
+
         .pz-game-field {
             background: #0f0f0f;
             color: white;

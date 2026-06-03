@@ -1,23 +1,43 @@
-const cwColorsStorageKey = "crossword_colors_settings";
-const defaultCrosswordColors = {
+const cwColorsStorageKey = "crosswordColorSettings";
+
+const darkCrosswordColors = {
     cw_cell_borders:            "#161718",
-    cw_letter_in_cell:          "#FFFFFF",
+    cw_letter_number_in_cell:   "#FFFFFF",
     cw_correct_letter_in_cell:  "#A9D6FE",
     cw_empty_cell:              "#585863",
     cw_prefilled_cell:          "#161718",
     cw_shaded_cell:             "#383840",
     cw_related_cell_clue:       "#596D83",
+    cw_related_shaded_cell:     "#596D83",
     cw_highlighted_cell_clue:   "#483F80",
     cw_shaded_highlighted_cell: "#383361",
     cw_selected_cell_clue:      "#4678AA",
     cw_shaded_selected_cell:    "#476E93",
     cw_circle_within_cell:      "#161718",
-    cw_main_selected_clue:      "#393361"
+    cw_main_selected_clue_bg:   "#393361",
+    cw_main_selected_clue_text: "#FFFFFF"
+};
+const lightCrosswordColors = {
+    cw_cell_borders:            "#696969",
+    cw_letter_number_in_cell:   "#000000",
+    cw_correct_letter_in_cell:  "#2860D8",
+    cw_empty_cell:              "#FFFFFF",
+    cw_prefilled_cell:          "#000000",
+    cw_shaded_cell:             "#DCDCDC",
+    cw_related_cell_clue:       "#FFECA0",
+    cw_related_shaded_cell:     "#E8E2C7",
+    cw_highlighted_cell_clue:   "#A7D8FF",
+    cw_shaded_highlighted_cell: "#BAD9F3",
+    cw_selected_cell_clue:      "#FFDA00",
+    cw_shaded_selected_cell:    "#F3DB4D",
+    cw_circle_within_cell:      "#696969",
+    cw_main_selected_clue_bg:   "#DCEFFF",
+    cw_main_selected_clue_text: "#000000"
 };
 
 function getCrosswordColors(customColors = {}) {
     return {
-        ...defaultCrosswordColors,
+        ...darkCrosswordColors,
         ...customColors
     };
 }
@@ -31,8 +51,8 @@ function buildCrosswordColorsCSS(customColors = {}) {
             stroke: ${cwColors.cw_cell_borders};
         }
 
-        .xwd__cell text /* Letter in cell */ {
-            fill: ${cwColors.cw_letter_in_cell};
+        .xwd__cell text /* Letter + Number in cell */ {
+            fill: ${cwColors.cw_letter_number_in_cell};
         }
 
         .xwd__assistance--confirmed~text:last-of-type /* Correct letter in cell */ {
@@ -53,6 +73,10 @@ function buildCrosswordColorsCSS(customColors = {}) {
 
         .xwd__cell--related /* Clue related cell */ {
             fill: ${cwColors.cw_related_cell_clue};
+        }
+
+        .xwd__cell--related.xwd__cell--shaded /* Related + shaded cell */ {
+            fill: ${cwColors.cw_related_shaded_cell};
         }
 
         .xwd__cell--highlighted, .xwd__cell--related.xwd__cell--highlighted /* Highlighted word cell */ {
@@ -88,8 +112,8 @@ function buildCrosswordColorsCSS(customColors = {}) {
         }
 
         .xwd__clue-bar-desktop--bar /* Main selected clue */ {
-            background: ${cwColors.cw_main_selected_clue};
-            color: white;
+            background: ${cwColors.cw_main_selected_clue_bg};
+            color: ${cwColors.cw_main_selected_clue_text};
         }
     `;
 }
@@ -113,10 +137,21 @@ function removeCrosswordColors() {
 
 function loadStoredCrosswordColors() {
     chrome.storage.sync.get(cwColorsStorageKey, (data) => {
-        const saved = data?.[cwColorsStorageKey]?.crosswords || {};
-        const colors = {};
-        for (const [key, value] of Object.entries(saved)) {
-            colors[key] = value?.hex || defaultCrosswordColors[key];
+        const settings = data?.[cwColorsStorageKey] || {};
+        const preset = settings.crosswordPreset || "light";
+        let colors;
+        if (preset === "dark") {
+            colors = {...darkCrosswordColors};
+        } else if (preset === "custom") {
+            const saved = settings.crosswords || {};
+            colors = {...lightCrosswordColors};
+            for (const [key, value] of Object.entries(saved)) {
+                if (value?.hex) {
+                    colors[key] = value.hex;
+                }
+            }
+        } else {
+            colors = {...lightCrosswordColors};
         }
         applyCrosswordColors(colors);
     });
@@ -570,3 +605,5 @@ chrome.storage.sync.get("miniDarkModeEnabled", function(data) {
         enableMiniDarkMode();
     } 
 });
+
+loadStoredCrosswordColors();

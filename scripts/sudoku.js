@@ -1,5 +1,19 @@
-const sdColorsStorageKey = "sudoku_colors_settings";
-const defaultSudokuColors = {
+const sdColorsStorageKey = "sudokuColorSettings";
+
+const lightSudokuColors = {
+    sd_board_frame:               "#121212",
+    sd_empty_cell:                "#FFFFFF",
+    sd_prefilled_cell:            "#DFDFDF",
+    sd_affected_no_number_cell:   "#F9EAC2",
+    sd_affected_number_cell:      "#D3C6AF",
+    sd_selected_cell:             "#FB9B00",
+    sd_filled_selected_number:    "#D48200",
+    sd_selected_number:           "#FEC468",
+    sd_prefilled_selected_number: "#E69100",
+    sd_numbers:                   "#000000",
+    sd_candidate_number:          "#5A5A5A"
+};
+const darkSudokuColors = {
     sd_board_frame:               "#FFFFFF",
     sd_empty_cell:                "#0F0F0F",
     sd_prefilled_cell:            "#434342",
@@ -10,13 +24,12 @@ const defaultSudokuColors = {
     sd_selected_number:           "#9E6708",
     sd_prefilled_selected_number: "#563B0A",
     sd_numbers:                   "#FFFFFF",
-    sd_number_selected_cell:      "#000000",
     sd_candidate_number:          "#D3D3D3"
 };
 
 function getSudokuColors(customColors = {}) {
     return {
-        ...defaultSudokuColors,
+        ...darkSudokuColors,
         ...customColors
     };
 }
@@ -66,10 +79,6 @@ function buildSudokuColorsCSS(customColors = {}) {
             fill: ${sdColors.sd_numbers};
         }
 
-        .selected .su-cell__value>path /* Number with selected cell */ {
-            fill: ${sdColors.sd_number_selected_cell};
-        }
-
         .su-candidates>svg>path /* Candidate numbers */ {
             fill: ${sdColors.sd_candidate_number};
         }
@@ -94,11 +103,22 @@ function removeSudokuColors() {
 }
 
 function loadStoredSudokuColors() {
-    chrome.storage.sync.get(sdColorsStorageKey, (data) => {
-        const saved = data?.[sdColorsStorageKey]?.sudoku || {};
-        const colors = {};
-        for (const [key, value] of Object.entries(saved)) {
-            colors[key] = value?.hex || defaultSudokuColors[key];
+    chrome.storage.sync.get("crosswordColorSettings", (data) => {
+        const settings = data?.["crosswordColorSettings"] || {};
+        const preset = settings.sudokuPreset || "light";
+        let colors;
+        if (preset === "dark") {
+            colors = {...darkSudokuColors};
+        } else if (preset === "custom") {
+            const saved = settings.sudoku || {};
+            colors = {...lightSudokuColors};
+            for (const [key, value] of Object.entries(saved)) {
+                if (value?.hex) {
+                    colors[key] = value.hex;
+                }
+            }
+        } else {
+            colors = {...lightSudokuColors};
         }
         applySudokuColors(colors);
     });
@@ -349,7 +369,7 @@ function enableSudokuDarkMode() {
 
         /* Game Page */
 
-        ._moment_1d9lu_8 {
+        .gameContainer {
             background-color: #0f0f0f;
         }
 
@@ -402,7 +422,8 @@ function enableSudokuDarkMode() {
 
         .GamesCarouselStack-module_frictionMitigationContent__sfyQO 
         .GamesCarouselStack-module_carouselStackContainer__ogcQ6 hr {
-            border-color: #777777;border-top: solid 2px white;
+            border-color: #777777;
+            border-top: solid 2px white;
         }
 
         /* Error Page */
@@ -443,7 +464,7 @@ function enableSudokuDarkMode() {
     style.id = "sudokustyle";
     style.innerText = sudokuCSS;
     document.head.appendChild(style);
-    loadStoredSudokuColors
+    loadStoredSudokuColors();
 }
 
 function disableSudokuDarkMode() {
@@ -471,3 +492,5 @@ chrome.storage.sync.get("sudokuDarkModeEnabled", function(data) {
         enableSudokuDarkMode();
     }
 });
+
+loadStoredSudokuColors();

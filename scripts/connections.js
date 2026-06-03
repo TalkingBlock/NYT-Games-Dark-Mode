@@ -319,8 +319,9 @@ function enableConnectionsDarkMode() {
 
         /* Game Page */
 
-        ._moment_1d9lu_8 {
+        .pz-game-field {
             background-color: #0f0f0f;
+            color: white;
         }
 
         .Board-module_form__B5pmo {
@@ -414,11 +415,6 @@ function enableConnectionsDarkMode() {
             border: 1px solid white;
         }
 
-        .BotLinkCTA-module_botLink__QjG6_.BotLinkCTA-module_bordered__Hlfnq{
-            border-top: 1px solid white;
-            border-bottom: 1px solid white;
-        }
-
         button.button-primary {
             background-color: white;
             color: black;
@@ -439,17 +435,17 @@ function enableConnectionsDarkMode() {
 
         .GamesCarouselStack-module_frictionMitigationContent__sfyQO 
         .GamesCarouselStack-module_carouselStackContainer__ogcQ6 hr {
-            border-color: #777777;border-top: solid 2px white;
+            border-color: #777777;
+            border-top: solid 2px white;
         }
 
         .GamesCarouselStack-module_frictionMitigationContent__sfyQO h4 {
             color: white;
         }
-            
-        .pz-moment__close_text.Congrats-module_closeButton__KtTXC {
-            filter: invert(1);
-        }
 
+        .pz-moment__close_text .inner-text {
+            color: white;
+        }
     `;
     const style = document.createElement("style");
     style.id = "connectionsstyle";

@@ -52,6 +52,31 @@ export function updateAll() {
     updateGameColorPanel();
     updateAllGamesColorObjects();
     updatePicker();
+    updatePresetUI();
+}
+
+// Updates the preset buttons and dims/locks the color UI when light or dark is active.
+export function updatePresetUI() {
+    const onSudoku = popupState.activeColorPanel === "sudoku";
+    const activePreset = onSudoku ? popupState.activeSudokuPreset : popupState.activeCrosswordPreset;
+    document.querySelectorAll(".color-preset").forEach((presetButton) => {
+        presetButton.classList.toggle("enabled", presetButton.dataset.preset === activePreset);
+    });
+    const crosswordLocked = popupState.activeCrosswordPreset !== "custom";
+    const sudokuLocked = popupState.activeSudokuPreset !== "custom";
+    const crosswordPanel = getCrosswordPanel();
+    if (crosswordPanel) {
+        crosswordPanel.classList.toggle("preset-locked", crosswordLocked);
+    }
+    const sudokuPanel = getSudokuPanel();
+    if (sudokuPanel) {
+        sudokuPanel.classList.toggle("preset-locked", sudokuLocked);
+    }
+    const colorPicker = document.querySelector(".color-picker");
+    if (colorPicker) {
+        const pickerLocked = onSudoku ? sudokuLocked : crosswordLocked;
+        colorPicker.classList.toggle("locked", pickerLocked);
+    }
 }
 
 // Updates and displays whichever page is active and visible to the user

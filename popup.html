@@ -230,6 +230,7 @@
                                 <div class="row hex-row">
                                     <div class="value" id="hexOut">
                                         <span class="hex-text">#FF0000</span>
+                                        <span class="hex-indicator" id="hexIndicator" aria-live="polite"></span>
                                         <span class="hex-actions">
                                             <button id="copyHex" title="Copy Hexcode"><img src="svgs/popup/copy.svg"></button>
                                             <button id="pasteHex" title="Paste Hexcode"><img src="svgs/popup/paste.svg"></button>
@@ -258,8 +259,8 @@
                                         <input type="radio" checked>
                                         <span class="radio-ui"></span>
                                     </label>
-                                    <label class="color-option" data-key="cw_letter_in_cell">
-                                        <span class="color-option-text">Letter In Cell</span><br>
+                                    <label class="color-option" data-key="cw_letter_number_in_cell">
+                                        <span class="color-option-text">Letter + Number In Cell</span><br>
                                         <span class="element-item">
                                             <span class="element-hex-box" aria-hidden="true"></span>
                                             <span class="element-hex">#FFFFFF</span>
@@ -312,6 +313,15 @@
                                         <input type="radio">
                                         <span class="radio-ui"></span>
                                     </label>
+                                    <label class="color-option" data-key="cw_related_shaded_cell">
+                                        <span class="color-option-text">Related + Shaded Cell</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
                                     <label class="color-option" data-key="cw_highlighted_cell_clue">
                                         <span class="color-option-text">Highlighted Cell + Clue</span><br>
                                         <span class="element-item">
@@ -357,8 +367,17 @@
                                         <input type="radio">
                                         <span class="radio-ui"></span>
                                     </label>                   
-                                    <label class="color-option" data-key="cw_main_selected_clue">
-                                        <span class="color-option-text">Main Selected Clue</span><br>
+                                    <label class="color-option" data-key="cw_main_selected_clue_bg">
+                                        <span class="color-option-text">Main Selected Clue BG</span><br>
+                                        <span class="element-item">
+                                            <span class="element-hex-box" aria-hidden="true"></span>
+                                            <span class="element-hex">#FFFFFF</span>
+                                        </span>
+                                        <input type="radio">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cw_main_selected_clue_text">
+                                        <span class="color-option-text">Main Selected Clue Text</span><br>
                                         <span class="element-item">
                                             <span class="element-hex-box" aria-hidden="true"></span>
                                             <span class="element-hex">#FFFFFF</span>
@@ -458,15 +477,6 @@
                                         <input type="radio">
                                         <span class="radio-ui"></span>
                                     </label>
-                                    <label class="color-option" data-key="sd_number_selected_cell">
-                                        <span class="color-option-text">Number + Selected Cell</span><br>
-                                        <span class="element-item">
-                                            <span class="element-hex-box" aria-hidden="true"></span>
-                                            <span class="element-hex">#FFFFFF</span>
-                                        </span>
-                                        <input type="radio">
-                                        <span class="radio-ui"></span>
-                                    </label>
                                     <label class="color-option" data-key="sd_candidate_number">
                                         <span class="color-option-text">Candidate Numbers</span><br>
                                         <span class="element-item">
@@ -477,6 +487,11 @@
                                         <span class="radio-ui"></span>
                                     </label>
                                 </div>
+                            </div>
+                            <div class="color-presets">
+                                <button class="color-preset enabled" data-preset="light">Light</button>
+                                <button class="color-preset" data-preset="dark">Dark</button>
+                                <button class="color-preset" data-preset="custom">Custom</button>
                             </div>
                         </div>
                     </div>
