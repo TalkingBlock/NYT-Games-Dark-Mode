@@ -1,13 +1,15 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Adds a toggleable dark mode to NYT Games :D",
-  "version": "0.7.2",
+  "version": "0.7.2.1",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab", "storage", "clipboardRead", "clipboardWrite"],
   "action": {
     "default_popup": "popup.html"
   },
   "icons": {
+    "16": "icons/nytdark16.png",
+    "32": "icons/nytdark32.png",
     "48": "icons/nytdark48.png",
     "128": "icons/nytdark128.png"
   },
