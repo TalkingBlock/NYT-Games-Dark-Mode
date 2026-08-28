@@ -7,6 +7,8 @@ export const popupState = {
     activeSudokuPreset: "light",
     selectedCrosswordColorKey: null,
     selectedSudokuColorKey: null,
+    lastCrosswordColorKey: null,
+    lastSudokuColorKey: null,
     pickerHue: 0,
     pickerSaturation: 1,
     pickerValue: 1,

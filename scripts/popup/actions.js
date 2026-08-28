@@ -4,11 +4,12 @@ import {
     popupActivePageStorageKey, popupActiveColorPanelStorageKey,
     lightCrosswordColors, darkCrosswordColors,
     lightSudokuColors, darkSudokuColors,
-    dmToggleConfig, dmToggleGroups, dmChildToggleParentMap
+    dmToggleConfig, dmToggleGroups, dmChildToggleParentMap,
+    rememberedGroupChildrenStorageKey
 } from "./defaultExports.js";
 import {clamp, hexToHsv, normalizeHexColor, hsvToHex} from "./colorMath.js";
 import {loadSavedTheme, saveTheme, readSyncValue, writeSyncValue, sendMessageToActiveTab} from "./storage.js";
-import {updateAll} from "./updater.js";
+import {updateAll, updateScrollAffordance} from "./updater.js";
 
 // Called from main.js; starts the popup, calls every single function to display it
 export async function initializePopup() {
@@ -24,7 +25,17 @@ export async function initializePopup() {
     attachPickerHandlers();
     attachClipboardHandlers();
     attachResetHandler();
+    attachColorPanelScrollHandlers();
     updateAll();
+}
+
+// Keeps the scroll affordance for color options synced while scrolling
+function attachColorPanelScrollHandlers() {
+    document.querySelectorAll(".color-info-panel").forEach((colorPanel) => {
+        colorPanel.addEventListener("scroll", () => {
+            updateScrollAffordance();
+        });
+    });
 }
 
 // Loads the page state from storage and displays whatever page is active
@@ -86,21 +97,35 @@ async function loadThemeState() {
     popupState.activeSudokuPreset =
         savedSudokuPreset === "dark" || savedSudokuPreset === "custom" ? savedSudokuPreset : "light";
     buildActiveSudokuColors();
-    if (savedTheme?.activeCrosswordKey && popupState.crosswordColors[savedTheme.activeCrosswordKey]) {
-        selectCrosswordColor(savedTheme.activeCrosswordKey, false, false);
+    popupState.lastCrosswordColorKey = resolveColorKey(
+        savedTheme?.activeCrosswordKey,
+        popupState.crosswordColors
+    );
+    popupState.lastSudokuColorKey = resolveColorKey(
+        savedTheme?.activeSudokuKey,
+        popupState.sudokuColors
+    );
+    selectColorForActivePanel(false);
+}
+
+// Helper function that returns the saved key if it still exists, otherwise the first available one
+function resolveColorKey(savedKey, colorMap) {
+    if (savedKey && colorMap[savedKey]) return savedKey;
+    return Object.keys(colorMap)[0] || null;
+}
+
+// Selects the remembered color of whichever color panel is currently displayed
+function selectColorForActivePanel(shouldSave = true) {
+    if (popupState.activeColorPanel === "sudoku") {
+        const sudokuColorKey = resolveColorKey(popupState.lastSudokuColorKey, popupState.sudokuColors);
+        if (sudokuColorKey) {
+            selectSudokuColor(sudokuColorKey, shouldSave, false);
+        }
         return;
     }
-    if (savedTheme?.activeSudokuKey && popupState.sudokuColors[savedTheme.activeSudokuKey]) {
-        selectSudokuColor(savedTheme.activeSudokuKey, false, false);
-        return;
-    }
-    const firstCrosswordColorKey = Object.keys(popupState.crosswordColors)[0];
-    if (firstCrosswordColorKey) {
-        selectCrosswordColor(firstCrosswordColorKey, false, false);
-    }
-    const firstSudokuColorKey = Object.keys(popupState.sudokuColors)[0];
-    if (firstSudokuColorKey) {
-        selectSudokuColor(firstSudokuColorKey, false, false);
+    const crosswordColorKey = resolveColorKey(popupState.lastCrosswordColorKey, popupState.crosswordColors);
+    if (crosswordColorKey) {
+        selectCrosswordColor(crosswordColorKey, shouldSave, false);
     }
 }
 
@@ -164,8 +189,9 @@ function applyCrosswordPreset(presetName) {
     popupState.activeCrosswordPreset = presetName;
     buildActiveCrosswordColors();
     if (!popupState.selectedCrosswordColorKey || !popupState.crosswordColors[popupState.selectedCrosswordColorKey]) {
-        popupState.selectedCrosswordColorKey = Object.keys(popupState.crosswordColors)[0] || null;
+        popupState.selectedCrosswordColorKey = resolveColorKey(popupState.lastCrosswordColorKey, popupState.crosswordColors);
     }
+    popupState.lastCrosswordColorKey = popupState.selectedCrosswordColorKey;
     const selectedColor = popupState.crosswordColors[popupState.selectedCrosswordColorKey];
     if (selectedColor) {
         popupState.pickerHue = selectedColor.h;
@@ -207,8 +233,9 @@ function applySudokuPreset(presetName) {
     popupState.activeSudokuPreset = presetName;
     buildActiveSudokuColors();
     if (!popupState.selectedSudokuColorKey || !popupState.sudokuColors[popupState.selectedSudokuColorKey]) {
-        popupState.selectedSudokuColorKey = Object.keys(popupState.sudokuColors)[0] || null;
+        popupState.selectedSudokuColorKey = resolveColorKey(popupState.lastSudokuColorKey, popupState.sudokuColors);
     }
+    popupState.lastSudokuColorKey = popupState.selectedSudokuColorKey;
     const selectedColor = popupState.sudokuColors[popupState.selectedSudokuColorKey];
     if (selectedColor) {
         popupState.pickerHue = selectedColor.h;
@@ -242,6 +269,7 @@ function attachGameColorPanelHandlers() {
             popupState.activeColorPanel = panelName;
             popupState.activePageButtonClass = "custom-colors-button";
             await writeSyncValue(popupActiveColorPanelStorageKey, panelName);
+            selectColorForActivePanel();
             updateAll();
         });
     });
@@ -309,22 +337,54 @@ function attachDMToggleHandlers() {
         if (!groupToggle) continue;
         groupToggle.addEventListener("change", async () => {
             const isEnabled = groupToggle.checked;
+            groupToggle.indeterminate = false;
             await writeSyncValue(groupToggleId, isEnabled);
-            if (!isEnabled) {
-                for (const childToggleId of childToggleIds) {
-                    const childToggle = document.getElementById(childToggleId);
-                    const childConfig = dmToggleConfig[childToggleId];
-                    if (childToggle) {
-                        childToggle.checked = false;
-                    }
-                    if (childConfig) {
-                        await writeSyncValue(childConfig.storageKey, false);
-                    }
-                }
+            if (isEnabled) {
+                await restoreGroupChildren(groupToggleId, childToggleIds);
+            } else {
+                await clearGroupChildren(groupToggleId, childToggleIds);
             }
             updateAll();
         });
     }
+}
+
+// Switches a group off and records which of its children were on for storage
+async function clearGroupChildren(groupToggleId, childToggleIds) {
+    const enabledChildToggleIds = [];
+    for (const childToggleId of childToggleIds) {
+        const childToggle = document.getElementById(childToggleId);
+        const childConfig = dmToggleConfig[childToggleId];
+        if (childToggle?.checked) {
+            enabledChildToggleIds.push(childToggleId);
+        }
+        if (childToggle) {
+            childToggle.checked = false;
+        }
+        if (childConfig) {
+            await writeSyncValue(childConfig.storageKey, false);
+        }
+    }
+    await writeSyncValue(rememberedGroupChildrenStorageKey(groupToggleId), enabledChildToggleIds);
+}
+
+// Switches a group back on and restores turned on storage states for children
+async function restoreGroupChildren(groupToggleId, childToggleIds) {
+    const rememberedKey = rememberedGroupChildrenStorageKey(groupToggleId);
+    const rememberedChildToggleIds = await readSyncValue(rememberedKey);
+    if (!Array.isArray(rememberedChildToggleIds) || rememberedChildToggleIds.length === 0) return;
+    for (const childToggleId of rememberedChildToggleIds) {
+        if (!childToggleIds.includes(childToggleId)) continue;
+        const childToggle = document.getElementById(childToggleId);
+        const childConfig = dmToggleConfig[childToggleId];
+        if (childToggle) {
+            childToggle.checked = true;
+        }
+        if (childConfig) {
+            await writeSyncValue(childConfig.storageKey, true);
+        }
+    }
+    await writeSyncValue(rememberedKey, []);
 }
 
 // Allows for the dragging of the hue slider and the saturation/value cursor
@@ -503,6 +563,7 @@ function selectCrosswordColor(colorKey, shouldSave = true, shouldSetPanel = true
     const colorState = popupState.crosswordColors[colorKey];
     if (!colorState) return;
     popupState.selectedCrosswordColorKey = colorKey;
+    popupState.lastCrosswordColorKey = colorKey;
     popupState.selectedSudokuColorKey = null;
     if (shouldSetPanel) {
         popupState.activeColorPanel = "crosswords";
@@ -521,6 +582,7 @@ function selectSudokuColor(colorKey, shouldSave = true, shouldSetPanel = true) {
     const colorState = popupState.sudokuColors[colorKey];
     if (!colorState) return;
     popupState.selectedSudokuColorKey = colorKey;
+    popupState.lastSudokuColorKey = colorKey;
     popupState.selectedCrosswordColorKey = null;
     if (shouldSetPanel) {
         popupState.activeColorPanel = "sudoku";
@@ -630,8 +692,8 @@ function saveThemeNow() {
         crosswordPreset: popupState.activeCrosswordPreset,
         sudoku: popupState.customSudokuColors,
         sudokuPreset: popupState.activeSudokuPreset,
-        activeCrosswordKey: popupState.selectedCrosswordColorKey,
-        activeSudokuKey: popupState.selectedSudokuColorKey
+        activeCrosswordKey: popupState.lastCrosswordColorKey,
+        activeSudokuKey: popupState.lastSudokuColorKey
     });
 }
 

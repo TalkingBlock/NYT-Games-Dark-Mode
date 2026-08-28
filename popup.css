@@ -117,19 +117,19 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
     margin: 3px 0 8px;
+    cursor: pointer;
+    user-select: none;
 }
 
-.section-header p {
-    margin: 0;
-    font-size: 18px;
+.section-title {
+    font-size: 20px;
     font-weight: bold;
 }
 
 .sub-toggles {
-    margin-left: 10px;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
+    margin-left: 4px;
 }
 
 .toggle-line.small {
@@ -137,12 +137,14 @@ header {
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    margin: 5px 0;
+    margin: 3px 0;
+    min-height: 26px;
+    cursor: pointer;
+    user-select: none;
 }
 
-.toggle-line.small p {
-    margin: 0;
-    font-size: 12px;
+.toggle-line.small .toggle-label {
+    font-size: 13px;
     line-height: 1.2;
     flex: 1;
     min-width: 0;
@@ -188,45 +190,50 @@ header {
 
 /* Big sliders */
 .switch.big {
-    width: 44px;
-    height: 24px;
+    width: 54px;
+    height: 30px;
 }
 
 .switch.big .slider {
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .switch.big .slider::before {
-    width: 16px;
-    height: 16px;
-    left: 4px;
-    bottom: 4px;
+    width: 20px;
+    height: 20px;
+    left: 5px;
+    bottom: 5px;
 }
 
 .switch.big input:checked + .slider::before {
-    transform: translateX(20px);
+    transform: translateX(24px);
     background-color: limegreen;
+}
+
+.switch.big input:indeterminate + .slider::before {
+    transform: translateX(12px);
+    background-color: #b8e986;
 }
 
 /* Small sliders */
 .switch.small {
-    width: 28px;
-    height: 14px;
+    width: 36px;
+    height: 20px;
 }
 
 .switch.small .slider {
-    border-radius: 5px;
+    border-radius: 7px;
 }
 
 .switch.small .slider::before {
-    width: 8px;
-    height: 8px;
-    left: 3px;
-    bottom: 3px;
+    width: 12px;
+    height: 12px;
+    left: 4px;
+    bottom: 4px;
 }
 
 .switch.small input:checked + .slider::before {
-    transform: translateX(13px);
+    transform: translateX(16px);
     background-color: limegreen;
 }
 
@@ -454,10 +461,6 @@ header {
     display: block;
 }
 
-#setColor {
-    margin-left: 8px;
-}
-
 /* Color info */
 
 .color-info-tabs {
@@ -515,6 +518,26 @@ header {
     display: none;
 }
 
+/* Bottom fade for color options if there are still options to scroll down on */
+/* (Mainly so I don't forget for the final product, will look better in the future */
+.color-info-panels::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 24px;
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(255, 105, 0, 0.3));
+}
+
+.color-info-panels.can-scroll::after {
+    opacity: 1;
+}
+
 /* Preset buttons + preset UI changes */
 .color-presets {
     flex: 0 0 auto;
@@ -561,8 +584,10 @@ header {
 }
 
 .color-picker.locked::after {
+    content: "The Light and Dark presets can't be edited. Choose the Custom preset to change these colors.";
     position: absolute;
     inset: 0;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -574,6 +599,7 @@ header {
     font-weight: 700;
     line-height: 1.35;
     color: #1a1a1a;
+    background: rgba(255, 165, 0, 0.75);
 }
 
 /* Radio list options */
@@ -587,6 +613,13 @@ header {
     cursor: pointer;
     user-select: none;
     padding: 6px 0;
+}
+
+.color-option-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
 }
 
 .color-option-text {
@@ -640,4 +673,33 @@ header {
     background: orange;
     border: 1px solid black;
     border-radius: 12px;
+}
+/* Focus indicators */
+
+.page-buttons button:focus-visible,
+.color-info-tab:focus-visible,
+.color-info-help:focus-visible,
+.color-preset:focus-visible,
+.value button:focus-visible,
+.hex-actions button:focus-visible,
+.switch input:focus-visible + .slider,
+.color-option input[type="radio"]:focus-visible + .radio-ui {
+    outline: 2px solid #000000;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #ffffff;
+}
+
+.switch input:focus-visible + .slider {
+    outline-offset: 2px;
+}
+
+/* Accessibility changes */
+@media (prefers-reduced-motion: reduce) {
+    .slider,
+    .slider::before,
+    .hex-indicator,
+    .color-picker.locked > .wrap,
+    .color-info-panels::after {
+        transition: none;
+    }
 }

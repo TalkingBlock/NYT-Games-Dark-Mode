@@ -7,6 +7,11 @@ export const cwColorsStorageKey = "crosswordColorSettings";
 export const sdColorsStorageKey = "sudokuColorSettings";
 export const crosswordPresetStorageKey = "crosswordPreset";
 
+// Storage key holding child toggles former states for when a group toggle is switched off
+export function rememberedGroupChildrenStorageKey(groupToggleId) {
+    return `${groupToggleId}RememberedChildren`;
+}
+
 // Light preset palette for crosswords
 export const lightCrosswordColors = {
     cw_cell_borders:            "#696969",

@@ -348,7 +348,7 @@ function enableMidiDarkMode() {
             color: white;
         }
 
-        /* Loading Background + Starting Popup */
+        /* Misc Stuff */
 
         .pz-desktop .xwd__loading {
             background-color: #0f0f0f;
@@ -368,22 +368,20 @@ function enableMidiDarkMode() {
             color: white;
         }
 
-        .xwd__start-modal--icon.midi {
-            filter: invert(1);
-        }
-
-        .pz-moment__button {
+        .pz-moment__button.primary.default {
             background: white;
             color: black;
         }
 
-        .pz-moment__button.primary:active {
-            background: #e4e4e4;
-        }
-
         /* Game Toolbar */
 
-        .xwd__timer--button {
+        .ToolbarAdapter-module_toolbarContainer__Ni4KN {
+            background-color: #0f0f0f;
+            border-top: 1px solid white;
+            border-bottom: 1px solid white;
+        }
+
+        .xwd__toolbar--wrapper {
             background-color: #0f0f0f;
         }
 
@@ -394,6 +392,9 @@ function enableMidiDarkMode() {
 
         .xwd__tool--button :hover {
             background-color: #777777;
+        }
+
+        .xwd__tool--texty :hover {
             color: white;
         }
 
@@ -436,51 +437,49 @@ function enableMidiDarkMode() {
             fill: white;
         }
 
-        /* Settings + Reaveal Puzzle Popups */
+        /* Settings + Reveal Puzzle Popups */
 
-        .xwd__settings-modal--form {
-            scrollbar-color: white #0f0f0f;
-        }
-
-        .xwd__settings-btns--wrapper .pz-moment__button.secondary {
+        .secondary:disabled {
             color: white;
             border: 1px solid white;
-            opacity: 1;
+            opacity: 0.5;
         }
 
-        .xwd__settings-btns--wrapper .secondary:disabled {
+        .pz-moment__button.secondary, .pz-moment__button.secondary:active {
             color: white;
             border: 1px solid white;
-            opacity: .5;
         }
 
         .xwd__modal--close .pz-icon {
             filter: invert(1);
         }
 
-        .xwd__modal--button-container .pz-moment__button.secondary {
-            color: white;
-            border: 1px solid white;
-        }
-
         /* Game Page */
 
-        .xwd__layout_puzzle--desktop {
-            background-color: #0f0f0f;
+        :root {
+            --bg-moment: #0f0f0f;
+        }
+
+        .xwd__clue-list--title {
             color: white;
+            border-bottom: 1px solid white;
         }
 
         .xwd__clue-list--list {
             scrollbar-color: black white;
         }
 
-        .xwd__clue--filled span {
-            color: #959595;
-        }
-
         .xwd__clue-bar-desktop--bar.obscured, .xwd__clue-list--obscured li span:last-child {
             background-color: #777777;
             color: #777777;
+        }
+
+        .xwd__clue--li {
+            color: white
+        }
+
+        .xwd__clue--filled span {
+            color: #959595;
         }
 
         .xwd__editorial-content--subGameplayGrid .xwd__editorial-content--header {
@@ -500,8 +499,12 @@ function enableMidiDarkMode() {
 
         /* Congrats Page */
 
-        .xwd__congrats-modal--content, .mini__congrats-modal--content {
-            color: white;
+        .pz-moment.xwd__congrats-moment.CongratsMoment-module_wrapper__GMYHg {
+            background-color: #0f0f0f !important;
+        }
+
+        .midi__congrats-modal--content {
+            color: white
         }
 
         body .css-1k8l6v3 hr {
@@ -516,21 +519,23 @@ function enableMidiDarkMode() {
             color: white;
         }
 
+        .xwd__share-modal_shareItem button i,
+        .xwd__share-modal_shareItem a i {
+            filter: invert(1);
+        }
+
+        .xwd__share-modal_shareItem button:hover i,
+        .xwd__share-modal_shareItem a:hover i {
+            background-color: #aaaaaa;
+        }
+            
+        .xwd__share-modal_shareIcon {
+            background-color: #f0f0f0;
+            border: 1px solid #aaaaaa;
+        }
+
         .xwd__share-modal_shareLinkButton.xwd__share-modal_copiedLink {
             background-image: url("${svgURL_Checkmark}");
-        }
-
-        /* Subscribe Popup */
-
-        ._momentButton_e4jbe_2._primary_e4jbe_37 {
-            background-color: white;
-            color: black;
-        }
-
-        .xwd__modal--button-container .mini-welcome-subscribe-anon-cta_button {
-            background-color: #0f0f0f;
-            border: 2px solid white;
-            color: white;
         }
 
         /* Error Page */

@@ -48,14 +48,47 @@ function getCurrentPickerHex() {
 export function updateAll() {
     updatePages();
     updateDisabledToggleGroups();
+    updateGroupToggleStates();
     updateGameColorButton();
     updateGameColorPanel();
     updateAllGamesColorObjects();
     updatePicker();
     updatePresetUI();
+    updateScrollAffordance();
 }
 
-// Updates the preset buttons and dims/locks the color UI when light or dark is active.
+// Updates the parent's children states when the toggle is changed
+export function updateGroupToggleStates() {
+    for (const [parentToggleId, childToggleIds] of Object.entries(dmToggleGroups)) {
+        const parentToggle = document.getElementById(parentToggleId);
+        if (!parentToggle) continue;
+        const enabledChildCount = childToggleIds.reduce((count, childToggleId) => {
+            const childToggle = document.getElementById(childToggleId);
+            return count + (childToggle?.checked ? 1 : 0);
+        }, 0);
+        parentToggle.indeterminate =
+            parentToggle.checked &&
+            enabledChildCount > 0 &&
+            enabledChildCount < childToggleIds.length;
+    }
+}
+
+// Adds a fade at the bottom of the crosswords/sudoku color options if there are more options to scroll down on 
+// (Mainly so I don't forget for the final product, will look better in the future)
+export function updateScrollAffordance() {
+    const panelsContainer = document.querySelector(".color-info-panels");
+    if (!panelsContainer) return;
+    const visiblePanel = panelsContainer.querySelector(".color-info-panel:not(.hidden)");
+    if (!visiblePanel) {
+        panelsContainer.classList.remove("can-scroll");
+        return;
+    }
+    const remainingScroll =
+        visiblePanel.scrollHeight - visiblePanel.scrollTop - visiblePanel.clientHeight;
+    panelsContainer.classList.toggle("can-scroll", remainingScroll > 2);
+}
+
+// Updates the preset buttons and dims/locks the color UI when light or dark is active
 export function updatePresetUI() {
     const onSudoku = popupState.activeColorPanel === "sudoku";
     const activePreset = onSudoku ? popupState.activeSudokuPreset : popupState.activeCrosswordPreset;
