@@ -1,11 +1,51 @@
-/* Base adjustments */
+/* Theme palette */
+:root {
+    /* Page background */
+    --gradient-start: #6AA1D9;
+    --gradient-mid: #d96a9e;
+    --gradient-end: #615C62;
+    --backdrop-mix: #9c9c9c;
 
+    /* Surfaces */
+    --page-bg: #1C1C1CAA;
+    --panel-bg: none;
+    --panel-tone: 24, 24, 24;
+
+    /* Borders */
+    --border: rgba(255, 255, 255, 0.25);
+    --border-strong: rgba(255, 255, 255, 0.55);
+
+    /* Text */
+    --text: #ffffff;
+    --text-soft: rgba(255, 255, 255, 0.82);
+    --text-dim: rgba(255, 255, 255, 0.6);
+
+    /* Tabs, presets, hex buttons */
+    --control-bg: rgba(255, 255, 255, 0.06);
+    --control-bg-hover: rgba(255, 255, 255, 0.13);
+    --control-bg-active: rgba(255, 255, 255, 0.16);
+
+    /* Focus indicators */
+    --focus-ring: #ffffff;
+    --focus-halo: rgba(0, 0, 0, 0.85);
+}
+
+/* Base adjustments */
 body {
     width: 510px;
     height: 510px;
-    margin: 10px;
-    padding: 5px;
+    margin: 0;
+    padding: 15px;
     font-family: Arial, sans-serif;
+    color: var(--text);
+    background-color: var(--backdrop-mix);
+    background-image: radial-gradient(
+        110% 72% at 50% 0%,
+        var(--gradient-start) 0%,
+        var(--gradient-mid) 65%,
+        var(--gradient-end) 100%
+    );
+    background-blend-mode: multiply;
 }
 
 header {
@@ -26,44 +66,75 @@ header {
 }
 
 /* Top page buttons */
-
 .page-buttons {
-    margin-top: 15px;
+    width: 450px;
+    margin: 15px auto 0;
+    align-items: flex-end;
+    gap: 3px;
 }
 
-.dark-mode-button button,
-.custom-colors-button button,
-.extra-features-button button {
-    width: 170px;
-    height: 60px;
-    padding: 10px;
+.page-buttons > div {
+    flex: 1;
+    min-width: 0;
+}
+
+.page-buttons button {
+    position: relative;
+    gap: 8px;
+    width: 100%;
+    height: 52px;
+    padding: 8px 6px;
     cursor: pointer;
+    overflow: hidden;
+    font-family: inherit;
+    font-size: 13px;
     font-weight: bold;
-    background: red;
-    border: 1px solid black;
-    border-radius: 12px 12px 0 0;
+    color: var(--text-dim);
+    background: rgba(var(--panel-tone), 0.4);
+    border: none;
+    border-radius: 14px 14px 0 0;
+    transition: background 0.2s, color 0.2s;
 }
 
 .page-buttons img {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
 }
 
 .page-buttons button:hover {
-    background: #dd0000;
+    color: var(--text);
+    background: rgba(var(--panel-tone), 0.6);
 }
 
-.enabled button {
-    background: #00dd00;
-    border-bottom: none;
+.page-buttons button:hover img {
+    opacity: 1;
 }
 
-.enabled button:hover {
-    background: #00aa00;
+.page-buttons .enabled button {
+    height: 60px;
+    color: var(--text);
+    background: var(--page-bg);
+}
+
+.page-buttons .enabled button::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background-image: linear-gradient(to right,
+        var(--gradient-mid), var(--gradient-start)
+    );
+}
+
+.page-buttons .enabled img {
+    opacity: 1;
 }
 
 /* Page containers */
-
 .dark-mode-page,
 .custom-colors-page,
 .extra-features-page {
@@ -71,11 +142,8 @@ header {
     height: 375px;
     gap: 10px;
     box-sizing: border-box;
-    background: blue;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
-    border-bottom: 1px solid black;
-    border-radius: 0 0 12px 12px;
+    background: var(--page-bg);
+    border-radius: 15px;
 }
 
 .dark-mode-page {
@@ -97,19 +165,17 @@ header {
 .dark-mode-page .wrap {
     flex-direction: row;
     align-items: stretch;
-    justify-content: space-between;
 }
 
 /* Dark mode slider sections */
-
 .games-sliders,
 .archives-sliders,
 .misc-sliders {
-    width: 144px;
-    height: 342px;
+    flex: 1;
+    min-width: 0;
     padding: 5px;
-    background: orange;
-    border: 1px solid black;
+    box-sizing: border-box;
+    border: 1px solid var(--border);
     border-radius: 12px;
 }
 
@@ -154,13 +220,11 @@ header {
     flex: 0 0 auto;
 }
 
-.toggle-line.disabled {
-    opacity: 0.4;
-    pointer-events: none;
+.sub-toggles.suspended {
+    opacity: 0.45;
 }
 
 /* Base sliders */
-
 .switch {
     position: relative;
     display: inline-block;
@@ -177,15 +241,30 @@ header {
     inset: 0;
     cursor: pointer;
     transition: 0.3s;
-    background-color: black;
+    background-color: #40404070;
 }
 
-.slider::before {
+.slider::before,
+.slider::after {
     position: absolute;
     content: "";
     transition: 0.3s;
     border-radius: 30%;
-    background-color: #999999;
+}
+
+.slider::before {
+    background-color: #4c4c4c;
+}
+
+.slider::after {
+    opacity: 0;
+    background-image: linear-gradient(to top left,
+        var(--gradient-start) 30%, var(--gradient-mid)
+    );
+}
+
+.switch input:checked + .slider::after {
+    opacity: 1;
 }
 
 /* Big sliders */
@@ -198,21 +277,17 @@ header {
     border-radius: 10px;
 }
 
-.switch.big .slider::before {
+.switch.big .slider::before,
+.switch.big .slider::after {
     width: 20px;
     height: 20px;
     left: 5px;
     bottom: 5px;
 }
 
-.switch.big input:checked + .slider::before {
+.switch.big input:checked + .slider::before,
+.switch.big input:checked + .slider::after {
     transform: translateX(24px);
-    background-color: limegreen;
-}
-
-.switch.big input:indeterminate + .slider::before {
-    transform: translateX(12px);
-    background-color: #b8e986;
 }
 
 /* Small sliders */
@@ -225,20 +300,20 @@ header {
     border-radius: 7px;
 }
 
-.switch.small .slider::before {
+.switch.small .slider::before,
+.switch.small .slider::after {
     width: 12px;
     height: 12px;
     left: 4px;
     bottom: 4px;
 }
 
-.switch.small input:checked + .slider::before {
+.switch.small input:checked + .slider::before,
+.switch.small input:checked + .slider::after {
     transform: translateX(16px);
-    background-color: limegreen;
 }
 
 /* Custom colors page */
-
 .custom-colors-page {
     align-items: stretch;
 }
@@ -246,16 +321,16 @@ header {
 .custom-colors-page > .wrap {
     flex-direction: row;
     align-items: stretch;
-    justify-content: space-between;
 }
 
 .color-picker,
 .color-info {
-    width: 245px;
-    height: 342px;
+    flex: 1;
+    min-width: 0;
     padding: 5px;
-    background: orange;
-    border: 1px solid black;
+    box-sizing: border-box;
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
     border-radius: 12px;
 }
 
@@ -267,7 +342,6 @@ header {
 }
 
 /* Color picker UI */
-
 .top {
     display: flex;
     flex-direction: column;
@@ -320,7 +394,7 @@ header {
     width: 14px;
     height: 14px;
     border-radius: 999px;
-    transform: translate(-7px, -7px);
+    transform: translate(-10px, -10px);
     border: 3px solid white;
     box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.2);
 }
@@ -339,7 +413,7 @@ header {
     height: 34px;
     border-radius: 10px;
     background: red;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid var(--border);
 }
 
 .hue {
@@ -372,7 +446,6 @@ header {
 }
 
 /* Value + hex rows */
-
 .bottom {
     margin-top: 0;
 }
@@ -385,8 +458,7 @@ header {
     padding: 8px 10px;
     box-sizing: border-box;
     border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.35);
-
+    border: 1px solid var(--border);
 }
 
 .value {
@@ -421,11 +493,11 @@ header {
     margin-left: 6px;
     padding: 2px 6px;
     border-radius: 6px;
-    border: 1px solid black;
+    border: 1px solid var(--border);
 }
 
 .value button:hover {
-    background: #e09200;
+    background: var(--control-bg-hover);
 }
 
 .hex-text {
@@ -448,59 +520,86 @@ header {
     width: 20px;
     height: 20px;
     border-radius: 6px;
-    border: 1px solid black;
+    border: 1px solid var(--border);
 }
 
 .hex-actions button:hover {
-    background: #e09200;
+    background: var(--control-bg-hover);
 }
 
 .hex-actions img {
     width: 14px;
     height: 14px;
     display: block;
+    filter: invert(1);
 }
 
 /* Color info */
-
 .color-info-tabs {
     display: flex;
     gap: 8px;
 }
 
-.color-info-tab {
-    flex: 1;
-    height: 24px;
+.color-info-tab,
+.color-info-help {
     cursor: pointer;
     font-size: 11px;
     font-weight: 700;
+    color: var(--text-dim);
+    background: var(--control-bg);
+    border: 1px solid var(--border);
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.color-info-tab {
+    flex: 1;
+    height: 24px;
     border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.35);
-    background: orange;
+}
+
+.color-info-tab:hover,
+.color-info-help:hover {
+    color: var(--text-soft);
+    background: var(--control-bg-hover);
 }
 
 .color-info-tab.enabled {
-    border-color: #000;
-}
-
-.color-info-tab:not(.enabled) {
-    opacity: 0.45;
+    color: var(--text-soft);
+    background: var(--control-bg-active);
+    border-color: var(--border-strong);
 }
 
 .color-info-help {
     width: 24px;
-    cursor: pointer;
-
-    font-weight: 700;
     border-radius: 999px;
-    background: orange;
-    border: 1px solid black;
 }
 
 .color-info-panels {
     position: relative;
     flex: 1;
     overflow: hidden;
+}
+
+.color-info-panels {
+    --fade-top: 0px;
+    --fade-bottom: 0px;
+    transition: --fade-top 0.15s ease, --fade-bottom 0.15s ease;
+    -webkit-mask-image: linear-gradient(to bottom,
+        transparent 0, #000 var(--fade-top),
+        #000 calc(100% - var(--fade-bottom)), transparent 100%
+    );
+    mask-image: linear-gradient(to bottom,
+        transparent 0, #000 var(--fade-top),
+        #000 calc(100% - var(--fade-bottom)), transparent 100%
+    );
+}
+
+.color-info-panels.can-scroll-up {
+    --fade-top: 30px;
+}
+
+.color-info-panels.can-scroll {
+    --fade-bottom: 30px;
 }
 
 .color-info-panel {
@@ -511,31 +610,25 @@ header {
     gap: 14px;
     overflow-y: auto;
     padding-right: 10px;
-    scrollbar-color: white orange;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
 }
 
 .color-info-panel.hidden {
     display: none;
 }
 
-/* Bottom fade for color options if there are still options to scroll down on */
-/* (Mainly so I don't forget for the final product, will look better in the future */
-.color-info-panels::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 24px;
-    z-index: 2;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.15s ease;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(255, 105, 0, 0.3));
+/* Scroll affordances */
+@property --fade-top {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
 }
 
-.color-info-panels.can-scroll::after {
-    opacity: 1;
+@property --fade-bottom {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
 }
 
 /* Preset buttons + preset UI changes */
@@ -545,7 +638,7 @@ header {
     gap: 8px;
     padding-top: 8px;
     margin-top: auto;
-    border-top: 1px solid rgba(0, 0, 0, 0.35);
+    border-top: 1px solid var(--border);
 }
 
 .color-preset {
@@ -554,15 +647,22 @@ header {
     cursor: pointer;
     font-size: 11px;
     font-weight: 700;
+    color: var(--text-dim);
+    background: var(--control-bg);
+    border: 1px solid var(--border);
     border-radius: 999px;
-    border: 1px solid rgba(0, 0, 0, 0.35);
-    background: orange;
-    opacity: 0.45;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.color-preset:hover {
+    color: var(--text-soft);
+    background: var(--control-bg-hover);
 }
 
 .color-preset.enabled {
-    border-color: #000;
-    opacity: 1;
+    color: var(--text-soft);
+    background: var(--control-bg-active);
+    border-color: var(--border-strong);
 }
 
 .color-info-panel.preset-locked {
@@ -578,28 +678,59 @@ header {
     pointer-events: none;
 }
 
+.color-picker > .wrap {
+    transition: filter 0.2s ease;
+}
+
 .color-picker.locked > .wrap {
-    filter: grayscale(0.55) opacity(0.5);
-    transition: filter 0.15s ease;
+    filter: grayscale(0.5) opacity(0.45);
+}
+
+.color-picker::before,
+.color-picker::after {
+    position: absolute;
+    content: "";
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Color picker message (when light/dark are active) */
+.color-picker::before {
+    inset: 0;
+    border-radius: 12px;
+    background: rgba(var(--panel-tone), 0.5);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
+.color-picker::after {
+    content: "Light and Dark are preset colors.\A Switch to Custom to edit them.";
+    left: 12px;
+    right: 12px;
+    top: 50%;
+    transform: translateY(calc(-50% + 6px));
+    padding: 14px 12px;
+    box-sizing: border-box;
+    text-align: center;
+    white-space: pre-line;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--text-soft);
+    background: rgba(var(--panel-tone), 0.94);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.color-picker.locked::before,
+.color-picker.locked::after {
+    opacity: 1;
 }
 
 .color-picker.locked::after {
-    content: "The Light and Dark presets can't be edited. Choose the Custom preset to change these colors.";
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 0 22px;
-    box-sizing: border-box;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1.35;
-    color: #1a1a1a;
-    background: rgba(255, 165, 0, 0.75);
+    transform: translateY(-50%);
 }
 
 /* Radio list options */
@@ -637,7 +768,7 @@ header {
 .element-hex-box {
     width: 12px;
     height: 12px;
-    border: 1px solid black;
+    border: 1px solid var(--border);
     background: #ffffff;
     flex: 0 0 auto;
 }
@@ -657,25 +788,28 @@ header {
     height: 16px;
     box-sizing: border-box;
     border-radius: 999px;
-    border: 2px solid #000;
+    border: 2px solid var(--border-strong);
     background: transparent;
+    transition: border-color 0.15s, background 0.15s;
 }
 
 .color-option input[type="radio"]:checked + .radio-ui {
-    background: radial-gradient(circle at center, #000 0 45%, transparent 46% 100%);
+    border-color: var(--text-soft);
+    background: radial-gradient(circle at center, var(--text-soft) 0 45%, transparent 46% 100%);
 }
 
 /* Extra features page */
 .extra-features-box {
-    width: 476px;
-    height: 100%;
+    flex: 1;
+    min-width: 0;
     padding: 5px;
-    background: orange;
-    border: 1px solid black;
+    box-sizing: border-box;
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
     border-radius: 12px;
 }
-/* Focus indicators */
 
+/* Focus indicators */
 .page-buttons button:focus-visible,
 .color-info-tab:focus-visible,
 .color-info-help:focus-visible,
@@ -684,22 +818,29 @@ header {
 .hex-actions button:focus-visible,
 .switch input:focus-visible + .slider,
 .color-option input[type="radio"]:focus-visible + .radio-ui {
-    outline: 2px solid #000000;
+    outline: 1px solid var(--focus-ring);
     outline-offset: 2px;
-    box-shadow: 0 0 0 2px #ffffff;
+    box-shadow: 0 0 0 2px var(--focus-halo);
 }
 
 .switch input:focus-visible + .slider {
-    outline-offset: 2px;
+    outline-offset: 3px;
 }
 
-/* Accessibility changes */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
     .slider,
     .slider::before,
+    .slider::after,
     .hex-indicator,
-    .color-picker.locked > .wrap,
-    .color-info-panels::after {
+    .color-info-tab,
+    .color-info-help,
+    .color-preset,
+    .radio-ui,
+    .color-info-panels,
+    .color-picker > .wrap,
+    .color-picker::before,
+    .color-picker::after {
         transition: none;
     }
 }

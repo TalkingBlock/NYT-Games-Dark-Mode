@@ -163,8 +163,8 @@ function enableTAConnectionsDarkMode() {
     `;
     const style = document.createElement("style");
     style.id = "taconnectionsstyle";
-    style.innerText = taConnectionsCSS;
-    document.head.appendChild(style);
+    style.textContent = taConnectionsCSS;
+    (document.head || document.documentElement).appendChild(style);
 }
 
 function disableTAConnectionsDarkMode() {
@@ -174,18 +174,28 @@ function disableTAConnectionsDarkMode() {
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableTAConnectionsDarkMode") {
-        if (document.getElementById("taconnectionsstyle")) {
-            disableTAConnectionsDarkMode();
-        } else {
+function syncTAConnectionsDarkMode() {
+    chrome.storage.sync.get(["taConnectionsDarkModeEnabled", "miscMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.miscMasterEnabled !== false && Boolean(data.taConnectionsDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("taconnectionsstyle"));
+        if (shouldBeEnabled && !isEnabled) {
             enableTAConnectionsDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableTAConnectionsDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enableTAConnectionsDarkMode" || message.action === "syncDarkModeState") {
+        syncTAConnectionsDarkMode();
     }
 });
 
-chrome.storage.sync.get("taConnectionsDarkModeEnabled", function(data) {
-    if (data.taConnectionsDarkModeEnabled) {
-        enableTAConnectionsDarkMode();
-    } 
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("taConnectionsDarkModeEnabled" in changes || "miscMasterEnabled" in changes)) {
+        syncTAConnectionsDarkMode();
+    }
 });
+
+syncTAConnectionsDarkMode();

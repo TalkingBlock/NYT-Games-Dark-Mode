@@ -472,8 +472,8 @@ function enableMenuDarkMode() {
     `;  
     const style = document.createElement("style");
     style.id = "menustyle";
-    style.innerText = menuCSS;
-    document.head.appendChild(style);
+    style.textContent = menuCSS;
+    (document.head || document.documentElement).appendChild(style);
 }
 
 function disableMenuDarkMode() {
@@ -483,18 +483,28 @@ function disableMenuDarkMode() {
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableMenuDarkMode") {
-        if (document.getElementById("menustyle")) {
-            disableMenuDarkMode();
-        } else {
+function syncMenuDarkMode() {
+    chrome.storage.sync.get(["menuDarkModeEnabled", "miscMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.miscMasterEnabled !== false && Boolean(data.menuDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("menustyle"));
+        if (shouldBeEnabled && !isEnabled) {
             enableMenuDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableMenuDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enableMenuDarkMode" || message.action === "syncDarkModeState") {
+        syncMenuDarkMode();
     }
 });
 
-chrome.storage.sync.get("menuDarkModeEnabled", function(data) {
-    if (data.menuDarkModeEnabled) {
-        enableMenuDarkMode();
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("menuDarkModeEnabled" in changes || "miscMasterEnabled" in changes)) {
+        syncMenuDarkMode();
     }
 });
+
+syncMenuDarkMode();

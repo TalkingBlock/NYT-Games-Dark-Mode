@@ -1,6 +1,9 @@
-function enableStrandsArchiveDarkMode() {
-    const svgURL_DateArrow = chrome.runtime.getURL("svgs/date-picker-arrow.svg");
-    const strandsArchiveCSS = `
+function enableSudokuDarkMode() {
+    const svgURL_IconClose = chrome.runtime.getURL("svgs/icon-close-2.svg");
+    const svgURL_Error404Small = chrome.runtime.getURL("svgs/error404-illustration-s.svg");
+    const svgURL_Error404Medium = chrome.runtime.getURL("svgs/error404-illustration-m.svg");
+    const svgURL_Error404XL = chrome.runtime.getURL("svgs/error404-illustration-xl.svg");
+    const sudokuCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -52,7 +55,7 @@ function enableStrandsArchiveDarkMode() {
 
         .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
-        }      
+        }     
             
         .pz-icon-daily {
             background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
@@ -152,7 +155,7 @@ function enableStrandsArchiveDarkMode() {
             background-color: #e4e4e4;
         }
 
-        /* Ads + Loading Bar + Footer */
+        /* Ads + Loading Bar + Footer + Title */
 
         .pz-ad-box {
             background-color: #0f0f0f;
@@ -161,7 +164,7 @@ function enableStrandsArchiveDarkMode() {
         .pz-ad-box::before {
             color: white;
             border: 1px solid white;
-        }        
+        }
 
         .xwd--loading-bar__fill {
             background-color: white;
@@ -176,92 +179,200 @@ function enableStrandsArchiveDarkMode() {
             color: white;
         }
 
-        /* Calendar Page */
-
-        .Header-module_archiveHeader__rjL9u {
+        .pz-module {
             color: white;
-            border-bottom: 1px solid white;
         }
 
-        .ArchiveLayout-module_wrapper__agJhw {
+        /* Game Toolbar */
+
+        .ToolbarAdapter-module_toolbarContainer__Ni4KN {
             background-color: #0f0f0f;
             color: white;
         }
 
-        .ArchiveCalendarGrid-module_daysOfWeekContainer__LjX8P {
-            border-bottom: 1px solid white;
-        }
-
-        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH {
-            border: 1px solid white;
+        .ToolbarItem-module_toolbar_item__xrBr_ {
             background: #0f0f0f;
+            color: white;
         }
 
-        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH:disabled {
-            border: 1px solid #777777;
+        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover:not(:disabled),
+        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover:not(:disabled) {
+            background-color: #777777;
         }
 
-        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH path {
+        .Icon-module_iconWrapper__ZfKPm path {
             fill: white;
         }
 
-        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH:disabled path {
-            fill: #777777;
-        }
-
-        select.ArchiveDatePicker-module_dropDownSelect__BqLa6 {
-            border: 1px solid white;
-            color: white;
-            background: url("${svgURL_DateArrow}") no-repeat #0f0f0f;
-            background-position: calc(100% - .75rem) center
-        }
-
-        /* Not Logged In Popup */
-
-        .xwd__modal--wrapper .ArchiveModalPaywall-module_modalOverlay__zCxO6 {
-            background: linear-gradient(180deg, rgba(15, 15, 15, 0) 0%, rgba(15, 15, 15, 0) 40%, #0f0f0f 55%);
-        }
-
-        .ArchiveModalPaywall-module_modalBody__QbLIt h3, 
-        .ArchiveModalPaywall-module_modalBody__QbLIt p {
+        .su-timer__value {
             color: white;
         }
 
-        ._momentButton_e4jbe_2._primary_e4jbe_37 {
-            background: white;
+        .Dropdown-module_dropdown__menuItem__FJHMg a, .Dropdown-module_dropdown__menuItem__FJHMg button {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Dropdown-module_toolbarColorsDesktop__ptWzT:hover:not(:disabled), 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover:not(:disabled), 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover:not(:disabled){
+            background-color: #777777;
+        }
+
+        /* How to Play, Settings, Pause Popups */
+
+        .xwd__modal--overlay {
+            background-color: #00000060;
+        }
+
+        .modal-rules-body.su-modal-help, .su-modal-help.modal-stats-body,
+        .modal-settings-body.su-modal-settings, .modal-pause-body.su-modal-pause {
+            background: #0f0f0f;
+            color: white;
+        }
+
+        .xwd__modal--body {
+            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .3);
+        }
+
+        .xwd__modal--close .pz-icon, .kebab-icon {
+            filter: invert(1);
+        }
+
+        .pz-modal__button.primary {
+            background-color: white;
             color: black;
         }
 
-        ._momentButton_e4jbe_2._secondary_e4jbe_42 {
+        /* Game Page */
+
+        .gameContainer {
+            background-color: #0f0f0f;
+        }
+
+        .su-keyboard__mode.candidateMode, .su-keyboard__mode.normalMode {
+            background-color: white;
+            color: black;
+        }
+
+        .su-keyboard__mode {
+            background-color: #0f0f0f;
+            border: 1px solid #777777;
+            color: #979797;
+        }
+
+        .su-keyboard__undo, .su-keyboard__delete, .su-keyboard__number {
+            background-color: #434342;
+        }
+
+        .su-keyboard__undo:active, .su-keyboard__delete:active, .su-keyboard__number:active {
+            background-color: #0f0f0f;
+            color: #979797;
+        }
+
+        .su-keyboard__svg {
+            fill: white;
+        }
+
+        .su-keyboard__delete {
+            background-image: url("${svgURL_IconClose}");
+        }
+
+        .su-keyboard__undo {
             color: white;
+        }
+
+        .su-keyboard__auto [role="button"] {
+            color: white;
+        }
+
+        /* Congrats Popup */
+
+        .xwd__modal--body.modal-congrats-body {
+            background: #0f0f0f;
+            color: white;
+        }
+
+        .pz-modal__button.primary:hover {
+            background-color: #e4e4e4;
+        }
+
+        .GamesCarouselStack-module_frictionMitigationContent__sfyQO 
+        .GamesCarouselStack-module_carouselStackContainer__ogcQ6 hr {
+            border-color: #777777;
+            border-top: solid 2px white;
+        }
+
+        /* Error Page */
+
+        .pz-error__message h1 {
+            color: white;
+        }
+
+        .pz-error__button {
+            color: black;
+            background-color: white;
             border: 1px solid white;
         }
-    `;
+
+        .pz-error-img-1 {
+            background-image: url("${svgURL_Error404Small}");
+        }
+
+        @media (min-width: 444px) {
+            .pz-error-img-1 {
+                background-image: url("${svgURL_Error404Small}");
+            }   
+        }
+
+        @media (min-width: 768px) {
+            .pz-error-img-1 {
+                background-image: url("${svgURL_Error404Medium}");
+            }
+        }
+
+        @media (min-width: 992px) {
+            .pz-error-img-1 {
+                background-image: url("${svgURL_Error404XL}");
+            }
+        }        
+    `;    
     const style = document.createElement("style");
-    style.id = "strandsarchivestyle";
-    style.innerText = strandsArchiveCSS;
-    document.head.appendChild(style);
+    style.id = "sudokustyle";
+    style.textContent = sudokuCSS;
+    (document.head || document.documentElement).appendChild(style);
+    loadStoredSudokuColors();
 }
 
-function disableStrandsArchiveDarkMode() {
-    const styleElement = document.getElementById("strandsarchivestyle");
+function disableSudokuDarkMode() {
+    const styleElement = document.getElementById("sudokustyle");
     if (styleElement) {
         styleElement.remove();
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableStrandsArchiveDarkMode") {
-        if (document.getElementById("strandsarchivestyle")) {
-            disableStrandsArchiveDarkMode();
-        } else {
-            enableStrandsArchiveDarkMode();
+function syncSudokuDarkMode() {
+    chrome.storage.sync.get(["sudokuDarkModeEnabled", "gamesMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.gamesMasterEnabled !== false && Boolean(data.sudokuDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("sudokustyle"));
+        if (shouldBeEnabled && !isEnabled) {
+            enableSudokuDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableSudokuDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enableSudokuDarkMode" || message.action === "syncDarkModeState") {
+        syncSudokuDarkMode();
     }
 });
 
-chrome.storage.sync.get("strandsArchiveDarkModeEnabled", function(data) {
-    if (data.strandsArchiveDarkModeEnabled) {
-        enableStrandsArchiveDarkMode();
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("sudokuDarkModeEnabled" in changes || "gamesMasterEnabled" in changes)) {
+        syncSudokuDarkMode();
     }
 });
+
+syncSudokuDarkMode();

@@ -1,6 +1,5 @@
-function enableCrosswordsArchiveDarkMode() {
-    const svgURL_Arrow = chrome.runtime.getURL("svgs/arrow.svg");
-    const crosswordsArchiveCSS = `
+function enableTilesDarkMode() {
+    const tilesCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -52,8 +51,8 @@ function enableCrosswordsArchiveDarkMode() {
 
         .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
-        }        
-
+        }    
+            
         .pz-icon-daily {
             background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
         }
@@ -122,6 +121,7 @@ function enableCrosswordsArchiveDarkMode() {
             color: black;
         }
 
+
         .pz-nav-drawer__account {
             background-color: #0f0f0f;
             border-top: 1px solid white;
@@ -152,7 +152,7 @@ function enableCrosswordsArchiveDarkMode() {
             background-color: #e4e4e4;
         }
 
-        /* Ads + Loading Bar + Footer */
+        /* Ads + Loading Bar + Footer + Title */
 
         .pz-ad-box {
             background-color: #0f0f0f;
@@ -162,7 +162,7 @@ function enableCrosswordsArchiveDarkMode() {
             color: white;
             border: 1px solid white;
         }
-                    
+
         .xwd--loading-bar__fill {
             background-color: white;
         }
@@ -176,208 +176,146 @@ function enableCrosswordsArchiveDarkMode() {
             color: white;
         }
 
-        /* Calendar Toolbar */
-
-        .archive_date-selector-container {
-            background-color: #0f0f0f;
-        }
-
-        .tab__tabGroup .tab__tab>.active {
-            border: 1px solid #777777;
-            color: white;
-            background-color: #0f0f0f;
-            border-bottom: none;
-        }
-
-        .tab__tabGroup .tab__tab {
-            color: #777777;
-            background: #222222;
-        }
-
-        .tab__tabGroup .tab__tab:hover {
+        .pz-game-title {
             color: white;
         }
 
-        .tab__tabGroup .tab__tabNav {
+        /* Game Toolbar */
+
+        .ToolbarAdapter-module_toolbarContainer__Ni4KN, .Game-module_toolbarContainer__PB1iO {
             background-color: #0f0f0f;
-            border: 1px solid #777777;
         }
 
-        /* Calendar Buttons + Text */
-
-        .archive_viewer button {
+        .ToolbarItem-module_toolbar_item__xrBr_ {
             background-color: #0f0f0f;
-            border: 1px solid white;
             color: white;
         }
 
-        .archive_viewer button.archive_next:hover, 
-        .archive_viewer button.archive_prev:hover, 
-        .archive_viewer button.archive_today:hover,
-        .archive_viewer button.archive_next:disabled:hover,
-        .archive_viewer button.archive_today:disabled:hover {
+        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover:not(:disabled),
+        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover:not(:disabled) {
             background-color: #777777;
         }
 
-        .archive_viewer button.archive_next {
-            background-image: url("${svgURL_Arrow}");
+        [data-testid="icon-help"] path {
+            fill: white;
         }
 
-        .archive_viewer button.archive_prev {
-            background-image: url("${svgURL_Arrow}");
-            transform: scale(-1, 1);
-        }
-
-        .archive_date-selector-container select {
+        .Dropdown-module_dropdown__menuItem__FJHMg button, 
+        .Dropdown-module_dropdown__menuItem__FJHMg a, 
+        .Dropdown-module_dropdown__menuItem__FJHMg button {
             background-color: #0f0f0f;
             color: white;
-            border: 1px solid white;
         }
 
-        .archive_calendar-header, .calendar.puzzleInfo .date {
+        .Dropdown-module_toolbarColorsDesktop__ptWzT:hover:not(:disabled), 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover:not(:disabled), 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover:not(:disabled) {
+            background-color: #777777;
+        }
+
+        [data-testid="icon-arrow"] path {
+            fill: white;
+        }
+
+        /* Tileset and How to Play Popup */
+
+        .xwd__modal--overlay {
+            background-color: #00000060;
+        }
+
+        .xwd__modal--body {
+            background-color: #0f0f0f;
             color: white;
+            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .5);
         }
 
-        /* Calendar Icons */
+        .tlz-palette-button {
+            color: white;
+            border: 1px solid #dddddd;
+        }
 
-        .progressIconContent.puzzleProgress0, .progressIconContent.midiProgress0, .progressIconContent.miniProgress0,
-        .puzzleProgressUnavailable, .midiProgressUnavailable, .miniProgressUnavailable {
+        .tlz-palette-button.selected {
+            border: solid 2px white;
+        }
+
+        .pz-icon-close {
             filter: invert(1);
         }
 
-        .print {
-            filter: brightness(1.5);
-        }
-
-        @media (min-width: 992px) {
-            .print:hover {
-                filter: invert(1);
-            }
-        }
-
-        .cardRibbon.brandNew {
-            filter: invert(1);
-        }
-
-        .calendar.puzzleInfo .printTool {
-            background-color: #0f0f0f;
-        }
-
-        /* List View */
-
-        .archive_mobile-list-item, .archive_list-item, .archive_list-item .archive_title>a,
-        .archive_list-columns {
-            color: white;
-        }
-
-        /* Print Popup */
-
-        .pzm-modals-wrapper {
-            background: rgba(0, 0, 0, .85);
-        }
-
-        .pzm-modal {
-            background: #0f0f0f;
-            border: 1px solid #0f0f0f;
-            box-shadow: 0 4px 23px 0 rgba(255, 255, 255, .08);
-            color: white;
-        }
-
-        .hub-print-modal-content .hub-print-modal-cell-darkness 
-        .hub-print-modal-opacity-icon .hub-print-modal-user-opacity {
+        .tlz-bob {
             border: 1px solid white;
         }
 
-        .pzm-modal-ex {
-            color: white;
-        }
-
-        .pz-modal__button.dark {
+        .tlz-bob.active {
             background-color: white;
+        }
+
+        .tlz-palette-arrows {
+            filter: invert(1);
+        }
+
+        .pz-settings-icon path {
+            fill: white;
+        }
+
+        /* Congrats Popup */
+
+        .xwd__modal--body.modal-congrats-body {
+            background: #0f0f0f;
+            color: white;
+        }
+
+        body .css-1lxqcbc {
             color: black;
+            background-color: white;
             border: 1px solid white;
         }
 
-        .pz-modal__button.dark:hover {
-            background-color: #e4e4e4;
-        }
-
-        /* Bonus Page */
-
-        .island {
-            background-color: #0f0f0f;
+        body .css-1lxqcbc:hover {
+            color: black;
+            background-color: #777777;
             border: 1px solid #777777;
         }
-
-        .island:hover {
-            box-shadow: 2px 2px 0 0 #555555;
-        }
-
-        .island:hover .printTool {
-            background-color: #0f0f0f;
-            border-top: 1px solid #777777;
-        }
-
-        .puzzleInfo .puzzleInfoContent {
-            color: white;
-        }
-
-        /* No Puzzles Yet Text */
-
-        .archive_empty-state-message {
-            color: white;
-        }
-
-        /* Not Logged In Page */
-
-        .archive_overlay-gradient--mini-redesign {
-            background: linear-gradient(to bottom, rgba(15, 15, 15, 0.4) 0%, rgb(15, 15, 15) 100%)
-        }
-
-        .archive_overlay-body--mini-redesign {
-            background-color: #0f0f0f;
-            color: white;
-        }
-
-        ._momentButton_e4jbe_2._primary_e4jbe_37 {
-            background: white;
-            color: black;
-        }
-
-        ._momentButton_e4jbe_2._secondary_e4jbe_42 {
-            color: white;
-            border: 1px solid white;
-        }
-
-        .archive_subscribe-button--mini-redesign {
-            border: 1px solid white;
-        }
+        
+        .css-1k8l6v3 hr {
+            border-top: 2px solid white;
+        } 
     `;
     const style = document.createElement("style");
-    style.id = "crosswordsarchivestyle";
-    style.innerText = crosswordsArchiveCSS;
-    document.head.appendChild(style);
+    style.id = "tilesstyle";
+    style.textContent = tilesCSS;
+    (document.head || document.documentElement).appendChild(style);
 }
 
-function disableCrosswordsArchiveDarkMode() {
-    const styleElement = document.getElementById("crosswordsarchivestyle");
+function disableTilesDarkMode() {
+    const styleElement = document.getElementById("tilesstyle");
     if (styleElement) {
         styleElement.remove();
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableCrosswordsArchiveDarkMode") {
-        if (document.getElementById("crosswordsarchivestyle")) {
-            disableCrosswordsArchiveDarkMode();
-        } else {
-            enableCrosswordsArchiveDarkMode();
+function syncTilesDarkMode() {
+    chrome.storage.sync.get(["tilesDarkModeEnabled", "gamesMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.gamesMasterEnabled !== false && Boolean(data.tilesDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("tilesstyle"));
+        if (shouldBeEnabled && !isEnabled) {
+            enableTilesDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableTilesDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enableTilesDarkMode" || message.action === "syncDarkModeState") {
+        syncTilesDarkMode();
     }
 });
 
-chrome.storage.sync.get("crosswordsArchiveDarkModeEnabled", function(data) {
-    if (data.crosswordsArchiveDarkModeEnabled) {
-        enableCrosswordsArchiveDarkMode();
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("tilesDarkModeEnabled" in changes || "gamesMasterEnabled" in changes)) {
+        syncTilesDarkMode();
     }
 });
+
+syncTilesDarkMode();

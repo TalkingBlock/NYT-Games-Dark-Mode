@@ -641,8 +641,8 @@ function enableSpellingBeeDarkMode() {
     `;
     const style = document.createElement("style");
     style.id = "spellingbeestyle";
-    style.innerText = spellingBeeCSS;
-    document.head.appendChild(style);
+    style.textContent = spellingBeeCSS;
+    (document.head || document.documentElement).appendChild(style);
 }
 
 function disableSpellingBeeDarkMode() {
@@ -652,18 +652,28 @@ function disableSpellingBeeDarkMode() {
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableSpellingBeeDarkMode") {
-        if (document.getElementById("spellingbeestyle")) {
-            disableSpellingBeeDarkMode();
-        } else {
+function syncSpellingBeeDarkMode() {
+    chrome.storage.sync.get(["spellingBeeDarkModeEnabled", "gamesMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.gamesMasterEnabled !== false && Boolean(data.spellingBeeDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("spellingbeestyle"));
+        if (shouldBeEnabled && !isEnabled) {
             enableSpellingBeeDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableSpellingBeeDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enableSpellingBeeDarkMode" || message.action === "syncDarkModeState") {
+        syncSpellingBeeDarkMode();
     }
 });
 
-chrome.storage.sync.get("spellingBeeDarkModeEnabled", function(data) {
-    if (data.spellingBeeDarkModeEnabled) {
-        enableSpellingBeeDarkMode();
-    } 
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("spellingBeeDarkModeEnabled" in changes || "gamesMasterEnabled" in changes)) {
+        syncSpellingBeeDarkMode();
+    }
 });
+
+syncSpellingBeeDarkMode();

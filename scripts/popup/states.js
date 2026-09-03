@@ -17,6 +17,7 @@ export const popupState = {
     sudokuColors: {},
     customSudokuColors: {},
     saveTimerId: null,
-    colorUpdateTimerId: null,
+    crosswordUpdateTimerId: null,
+    sudokuUpdateTimerId: null,
     hexFeedbackTimerId: null
 };

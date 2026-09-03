@@ -1,7 +1,7 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Adds a toggleable dark mode to NYT Games :D",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab", "storage", "clipboardRead", "clipboardWrite"],
   "action": {
@@ -17,96 +17,96 @@
     {
       "matches": ["https://www.nytimes.com/crosswords/game/daily*",
                   "https://www.nytimes.com/crosswords/game/bonus*"],
-      "js": ["scripts/theCrossword.js"],
+      "js": ["scripts/misc/crosswordColors.js", "scripts/games/theCrossword.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/crosswords/game/midi*"],
-      "js": ["scripts/midiCrossword.js"],
+      "js": ["scripts/misc/crosswordColors.js", "scripts/games/midiCrossword.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/crosswords/game/mini*"],
-      "js": ["scripts/miniCrossword.js"],
+      "js": ["scripts/misc/crosswordColors.js", "scripts/games/miniCrossword.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/games/connections",
                   "https://www.nytimes.com/games/connections/20*",
                   "https://www.nytimes.com/games/connections?utm_source=wordle&utm_medium=referral&utm_campaign=wordle_nav"],
-      "js": ["scripts/connections.js"],
+      "js": ["scripts/games/connections.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/puzzles/spelling-bee",
                   "https://www.nytimes.com/puzzles/spelling-bee/20*",
                   "https://www.nytimes.com/puzzles/spelling-bee?utm_source=wordle&utm_medium=referral&utm_campaign=wordle_nav"],
-      "js": ["scripts/spellingBee.js"],
+      "js": ["scripts/games/spellingBee.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/games/pips*"],
-      "js": ["scripts/pips.js"],
+      "js": ["scripts/games/pips.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/games/strands",
                   "https://www.nytimes.com/games/strands/20*",
                   "https://www.nytimes.com/games/strands?utm_source=wordle&utm_medium=referral&utm_campaign=wordle_nav"],
-      "js": ["scripts/strands.js"],
+      "js": ["scripts/games/strands.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/puzzles/letter-boxed"],
-      "js": ["scripts/letterBoxed.js"],
+      "js": ["scripts/games/letterBoxed.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/puzzles/tiles"],
-      "js": ["scripts/tiles.js"],
+      "js": ["scripts/games/tiles.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/puzzles/sudoku*"],
-      "js": ["scripts/sudoku.js"],
+      "js": ["scripts/misc/sudokuColors.js", "scripts/games/sudoku.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/crosswords/archive*"],
-      "js": ["scripts/crosswordsArchive.js"],
+      "js": ["scripts/games/crosswordsArchive.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/games/connections/archive*"],
-      "js": ["scripts/connectionsArchive.js"],
+      "js": ["scripts/games/connectionsArchive.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/puzzles/spelling-bee/hub*"],
-      "js": ["scripts/spellingBeeArchive.js"],
+      "js": ["scripts/games/spellingBeeArchive.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/games/wordle/archive/*"],
-      "js": ["scripts/wordleArchive.js"],
+      "js": ["scripts/games/wordleArchive.js"],
       "run_at": "document_start"
     }, {  
       "matches": ["https://www.nytimes.com/games/strands/archive/*"],
-      "js": ["scripts/strandsArchive.js"],
+      "js": ["scripts/games/strandsArchive.js"],
       "run_at": "document_start"
     }, { 
       "matches": ["https://www.nytimes.com/crosswords",
                   "https://www.nytimes.com/crosswords?utm_campaign=wordle_nav&utm_medium=referral&utm_source=wordle"],
-      "js": ["scripts/menu.js"],
+      "js": ["scripts/games/menu.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/puzzles/stats",
                   "https://www.nytimes.com/puzzles/stats?login=smartlock&auth=login-smartlock"],
-      "js": ["scripts/crosswordStats.js"],
+      "js": ["scripts/games/crosswordStats.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/games/create/wordle",
                   "https://www.nytimes.com/games/create/wordle?login=smartlock&auth=login-smartlock"],
-      "js": ["scripts/customWordle.js"],
+      "js": ["scripts/games/customWordle.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/athletic/connections-sports-edition/"],
-      "js": ["scripts/taConnections.js"],
+      "js": ["scripts/games/taConnections.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/games/crossplay"],
-      "js": ["scripts/miscPages.js"],
+      "js": ["scripts/misc/miscPages.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://myaccount.nytimes.com/auth/iframe/*"],
-      "js": ["scripts/iframe.js"],
+      "js": ["scripts/misc/iframe.js"],
       "run_at": "document_start",
       "all_frames": true
     }

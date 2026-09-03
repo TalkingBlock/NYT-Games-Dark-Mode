@@ -7,10 +7,21 @@ export const cwColorsStorageKey = "crosswordColorSettings";
 export const sdColorsStorageKey = "sudokuColorSettings";
 export const crosswordPresetStorageKey = "crosswordPreset";
 
-// Storage key holding child toggles former states for when a group toggle is switched off
-export function rememberedGroupChildrenStorageKey(groupToggleId) {
-    return `${groupToggleId}RememberedChildren`;
-}
+// Key exports for master switches
+export const dmGroupMasterStorageKeys = {
+    "games-main": "gamesMasterEnabled",
+    "archives-main": "archivesMasterEnabled",
+    "misc-main": "miscMasterEnabled"
+};
+
+// Message for syncing dark mode state across tabs
+export const syncDarkModeAction = "syncDarkModeState";
+
+// Keys written by the old popup gate (cleared out on startup)
+export const legacyGroupStorageKeys = [
+    "games-main", "archives-main", "misc-main",
+    "games-mainRememberedChildren", "archives-mainRememberedChildren", "misc-mainRememberedChildren"
+];
 
 // Light preset palette for crosswords
 export const lightCrosswordColors = {
@@ -194,12 +205,17 @@ export const dmToggleGroups = {
     ]
 };
 
-// Map of child toggle ID to its parent for searching + updating disabled states
-export const dmChildToggleParentMap = Object.fromEntries(
-    Object.entries(dmToggleGroups).flatMap(([parentToggleId, childToggleIds]) =>
-        childToggleIds.map((childToggleId) => [childToggleId, parentToggleId])
-    )
-);
+// Variable of every key the popup reads when opened so the switches are not wrong before storage is reached
+export const popupStorageKeys = [
+    popupActivePageStorageKey,
+    popupActiveColorPanelStorageKey,
+    cwColorsStorageKey,
+    ...Object.values(dmGroupMasterStorageKeys),
+    ...Object.values(dmToggleConfig).map((toggleConfig) => toggleConfig.storageKey)
+];
+
+// Cursor inset for the color picker so it can always be exactly at the corners
+export const svCursorInset = 4;
 
 // Grouped names of page buttons and their corresponding pages
 export const pageButtons = [
@@ -207,7 +223,6 @@ export const pageButtons = [
     "custom-colors-button",
     "extra-features-button"
 ];
-
 export const pages = [
     "dark-mode-page",
     "custom-colors-page",

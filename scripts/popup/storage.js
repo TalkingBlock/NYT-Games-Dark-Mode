@@ -1,11 +1,11 @@
 // Import variable
 import {cwColorsStorageKey} from "./defaultExports.js";
 
-// Reads a value from a key in from chrome.storage.sync for the given key and returns said value
-export function readSyncValue(key) {
+// Reads every given key from chrome.storage.sync and returns them as an object
+export function readSyncValues(keys) {
     return new Promise((resolve) => {
-        chrome.storage.sync.get(key, (result) => {
-            resolve(result?.[key]);
+        chrome.storage.sync.get(keys, (result) => {
+            resolve(result || {});
         });
     });
 }
@@ -17,10 +17,11 @@ export function writeSyncValue(key, value) {
     });
 }
 
-// Loads the saved crossword color theme from chrome storage
-export async function loadSavedTheme() {
-    const savedTheme = await readSyncValue(cwColorsStorageKey);
-    return savedTheme || null;
+// Deletes keys from chrome.storage.sync
+export function removeSyncValues(keys) {
+    return new Promise((resolve) => {
+        chrome.storage.sync.remove(keys, resolve);
+    });
 }
 
 // Saves the current crossword color theme to chrome storage

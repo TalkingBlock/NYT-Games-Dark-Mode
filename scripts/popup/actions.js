@@ -4,19 +4,23 @@ import {
     popupActivePageStorageKey, popupActiveColorPanelStorageKey,
     lightCrosswordColors, darkCrosswordColors,
     lightSudokuColors, darkSudokuColors,
-    dmToggleConfig, dmToggleGroups, dmChildToggleParentMap,
-    rememberedGroupChildrenStorageKey
+    dmToggleConfig, dmToggleGroups, cwColorsStorageKey,
+    dmGroupMasterStorageKeys, syncDarkModeAction, legacyGroupStorageKeys, popupStorageKeys, pageButtons, svCursorInset
 } from "./defaultExports.js";
 import {clamp, hexToHsv, normalizeHexColor, hsvToHex} from "./colorMath.js";
-import {loadSavedTheme, saveTheme, readSyncValue, writeSyncValue, sendMessageToActiveTab} from "./storage.js";
+import {saveTheme, readSyncValues, writeSyncValue, removeSyncValues, sendMessageToActiveTab} from "./storage.js";
 import {updateAll, updateScrollAffordance} from "./updater.js";
 
-// Called from main.js; starts the popup, calls every single function to display it
+// Call from main.js which starts the popup and calls all functions to display it
 export async function initializePopup() {
-    await loadSavedPageState();
-    await loadDMToggleStates();
-    await loadSavedColorPanelState();
-    await loadThemeState();
+    const [savedValues] = await Promise.all([
+        readSyncValues(popupStorageKeys),
+        removeSyncValues(legacyGroupStorageKeys)
+    ]);
+    loadSavedPageState(savedValues);
+    loadDMToggleStates(savedValues);
+    loadSavedColorPanelState(savedValues);
+    loadThemeState(savedValues[cwColorsStorageKey] || null);
     attachPageButtonHandlers();
     attachGameColorPanelHandlers();
     attachGameColorObjectHandlers();
@@ -39,44 +43,37 @@ function attachColorPanelScrollHandlers() {
 }
 
 // Loads the page state from storage and displays whatever page is active
-async function loadSavedPageState() {
-    const savedPage = await readSyncValue(popupActivePageStorageKey);
-    if (savedPage) {
+function loadSavedPageState(savedValues) {
+    const savedPage = savedValues[popupActivePageStorageKey];
+    if (pageButtons.includes(savedPage)) {
         popupState.activePageButtonClass = savedPage;
     }
 }
 
 // Loads and applies the dark mode toggle states from storage
-async function loadDMToggleStates() {
-    const allToggleIds = Object.keys(dmToggleConfig);
-    const parentToggleIds = Object.keys(dmToggleGroups);
-    for (const parentToggleId of parentToggleIds) {
-        const savedValue = await readSyncValue(parentToggleId);
+function loadDMToggleStates(savedValues) {
+    for (const parentToggleId of Object.keys(dmToggleGroups)) {
         const parentToggle = document.getElementById(parentToggleId);
-        if (parentToggle) {
-            parentToggle.checked = Boolean(savedValue);
-        }
+        if (!parentToggle) continue;
+        parentToggle.checked = savedValues[dmGroupMasterStorageKeys[parentToggleId]] !== false;
     }
-    for (const toggleId of allToggleIds) {
-        const toggleConfig = dmToggleConfig[toggleId];
+    for (const [toggleId, toggleConfig] of Object.entries(dmToggleConfig)) {
         const toggleInput = document.getElementById(toggleId);
         if (!toggleInput) continue;
-        const savedValue = await readSyncValue(toggleConfig.storageKey);
-        toggleInput.checked = Boolean(savedValue);
+        toggleInput.checked = Boolean(savedValues[toggleConfig.storageKey]);
     }
 }
 
 // Helper function that loads the color panel from storage
-async function loadSavedColorPanelState() {
-    const savedPanel = await readSyncValue(popupActiveColorPanelStorageKey);
+function loadSavedColorPanelState(savedValues) {
+    const savedPanel = savedValues[popupActiveColorPanelStorageKey];
     if (savedPanel === "crosswords" || savedPanel === "sudoku") {
         popupState.activeColorPanel = savedPanel;
     }
 }
 
 // Loads and applies the crossword and sudoku color themes from storage
-async function loadThemeState() {
-    const savedTheme = await loadSavedTheme();
+function loadThemeState(savedTheme) {
     loadColorCollection({
         selector: "#panel-crosswords .color-option[data-key]",
         defaults: lightCrosswordColors,
@@ -267,7 +264,6 @@ function attachGameColorPanelHandlers() {
             const panelName = panelButton.dataset.colorPanel;
             if (!panelName) return;
             popupState.activeColorPanel = panelName;
-            popupState.activePageButtonClass = "custom-colors-button";
             await writeSyncValue(popupActiveColorPanelStorageKey, panelName);
             selectColorForActivePanel();
             updateAll();
@@ -318,73 +314,21 @@ function attachDMToggleHandlers() {
         const toggleInput = document.getElementById(toggleId);
         if (!toggleInput) continue;
         toggleInput.addEventListener("change", async () => {
-            const parentToggleId = dmChildToggleParentMap[toggleId];
-            if (parentToggleId) {
-                const parentToggle = document.getElementById(parentToggleId);
-                if (parentToggle && !parentToggle.checked) {
-                    toggleInput.checked = false;
-                    return;
-                }
-            }
             const isEnabled = toggleInput.checked;
             await writeSyncValue(toggleConfig.storageKey, isEnabled);
             sendMessageToActiveTab({ action: toggleConfig.action });
             updateAll();
         });
     }
-    for (const [groupToggleId, childToggleIds] of Object.entries(dmToggleGroups)) {
+    for (const groupToggleId of Object.keys(dmToggleGroups)) {
         const groupToggle = document.getElementById(groupToggleId);
         if (!groupToggle) continue;
         groupToggle.addEventListener("change", async () => {
-            const isEnabled = groupToggle.checked;
-            groupToggle.indeterminate = false;
-            await writeSyncValue(groupToggleId, isEnabled);
-            if (isEnabled) {
-                await restoreGroupChildren(groupToggleId, childToggleIds);
-            } else {
-                await clearGroupChildren(groupToggleId, childToggleIds);
-            }
+            await writeSyncValue(dmGroupMasterStorageKeys[groupToggleId], groupToggle.checked);
+            sendMessageToActiveTab({ action: syncDarkModeAction });
             updateAll();
         });
     }
-}
-
-// Switches a group off and records which of its children were on for storage
-async function clearGroupChildren(groupToggleId, childToggleIds) {
-    const enabledChildToggleIds = [];
-    for (const childToggleId of childToggleIds) {
-        const childToggle = document.getElementById(childToggleId);
-        const childConfig = dmToggleConfig[childToggleId];
-        if (childToggle?.checked) {
-            enabledChildToggleIds.push(childToggleId);
-        }
-        if (childToggle) {
-            childToggle.checked = false;
-        }
-        if (childConfig) {
-            await writeSyncValue(childConfig.storageKey, false);
-        }
-    }
-    await writeSyncValue(rememberedGroupChildrenStorageKey(groupToggleId), enabledChildToggleIds);
-}
-
-// Switches a group back on and restores turned on storage states for children
-async function restoreGroupChildren(groupToggleId, childToggleIds) {
-    const rememberedKey = rememberedGroupChildrenStorageKey(groupToggleId);
-    const rememberedChildToggleIds = await readSyncValue(rememberedKey);
-    if (!Array.isArray(rememberedChildToggleIds) || rememberedChildToggleIds.length === 0) return;
-    for (const childToggleId of rememberedChildToggleIds) {
-        if (!childToggleIds.includes(childToggleId)) continue;
-        const childToggle = document.getElementById(childToggleId);
-        const childConfig = dmToggleConfig[childToggleId];
-        if (childToggle) {
-            childToggle.checked = true;
-        }
-        if (childConfig) {
-            await writeSyncValue(childConfig.storageKey, true);
-        }
-    }
-    await writeSyncValue(rememberedKey, []);
 }
 
 // Allows for the dragging of the hue slider and the saturation/value cursor
@@ -399,7 +343,7 @@ function attachPickerHandlers() {
     });
 }
 
-// Shows an action success message next to the hex actions for 3 seconds
+// Shows an action success message next to the hex actions for 2.5 seconds
 function showHexFeedback(message) {
     const indicator = document.getElementById("hexIndicator");
     if (!indicator) return;
@@ -509,18 +453,13 @@ function updateSaturationAndValueFromCursor(event) {
     const bounds = saturationValueArea.getBoundingClientRect();
     const cursorX = event.clientX - bounds.left;
     const cursorY = event.clientY - bounds.top;
-    const cursorRadius = 8;
-    const fullWidth = saturationValueArea.clientWidth + 8;
-    const fullHeight = saturationValueArea.clientHeight + 8;
-    if (fullWidth <= 2 * cursorRadius || fullHeight <= 2 * cursorRadius) {
+    const saturationTravel = saturationValueArea.clientWidth - 2 * svCursorInset;
+    const valueTravel = saturationValueArea.clientHeight - 2 * svCursorInset;
+    if (saturationTravel <= 0 || valueTravel <= 0) {
         return;
     }
-    popupState.pickerSaturation = clamp(
-        (cursorX - cursorRadius) / (fullWidth - 2 * cursorRadius)
-    );
-    popupState.pickerValue = clamp(
-        1 - (cursorY - cursorRadius) / (fullHeight - 2 * cursorRadius)
-    );
+    popupState.pickerSaturation = clamp((cursorX - svCursorInset) / saturationTravel);
+    popupState.pickerValue = clamp(1 - (cursorY - svCursorInset) / valueTravel);
 
     applyPickerColorToSelectedOption();
     updateAll();
@@ -675,14 +614,14 @@ function sendSudokuColorsNow() {
 
 // Delays the sending of the crossword colors by 35ms to prevent unnecessary messages while dragging the color picker
 function scheduleCrosswordUpdate() {
-    clearTimeout(popupState.colorUpdateTimerId);
-    popupState.colorUpdateTimerId = setTimeout(() => { sendCrosswordColorsNow(); }, 35);
+    clearTimeout(popupState.crosswordUpdateTimerId);
+    popupState.crosswordUpdateTimerId = setTimeout(() => { sendCrosswordColorsNow(); }, 35);
 }
 
 // Delays the sending of the sudoku colors by 35ms to prevent unnecessary messages while dragging the color picker
 function scheduleSudokuUpdate() {
-    clearTimeout(popupState.colorUpdateTimerId);
-    popupState.colorUpdateTimerId = setTimeout(() => { sendSudokuColorsNow(); }, 35);
+    clearTimeout(popupState.sudokuUpdateTimerId);
+    popupState.sudokuUpdateTimerId = setTimeout(() => { sendSudokuColorsNow(); }, 35);
 }
 
 // Saves the current theme to storage

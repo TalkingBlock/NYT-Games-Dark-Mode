@@ -1,6 +1,7 @@
-function enableCrosswordStatsDarkMode() {
-    const imgURL_UpsellStats = chrome.runtime.getURL("imgs/upsell_stats.png");
-    const crosswordStatsCSS = `
+function enableSpellingBeeArchiveDarkMode() {
+    const svgURL_Swirl = chrome.runtime.getURL("svgs/path-swirl.svg");
+    const svgURL_Wavy = chrome.runtime.getURL("svgs/path-wavy.svg");
+    const spellingBeeArchiveCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -52,8 +53,8 @@ function enableCrosswordStatsDarkMode() {
 
         .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
-        }      
-
+        }    
+            
         .pz-icon-daily {
             background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
         }
@@ -161,7 +162,7 @@ function enableCrosswordStatsDarkMode() {
         .pz-ad-box::before {
             color: white;
             border: 1px solid white;
-        }
+        }        
 
         .xwd--loading-bar__fill {
             background-color: white;
@@ -176,76 +177,76 @@ function enableCrosswordStatsDarkMode() {
             color: white;
         }
 
-        /* Stats Page */
+        /* Today's Puzzle Section */
 
-        #stats-overview, .stats-subheader {
-            color: white;
+        .Layout-module_outerWrapper__kO4JV {
+            background-image: url("${svgURL_Swirl}"), url("${svgURL_Wavy}"),
+                              linear-gradient(to bottom, #0f0f0f 377px, #151515 377px);
         }
 
-        .day-of-week {
-            color: white;
-        }
-
-        #weekly-stats .single-day.active {
-            box-shadow: 0 0 #0f0f0f, 0 0px #0f0f0f, -4px 0 4px 0px rgba(0, 0, 0, .6), 4px 0 4px 2px rgba(0, 0, 0, .6);
-        }
-
-        @media only screen and (min-width: 768px) {
-            #weekly-stats .single-day.active {
-                box-shadow: 0 0 #0f0f0f, 0 6px #0f0f0f, -4px 0 4px -2px rgba(0, 0, 0, .6), 4px 0 4px -2px rgba(0, 0, 0, .6);
+        @media (max-width: 991.98px) {
+            .Layout-module_outerWrapper__kO4JV {
+                background-image: url("${svgURL_Swirl}"), url("${svgURL_Wavy}"),
+                                  linear-gradient(to bottom, #0f0f0f 332px, #151515 332px);
             }
         }
 
-        #weekly-stats .single-day .no-stats {
-            background: repeating-linear-gradient(-45deg, #000, #000 5px, #0f0f0f 5px, #0f0f0f 10px);
+        @media (max-width: 767.98px) {
+            .Layout-module_outerWrapper__kO4JV {
+                background-image: none, none, linear-gradient(to bottom, #0f0f0f 306px, #151515 306px);
+            }
         }
 
-        /* Not Logged In Page */
+        /* Rest of Page */
 
-        .overlay-container {
-            background-color: rgba(0, 0, 0, .8);
+        .Layout-module_outerWrapper__kO4JV .Layout-module_innerWrapper__J9ldt {
             color: white;
         }
 
-        .overlay-body {
-            background-color: #0f0f0f;
-            box-shadow: 0 0 20px 0 rgba(255, 255, 255, .1);
+        .PastPuzzlesSections-module_pastPuzzlesContent__KwLBJ 
+        .PastPuzzlesSections-module_weekSectionContainer__LNvJi {
+            border-top: 2px solid white;
         }
 
-        #stats-root .info-container p {
-            color: white;
-        }
-
-        .image-container {
-            background: url("${imgURL_UpsellStats}") no-repeat;
-            background-size: contain;
+        .HeroCard-module_heroCard___sPDU {
+            color: black;
         }
     `;
     const style = document.createElement("style");
-    style.id = "crosswordstatsstyle";
-    style.innerText = crosswordStatsCSS;
-    document.head.appendChild(style);
+    style.id = "spellingbeearchivestyle";
+    style.textContent = spellingBeeArchiveCSS;
+    (document.head || document.documentElement).appendChild(style);
 }
 
-function disableCrosswordStatsDarkMode() {
-    const styleElement = document.getElementById("crosswordstatsstyle");
+function disableSpellingBeeArchiveDarkMode() {
+    const styleElement = document.getElementById("spellingbeearchivestyle");
     if (styleElement) {
         styleElement.remove();
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableCrosswordStatsDarkMode") {
-        if (document.getElementById("crosswordstatsstyle")) {
-            disableCrosswordStatsDarkMode();
-        } else {
-            enableCrosswordStatsDarkMode();
+function syncSpellingBeeArchiveDarkMode() {
+    chrome.storage.sync.get(["spellingBeeArchiveDarkModeEnabled", "archivesMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.archivesMasterEnabled !== false && Boolean(data.spellingBeeArchiveDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("spellingbeearchivestyle"));
+        if (shouldBeEnabled && !isEnabled) {
+            enableSpellingBeeArchiveDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableSpellingBeeArchiveDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enableSpellingBeeArchiveDarkMode" || message.action === "syncDarkModeState") {
+        syncSpellingBeeArchiveDarkMode();
     }
 });
 
-chrome.storage.sync.get("crosswordStatsDarkModeEnabled", function(data) {
-    if (data.crosswordStatsDarkModeEnabled) {
-        enableCrosswordStatsDarkMode();
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("spellingBeeArchiveDarkModeEnabled" in changes || "archivesMasterEnabled" in changes)) {
+        syncSpellingBeeArchiveDarkMode();
     }
 });
+
+syncSpellingBeeArchiveDarkMode();

@@ -1,7 +1,5 @@
-function enableSpellingBeeArchiveDarkMode() {
-    const svgURL_Swirl = chrome.runtime.getURL("svgs/path-swirl.svg");
-    const svgURL_Wavy = chrome.runtime.getURL("svgs/path-wavy.svg");
-    const spellingBeeArchiveCSS = `
+function enableMiscPagesDarkMode() {
+    const miscPagesCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -30,6 +28,7 @@ function enableSpellingBeeArchiveDarkMode() {
 
         body .css-1igzjy9 {
             background-color: white;
+            border: 1px solid white;
         }
 
         body .css-1igzjy9 a {
@@ -53,7 +52,7 @@ function enableSpellingBeeArchiveDarkMode() {
 
         .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
-        }    
+        }      
             
         .pz-icon-daily {
             background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
@@ -162,7 +161,7 @@ function enableSpellingBeeArchiveDarkMode() {
         .pz-ad-box::before {
             color: white;
             border: 1px solid white;
-        }        
+        }
 
         .xwd--loading-bar__fill {
             background-color: white;
@@ -177,66 +176,55 @@ function enableSpellingBeeArchiveDarkMode() {
             color: white;
         }
 
-        /* Today's Puzzle Section */
+        /* ----------------- */
+        /* PAGE 1: CROSSPLAY */
+        /* ----------------- */
 
-        .Layout-module_outerWrapper__kO4JV {
-            background-image: url("${svgURL_Swirl}"), url("${svgURL_Wavy}"),
-                              linear-gradient(to bottom, #0f0f0f 377px, #151515 377px);
-        }
-
-        @media (max-width: 991.98px) {
-            .Layout-module_outerWrapper__kO4JV {
-                background-image: url("${svgURL_Swirl}"), url("${svgURL_Wavy}"),
-                                  linear-gradient(to bottom, #0f0f0f 332px, #151515 332px);
+        @media only screen and (max-width: 1024px) and (orientation: portrait) {
+            [data-app-variant=crossplay] .column-left, [data-app-variant=locked] .column-left {
+                color: white;
             }
         }
 
-        @media (max-width: 767.98px) {
-            .Layout-module_outerWrapper__kO4JV {
-                background-image: none, none, linear-gradient(to bottom, #0f0f0f 306px, #151515 306px);
-            }
-        }
-
-        /* Rest of Page */
-
-        .Layout-module_outerWrapper__kO4JV .Layout-module_innerWrapper__J9ldt {
+        .column {
             color: white;
         }
-
-        .PastPuzzlesSections-module_pastPuzzlesContent__KwLBJ 
-        .PastPuzzlesSections-module_weekSectionContainer__LNvJi {
-            border-top: 2px solid white;
-        }
-
-        .HeroCard-module_heroCard___sPDU {
-            color: black;
-        }
-    `;
+    `;  
     const style = document.createElement("style");
-    style.id = "spellingbeearchivestyle";
-    style.innerText = spellingBeeArchiveCSS;
-    document.head.appendChild(style);
+    style.id = "miscpagesstyle";
+    style.textContent = miscPagesCSS;
+    (document.head || document.documentElement).appendChild(style);
 }
 
-function disableSpellingBeeArchiveDarkMode() {
-    const styleElement = document.getElementById("spellingbeearchivestyle");
+function disableMiscPagesDarkMode() {
+    const styleElement = document.getElementById("miscpagesstyle");
     if (styleElement) {
         styleElement.remove();
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableSpellingBeeArchiveDarkMode") {
-        if (document.getElementById("spellingbeearchivestyle")) {
-            disableSpellingBeeArchiveDarkMode();
-        } else {
-            enableSpellingBeeArchiveDarkMode();
+function syncMiscPagesDarkMode() {
+    chrome.storage.sync.get(["miscPagesDarkModeEnabled", "miscMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.miscMasterEnabled !== false && Boolean(data.miscPagesDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("miscpagesstyle"));
+        if (shouldBeEnabled && !isEnabled) {
+            enableMiscPagesDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableMiscPagesDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enableMiscPagesDarkMode" || message.action === "syncDarkModeState") {
+        syncMiscPagesDarkMode();
     }
 });
 
-chrome.storage.sync.get("spellingBeeArchiveDarkModeEnabled", function(data) {
-    if (data.spellingBeeArchiveDarkModeEnabled) {
-        enableSpellingBeeArchiveDarkMode();
-    } 
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("miscPagesDarkModeEnabled" in changes || "miscMasterEnabled" in changes)) {
+        syncMiscPagesDarkMode();
+    }
 });
+
+syncMiscPagesDarkMode();

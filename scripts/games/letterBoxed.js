@@ -1,5 +1,5 @@
-function enableTilesDarkMode() {
-    const tilesCSS = `
+function enableLetterBoxedDarkMode() {
+    const letterBoxedCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -51,7 +51,7 @@ function enableTilesDarkMode() {
 
         .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
-        }    
+        }   
             
         .pz-icon-daily {
             background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
@@ -121,7 +121,6 @@ function enableTilesDarkMode() {
             color: black;
         }
 
-
         .pz-nav-drawer__account {
             background-color: #0f0f0f;
             border-top: 1px solid white;
@@ -176,22 +175,27 @@ function enableTilesDarkMode() {
             color: white;
         }
 
-        .pz-game-title {
-            color: white;
+        .pz-module {
+            color: white; 
         }
 
         /* Game Toolbar */
 
-        .ToolbarAdapter-module_toolbarContainer__Ni4KN, .Game-module_toolbarContainer__PB1iO {
+        .ToolbarAdapter-module_toolbarContainer__Ni4KN {
             background-color: #0f0f0f;
         }
 
-        .ToolbarItem-module_toolbar_item__xrBr_ {
+        .ToolbarItem-module_toolbarColors__d6naZ, .ToolbarItem-module_toolbar_item__xrBr_ {
             background-color: #0f0f0f;
             color: white;
         }
 
-        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
+        .Game-module_toolbarContainer__QaAst {
+            background-color: #0f0f0f;
+        }
+
+        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover:not(:disabled),
+        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover:not(:disabled) {
             background-color: #777777;
         }
 
@@ -206,8 +210,9 @@ function enableTilesDarkMode() {
             color: white;
         }
 
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover, 
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover {
+        .Dropdown-module_toolbarColorsDesktop__ptWzT:hover:not(:disabled), 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover:not(:disabled), 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover:not(:disabled) {
             background-color: #777777;
         }
 
@@ -215,45 +220,31 @@ function enableTilesDarkMode() {
             fill: white;
         }
 
-        /* Tileset and How to Play Popup */
+        /* Yesterday and Help Popups */
 
         .xwd__modal--overlay {
             background-color: #00000060;
         }
 
         .xwd__modal--body {
-            background-color: #0f0f0f;
-            color: white;
-            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .5);
+            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .3);
         }
 
-        .tlz-palette-button {
+        .lb__modal {
+            background: #0f0f0f;
             color: white;
-            border: 1px solid #dddddd;
         }
 
-        .tlz-palette-button.selected {
-            border: solid 2px white;
+        .modal-wordlist {
+            color: white;
+        }
+
+        .modal-system-centered-content canvas {
+            filter: invert(1) hue-rotate(175deg) brightness(3.7);
         }
 
         .pz-icon-close {
             filter: invert(1);
-        }
-
-        .tlz-bob {
-            border: 1px solid white;
-        }
-
-        .tlz-bob.active {
-            background-color: white;
-        }
-
-        .tlz-palette-arrows {
-            filter: invert(1);
-        }
-
-        .pz-settings-icon path {
-            fill: white;
         }
 
         /* Congrats Popup */
@@ -263,13 +254,13 @@ function enableTilesDarkMode() {
             color: white;
         }
 
-        body .css-1lxqcbc {
+        body .css-1e3260o {
             color: black;
             background-color: white;
             border: 1px solid white;
         }
 
-        body .css-1lxqcbc:hover {
+        body .css-1e3260o:hover {
             color: black;
             background-color: #777777;
             border: 1px solid #777777;
@@ -280,30 +271,40 @@ function enableTilesDarkMode() {
         } 
     `;
     const style = document.createElement("style");
-    style.id = "tilesstyle";
-    style.innerText = tilesCSS;
-    document.head.appendChild(style);
+    style.id = "letterBoxedstyle";
+    style.textContent = letterBoxedCSS;
+    (document.head || document.documentElement).appendChild(style);
 }
 
-function disableTilesDarkMode() {
-    const styleElement = document.getElementById("tilesstyle");
+function disableLetterBoxedDarkMode() {
+    const styleElement = document.getElementById("letterBoxedstyle");
     if (styleElement) {
         styleElement.remove();
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableTilesDarkMode") {
-        if (document.getElementById("tilesstyle")) {
-            disableTilesDarkMode();
-        } else {
-            enableTilesDarkMode();
+function syncLetterBoxedDarkMode() {
+    chrome.storage.sync.get(["letterBoxedDarkModeEnabled", "gamesMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.gamesMasterEnabled !== false && Boolean(data.letterBoxedDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("letterBoxedstyle"));
+        if (shouldBeEnabled && !isEnabled) {
+            enableLetterBoxedDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableLetterBoxedDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enableLetterBoxedDarkMode" || message.action === "syncDarkModeState") {
+        syncLetterBoxedDarkMode();
     }
 });
 
-chrome.storage.sync.get("tilesDarkModeEnabled", function(data) {
-    if (data.tilesDarkModeEnabled) {
-        enableTilesDarkMode();
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("letterBoxedDarkModeEnabled" in changes || "gamesMasterEnabled" in changes)) {
+        syncLetterBoxedDarkMode();
     }
 });
+
+syncLetterBoxedDarkMode();

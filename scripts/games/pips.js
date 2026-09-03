@@ -1,5 +1,6 @@
-const strandsSourceObservers = {};
-let strandsReplaceTimeout = null;
+let pipsSourceObserver = null;
+let pipsObserver = null;
+let pipsReplaceTimeout = null;
 
 function replaceVideo(selector, newSource) {
     const video = document.querySelector(selector);
@@ -18,20 +19,20 @@ function replaceVideo(selector, newSource) {
     video.load();
     video.style.visibility = 'visible';
 
-    if (strandsSourceObservers[selector]) strandsSourceObservers[selector].disconnect();
-    strandsSourceObservers[selector] = new MutationObserver(() => {
+    if (pipsSourceObserver) pipsSourceObserver.disconnect();
+    pipsSourceObserver = new MutationObserver(() => {
         if (!source.isConnected) return;
         if (source.src !== newSrc) {
             source.src = newSrc;
         }
     });
-    strandsSourceObservers[selector].observe(source, {attributes: true, attributeFilter: ["src"]});
+    pipsSourceObserver.observe(source, {attributes: true, attributeFilter: ["src"]});
 }
 
 function restoreVideo(selector) {
-    if (strandsSourceObservers[selector]) {
-        strandsSourceObservers[selector].disconnect();
-        delete strandsSourceObservers[selector];
+    if (pipsSourceObserver) {
+        pipsSourceObserver.disconnect();
+        pipsSourceObserver = null;
     }
     const video = document.querySelector(selector);
     if (!video) return;
@@ -43,9 +44,8 @@ function restoreVideo(selector) {
     video.style.visibility = '';
 }
 
-function enableStrandsDarkMode() {
-    const svgURL_Regiwall = chrome.runtime.getURL("svgs/strands-stats-regiwall.svg");
-    const strandsCSS = `
+function enablePipsDarkMode() {
+    const pipsCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -227,323 +227,239 @@ function enableStrandsDarkMode() {
 
         /* Game Toolbar */
 
-        .pz-row {
-            background-color: #0f0f0f;
-        }
-
-        .ToolbarAdapter-module_toolbarContainer__Ni4KN {
-            background-color: #0f0f0f;
-        }
-
         .ToolbarItem-module_toolbar_item__xrBr_ {
             background-color: #0f0f0f;
+            color: white;
         }
 
-        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
+        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover:not(:disabled), 
+        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover:not(:disabled) {
             background-color: #777777;
         }
 
-        .Icon-module_iconWrapper__ZfKPm path {
+        .ToolbarItem-module_toolbar_item__xrBr_ path,
+        .Toolbar-module_toolbarRight__VADxO .game-icon,
+        [data-testid="icon-arrow"] path {
             fill: white;
         }
 
-        .Dropdown-module_dropdown__menuItem__FJHMg a, .Dropdown-module_dropdown__menuItem__FJHMg button {
+        .Dropdown-module_dropdown__menuItem__FJHMg a,
+        .Dropdown-module_dropdown__menuItem__FJHMg button {
             background-color: #0f0f0f;
             color: white;
         }
 
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover,
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover {
+        .Dropdown-module_toolbarColorsDesktop__ptWzT:hover:not(:disabled), 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover:not(:disabled), 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover:not(:disabled) {
             background-color: #777777;
         }
 
-        /* Stats Popup */
+        .Timer-module_timerValue__pF6nA {
+            color: white;
+        }
+            
+        /* Pause, Reference, Settings and Reveal Popups */
 
         .xwd__modal--overlay {
-            background: #00000060;
-        }
-
-        .strands__modal {
-            background-color: #0f0f0f;
+            background-color: #00000060;
         }
 
         .xwd__modal--body {
+            background-color: #0f0f0f;
+            color: white;
             box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .3);
         }
 
-        .Stats-module_wrapper__zUfh0 {
-            color: white;
-            background: #0f0f0f;
+        .Button-module_button__WxR62 {
+            background-color: white;
+            color: black;
         }
 
-        .Stats-module_stats__CB23r {
+        .Help-module_iconSymbol__YNX_q {
+            background-color: white;
+        }
+
+        .Help-module_iconText__uL1Xt {
+            color: black;
+        }
+
+        .ReferenceModal-module_bold__KQila .Help-module_iconSymbolSVG__NUamL.Help-module_equal__sY30n,
+        .Help-module_iconSymbolSVG__NUamL.Help-module_notEqual__lKpg6 {
+            filter: invert(1);
+        }
+
+        .pz-icon-close {
+            filter: invert(1);
+        }
+
+        .SettingsModal-module_title__aR9bD {
+            color: white;
+        }
+
+        ._footNote_kbfjk_1 {
+            color: #8b8b8b;
+        }
+
+        .RevealModal-module_primary__Uass7 {
+            color: black;
+            background-color: white;
+        }
+
+        .RevealModal-module_secondary__kAuqv {
+            border: 1px solid white;
+            color: white;
+            background-color: black;
+        }
+
+        /* How To Play Popup */
+
+        .Help-module_helpContent__z9yZl, .carousel-module_carouselNavigation__WPAci {
+            background-color: #0f0f0f;
+        }
+
+        .carousel-module_buttonsWrapper__xuzls button {
+            border: 1px solid white;
+            color: white;
+            background-color: black;
+        }
+
+        .carousel-module_buttonsWrapper__xuzls button.carousel-module_play__RzWpB {
+            background: white;
+            color: black;
+        }
+
+        .Help-module_regionTransitions__iXxh3 {
+            color: white;
+        }
+
+        .Help-module_pulseTeal__vD2oj {
+            color: #008293;
+        }
+
+        .Help-module_pulsePink__tyMy_ {
+            color: #db137a;
+        }
+
+        .Help-module_pulseOrange__Etbhj {
+            color: #d15609;
+        }
+
+        .carousel-module_swipe__ZyaWm, 
+        .carousel-module_carouselPage__ZEB4H,
+        .TutorialPuzzle-module_tutorialScrim__azZoc,
+        .Tray-module_trayContainer__zSWYr.Tray-module_isTutorial__oBYJI {
+            background-color: #0f0f0f;
+        }
+
+        .Help-module_howToPlayGif__S5Kic {
+            visibility: hidden;
+        }
+
+        /* Game Page */
+
+        .GameMoment-module_gameContainer__Vuha8 {
+            background-color: #0f0f0f;
+        }
+
+        .GameMoment-module_instructions__ZW7Et {
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        .Tray-module_trayContainer__zSWYr {
+            background-color: #0f0f0f;
             border-top: 1px solid white;
         }
 
-        .Stat-module_stats__row__xnktL {
-            border-bottom: 1px solid white;
+        .Toastify__toast-theme--dark {
+            background: white;
+            color: black;
         }
 
-        .TrophyItem-module_name__wbtJx {
+        /* Congrats Page */
+
+        .CongratsModal-module_backToPuzzle__aBXu5 button {
+            color: white
+        }
+
+        .CongratsModal-module_primary__eycd1 {
+            color: black;
+            background-color: white;
+        }
+
+        .CongratsModal-module_congratsModalBody__v1jMi .button-secondary {
             color: white;
+            background-color: black;
+            border: 1px solid white;
         }
 
-        .ProgressBar-module_progressBar__MOWb7 {
-            background-color: black !important;
-            border: 1px solid white !important;
-        }
-
-        .ProgressBar-module_progressBarFill__E7Rrg {
-            border-color: black !important;
-            background-color: white !important;
-        }
-
-        .Stats-module_inline_carrot__icon__YCGc0 {
-            filter: invert(1);
-        }
-
-        .xwd__modal--close .pz-icon, .Stats-module_inline_carrot__icon__G2cbk {
-            filter: invert(1);
-        }
-
-        .modal-stats-body .xwd__modal--content {
+        button.button-secondary:hover:enabled {
+            background: black;
             color: white;
-        }
-
-        .RegiWall-module_regiwall_abstract_stats__L6lxo {
-            background: url(${svgURL_Regiwall}) center no-repeat;
+            opacity: .85;
         }
 
         button.button-dark-mode-support {
             background: white;
             color: black;
         }
-
-        button.button-dark-mode-support:hover:enabled {
-            background: #e4e4e4;
-        }
-
-        button.RegiWall-module_log_in_link__NlizD {
-            color: white;
-        }
-
-        /* Badges Page */
-
-        .pz-moment__badgeDetail, .BadgeDetail-module_container__RKO_D {
-            background-color: #0f0f0f;
-            color: white;
-        }
-
-        .BadgeDetail-module_background__Y5IWc path {
-			fill: #005b6d !important;
-		}
-
-        .BadgeDetail-module_helpCenterIcon__ZsJPD {
-            fill: white;
-        }
-
-        .BadgeDetailCTAs-module_buttonContainer__Td8eU button.pz-moment__button.secondary.default, 
-        .BadgeDetailCTAs-module_buttonContainer__Td8eU a.pz-moment__button.secondary.default {
-            color: white;
-            border: 1px solid white;
-        }
-
-        .BadgeDetail-module_arrowButton__LtZ8v {
-            background-color: #0f0f0f;
-            border: 1px solid white;
-        }
-
-        .BadgeDetail-module_arrowButton__LtZ8v path {
-            fill: white;
-        }
-
-        .BadgeDetail-module_arrowButton__LtZ8v:disabled {
-            border: 1px solid #777777;
-        }
-
-        .BadgeDetail-module_closeIcon__pPedP {
-            fill: white;
-        }
-
-        .pz-moment__frame, .BadgeDetail-module_background__Y5IWc {
-            background-color: #0f0f0f;
-        }
-
-        /* Hide How to Play videos until dark mode versions are loaded */
-
-        .darkPage1Gif, .darkPage3Gif {
-            visibility: hidden;
-        }
-
-        /* How to Play Popup */
-
-        .Help-module_title___5yTv, .carousel-module_wrapper__ZdPMF {
-            background: #0f0f0f;
-            color: white;
-        }
-
-        .carousel-module_buttonsWrapper__sEp8T button {
-            border: 1px solid white;
-            color: white;
-        }
-
-        .carousel-module_currentDot__hbt8i {
-            background-color: white;
-        }
-
-        /* Game Page */
-
-        .bubbles-module_hider__zoPog {
-            background-color: #0f0f0f;
-        }
-
-        .pz-game-field {
-            background: #0f0f0f;
-            color: white;
-        }
-
-        .styles-module_strandsBtn__xobCT {
-            color: white;
-        }
-
-        .hint-module_lightbulb__YfeFm {
-            background: #0f0f0f;
-            border: 3px solid #9f9f9f;
-        }
-
-        .hint-module_overlay___9ixH>div {
-            border: 3px solid #0f0f0f;
-            transform: none;
-        }
-
-        .hint-module_overlay___9ixH {
-            border: 3px solid white;
-        }
-
-        .hint-module_bluebulb__QtJ5d {
-            color: black !important;
-            background: white;
-            border: 2px solid white;
-        }
-
-        .styles-module_invalidshake__KMQkk {
-            color: white !important;
-        }
-
-        .pz-game-wrapper {
-            background-color: #0f0f0f !important;
-        }
-
-        /* Hint Popup */
-
-        .strands-hint-modal {
-            background: #0f0f0f;
-            color: white;
-            border: none;
-        }
-
-        .Hints-module_confirmButton__PyF6x {
-            background-color: white;
-            color: black;
-        }
-
-        /* Congrats Page */
-
-        .pz-moment.Congrats-module_wrapper__QikSo {
-            background-color: #0f0f0f !important;
-        }
-
-        .Congrats-module_fullscreenContent__hmx5w, .Congrats-module_shareDescriptor__XO5GF {
-            color: white;
-        }
-
-        .Congrats-module_closeButton__e7oha {
-            filter: invert(1);
-        }
-
-        .BadgeCarousel-module_badgeHeader__H_g5M h3, .BadgeCarouselItem-module_displayName__GrwKg {
-            color: white;
-        }
-
-        .BadgeCarouselItem-module_badge__YWm7f {
-            background-color: #0f0f0f;
-            border: 1px solid white;
-        }
-
-        button.button-primary {
-            background: white;
-            color: black;
-            border: 1px solid white;
-        }
-
-        button.button-primary:hover:enabled {
-            background: #e4e4e4;
-        }
-
-        button.css-15cgz6j {
-            background-color: #0f0f0f;
-            color: white;
-            border: 1px solid white;
-        }
-
-        button.css-27fpwl:hover {
-            outline: #b4b4b4 solid 3px;
-        }
-
-        .Toast-module_toast__q1i0d {
-            background-color: white;
-            color: black;
-        }
     `;
     const style = document.createElement("style");
-    style.id = "strandsstyle";
-    style.innerText = strandsCSS;
-    document.head.appendChild(style);
+    style.id = "pipsstyle";
+    style.textContent = pipsCSS;
+    (document.head || document.documentElement).appendChild(style);
 
-    applyDarkModeVideosIfEnabled();
-    const observer = new MutationObserver(() => {
-        clearTimeout(strandsReplaceTimeout);
-        strandsReplaceTimeout = setTimeout(() => applyDarkModeVideosIfEnabled(), 0);
+    applyDarkModeVideoIfEnabled();
+    pipsObserver = new MutationObserver(() => {
+        clearTimeout(pipsReplaceTimeout);
+        pipsReplaceTimeout = setTimeout(() => applyDarkModeVideoIfEnabled(), 0);
     });
-    observer.observe(document.documentElement, {childList: true, subtree: true});
-    window.strandsObserver = observer;
+    pipsObserver.observe(document.documentElement, {childList: true, subtree: true});
 }
 
-function applyDarkModeVideosIfEnabled() {
-    if (!document.getElementById("strandsstyle")) return;
-    replaceVideo(".darkPage1Gif", "mp4s/FirstGIFH2P.mp4");
-    replaceVideo(".darkPage3Gif", "mp4s/ThirdGIFH2P.mp4");
+function applyDarkModeVideoIfEnabled() {
+    if (!document.getElementById("pipsstyle")) return;
+    replaceVideo(".Help-module_howToPlayGif__S5Kic", "mp4s/h2p-gif-slowed.mp4");
 }
 
-
-function disableStrandsDarkMode() {
-    const styleElement = document.getElementById("strandsstyle");
+function disablePipsDarkMode() {
+    const styleElement = document.getElementById("pipsstyle");
     if (styleElement) {
         styleElement.remove();
     }
 
-    clearTimeout(strandsReplaceTimeout);
-    strandsReplaceTimeout = null;
-    restoreVideo(".darkPage1Gif");
-    restoreVideo(".darkPage3Gif");
-    if (window.strandsObserver) {
-        window.strandsObserver.disconnect();
-        window.strandsObserver = null;
+    clearTimeout(pipsReplaceTimeout);
+    pipsReplaceTimeout = null;
+    restoreVideo(".Help-module_howToPlayGif__S5Kic");
+    if (pipsObserver) {
+        pipsObserver.disconnect();
+        pipsObserver = null;
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableStrandsDarkMode") {
-        if (document.getElementById("strandsstyle")) {
-            disableStrandsDarkMode();
-        } else {
-            enableStrandsDarkMode();
+function syncPipsDarkMode() {
+    chrome.storage.sync.get(["pipsDarkModeEnabled", "gamesMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.gamesMasterEnabled !== false && Boolean(data.pipsDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("pipsstyle"));
+        if (shouldBeEnabled && !isEnabled) {
+            enablePipsDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disablePipsDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enablePipsDarkMode" || message.action === "syncDarkModeState") {
+        syncPipsDarkMode();
     }
 });
 
-chrome.storage.sync.get("strandsDarkModeEnabled", function(data) {
-    if (data.strandsDarkModeEnabled) {
-        enableStrandsDarkMode();
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("pipsDarkModeEnabled" in changes || "gamesMasterEnabled" in changes)) {
+        syncPipsDarkMode();
     }
 });
+
+syncPipsDarkMode();

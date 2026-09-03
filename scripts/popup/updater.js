@@ -1,6 +1,6 @@
 // Import functions and variables
 import {popupState} from "./states.js";
-import {pageButtons, pages, dmToggleGroups} from "./defaultExports.js";
+import {pageButtons, pages, dmToggleGroups, svCursorInset} from "./defaultExports.js";
 import {hsvToHex} from "./colorMath.js";
 
 // Functions to get HTML elements for updating, these are called throughout the file to read and update the popup's DOM
@@ -47,8 +47,7 @@ function getCurrentPickerHex() {
 // Updates and displays the entire popup based on the popupState properties
 export function updateAll() {
     updatePages();
-    updateDisabledToggleGroups();
-    updateGroupToggleStates();
+    updateSuspendedGroups();
     updateGameColorButton();
     updateGameColorPanel();
     updateAllGamesColorObjects();
@@ -57,35 +56,32 @@ export function updateAll() {
     updateScrollAffordance();
 }
 
-// Updates the parent's children states when the toggle is changed
-export function updateGroupToggleStates() {
-    for (const [parentToggleId, childToggleIds] of Object.entries(dmToggleGroups)) {
+// Dims a group whose master switch is off, the games keep their settings and stay clickable but are not being applied
+export function updateSuspendedGroups() {
+    for (const parentToggleId of Object.keys(dmToggleGroups)) {
         const parentToggle = document.getElementById(parentToggleId);
         if (!parentToggle) continue;
-        const enabledChildCount = childToggleIds.reduce((count, childToggleId) => {
-            const childToggle = document.getElementById(childToggleId);
-            return count + (childToggle?.checked ? 1 : 0);
-        }, 0);
-        parentToggle.indeterminate =
-            parentToggle.checked &&
-            enabledChildCount > 0 &&
-            enabledChildCount < childToggleIds.length;
+        const subToggles = parentToggle.closest(".section-header")?.parentElement?.querySelector(".sub-toggles");
+        if (subToggles) {
+            subToggles.classList.toggle("suspended", !parentToggle.checked);
+        }
     }
 }
 
-// Adds a fade at the bottom of the crosswords/sudoku color options if there are more options to scroll down on 
-// (Mainly so I don't forget for the final product, will look better in the future)
+// Fades the crosswords/sudoku color options at whichever edge still has more options past it
 export function updateScrollAffordance() {
     const panelsContainer = document.querySelector(".color-info-panels");
     if (!panelsContainer) return;
     const visiblePanel = panelsContainer.querySelector(".color-info-panel:not(.hidden)");
     if (!visiblePanel) {
         panelsContainer.classList.remove("can-scroll");
+        panelsContainer.classList.remove("can-scroll-up");
         return;
     }
     const remainingScroll =
         visiblePanel.scrollHeight - visiblePanel.scrollTop - visiblePanel.clientHeight;
     panelsContainer.classList.toggle("can-scroll", remainingScroll > 2);
+    panelsContainer.classList.toggle("can-scroll-up", visiblePanel.scrollTop > 2);
 }
 
 // Updates the preset buttons and dims/locks the color UI when light or dark is active
@@ -125,26 +121,6 @@ export function updatePages() {
         if (!page) return;
         const expectedPageClass = popupState.activePageButtonClass.replace("button", "page");
         page.classList.toggle("hidden", pageClassName !== expectedPageClass);
-    });
-}
-
-// Updates and displays disabled states of toggles when the parent toggle is off
-export function updateDisabledToggleGroups() {
-    const childToggleToParentMap = {};
-    for (const [parentToggleId, childToggleIds] of Object.entries(dmToggleGroups)) {
-        for (const childToggleId of childToggleIds) {
-            childToggleToParentMap[childToggleId] = parentToggleId;
-        }
-    }
-    document.querySelectorAll(".toggle-line input[type='checkbox']").forEach((toggleInput) => {
-        const toggleRow = toggleInput.closest(".toggle-line");
-        if (!toggleRow) return;
-        const parentToggleId = childToggleToParentMap[toggleInput.id];
-        if (!parentToggleId) return;
-        const parentToggle = document.getElementById(parentToggleId);
-        const isEnabled = parentToggle?.checked ?? true;
-        toggleInput.disabled = !isEnabled;
-        toggleRow.classList.toggle("disabled", !isEnabled);
     });
 }
 
@@ -198,7 +174,7 @@ function updateOneGamesColorObjects(selector, colorMap, selectedColorKey) {
     });
 }
 
-// Updates and displays and updates the color picker
+// Updates and displays the color picker
 export function updatePicker() {
     const saturationValueArea = getSaturationValueArea();
     const hueSlider = getHueSlider();
@@ -225,15 +201,11 @@ export function updatePicker() {
     }
 
     saturationValueCursor.style.background = currentHex;
-    const saturationValueCursorRadius = 8;
-    const saturationValueWidth = saturationValueArea.clientWidth + 8;
-    const saturationValueHeight = saturationValueArea.clientHeight + 8;
-    if (
-        saturationValueWidth > 2 * saturationValueCursorRadius &&
-        saturationValueHeight > 2 * saturationValueCursorRadius
-    ) {
-        const left = saturationValueCursorRadius + popupState.pickerSaturation * (saturationValueWidth - 2 * saturationValueCursorRadius) - 7;
-        const top = saturationValueCursorRadius + (1 - popupState.pickerValue) * (saturationValueHeight - 2 * saturationValueCursorRadius) - 7;
+    const saturationTravel = saturationValueArea.clientWidth - 2 * svCursorInset;
+    const valueTravel = saturationValueArea.clientHeight - 2 * svCursorInset;
+    if (saturationTravel > 0 && valueTravel > 0) {
+        const left = svCursorInset + popupState.pickerSaturation * saturationTravel;
+        const top = svCursorInset + (1 - popupState.pickerValue) * valueTravel;
         saturationValueCursor.style.left = `${left}px`;
         saturationValueCursor.style.top = `${top}px`;
     }

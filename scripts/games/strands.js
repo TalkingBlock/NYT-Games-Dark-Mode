@@ -1,6 +1,52 @@
-function enableConnectionsDarkMode() {
-    const svgURL_Regiwall = chrome.runtime.getURL("svgs/connections-stats-regiwall.svg");
-    const connectionsCSS = `
+const strandsSourceObservers = {};
+let strandsReplaceTimeout = null;
+let strandsObserver = null;
+
+function replaceVideo(selector, newSource) {
+    const video = document.querySelector(selector);
+    if (!video) return;
+    const source = video.querySelector("source");
+    if (!source) return;
+    const newSrc = chrome.runtime.getURL(newSource);
+    if (source.src === newSrc) {
+        video.style.visibility = 'visible';
+        return;
+    }
+    if (!source.dataset.originalSource) {
+        source.dataset.originalSource = source.src || "";
+    }
+    source.src = newSrc;
+    video.load();
+    video.style.visibility = 'visible';
+
+    if (strandsSourceObservers[selector]) strandsSourceObservers[selector].disconnect();
+    strandsSourceObservers[selector] = new MutationObserver(() => {
+        if (!source.isConnected) return;
+        if (source.src !== newSrc) {
+            source.src = newSrc;
+        }
+    });
+    strandsSourceObservers[selector].observe(source, {attributes: true, attributeFilter: ["src"]});
+}
+
+function restoreVideo(selector) {
+    if (strandsSourceObservers[selector]) {
+        strandsSourceObservers[selector].disconnect();
+        delete strandsSourceObservers[selector];
+    }
+    const video = document.querySelector(selector);
+    if (!video) return;
+    const source = video.querySelector("source");
+    if (!source || !source.dataset.originalSource) return;
+    source.src = source.dataset.originalSource;
+    delete source.dataset.originalSource;
+    video.load();
+    video.style.visibility = '';
+}
+
+function enableStrandsDarkMode() {
+    const svgURL_Regiwall = chrome.runtime.getURL("svgs/strands-stats-regiwall.svg");
+    const strandsCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -52,7 +98,7 @@ function enableConnectionsDarkMode() {
 
         .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
-        }       
+        }        
 
         .pz-icon-daily {
             background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
@@ -182,11 +228,20 @@ function enableConnectionsDarkMode() {
 
         /* Game Toolbar */
 
-        .ToolbarAdapter-module_toolbarContainer__Ni4KN, .ToolbarItem-module_toolbar_item__xrBr_ {
+        .pz-row {
             background-color: #0f0f0f;
         }
 
-        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
+        .ToolbarAdapter-module_toolbarContainer__Ni4KN {
+            background-color: #0f0f0f;
+        }
+
+        .ToolbarItem-module_toolbar_item__xrBr_ {
+            background-color: #0f0f0f;
+        }
+
+        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover:not(:disabled),
+        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover:not(:disabled) {
             background-color: #777777;
         }
 
@@ -194,32 +249,38 @@ function enableConnectionsDarkMode() {
             fill: white;
         }
 
-        .Dropdown-module_dropdown__menuItem__FJHMg a, .Dropdown-module_dropdown__menuItem__FJHMg button {
+        .Dropdown-module_dropdown__menuItem__FJHMg a, 
+        .Dropdown-module_dropdown__menuItem__FJHMg button {
             background-color: #0f0f0f;
             color: white;
         }
 
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover, 
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover {
+        .Dropdown-module_toolbarColorsDesktop__ptWzT:hover:not(:disabled), 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover:not(:disabled), 
+        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover:not(:disabled) {
             background-color: #777777;
         }
 
-        /* Stats + How to Play Popup */
+        /* Stats Popup */
 
         .xwd__modal--overlay {
-            background-color: #00000060;
+            background: #00000060;
+        }
+
+        .strands__modal {
+            background-color: #0f0f0f;
         }
 
         .xwd__modal--body {
-            box-shadow: 0 3px 12px -1px rgba(255, 255, 255 .3);
+            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .3);
         }
 
-        .modal-stats-body {
-            background-color: #0f0f0f;
+        .Stats-module_wrapper__zUfh0 {
             color: white;
+            background: #0f0f0f;
         }
 
-        .Stats-module_stats__Oq7rS {
+        .Stats-module_stats__CB23r {
             border-top: 1px solid white;
         }
 
@@ -241,25 +302,20 @@ function enableConnectionsDarkMode() {
             background-color: white !important;
         }
 
+        .Stats-module_inline_carrot__icon__YCGc0 {
+            filter: invert(1);
+        }
+
         .xwd__modal--close .pz-icon, .Stats-module_inline_carrot__icon__G2cbk {
             filter: invert(1);
         }
 
-        .Stats-module_histogram_bar___Mxj8 {
-            background-color: #444444;
-        }
-
-        .modal-rules-body.conn__modal--help {
-            background: #0f0f0f;
+        .modal-stats-body .xwd__modal--content {
             color: white;
         }
 
-        .HowToPlay-module_helpArrow__WMXx9 {
-            filter: invert(1);
-        }
-
-        .Stats-module_regiwall_stats_badges__yjE6J {
-            background: url("${svgURL_Regiwall}") center no-repeat;
+        .RegiWall-module_regiwall_abstract_stats__L6lxo {
+            background: url(${svgURL_Regiwall}) center no-repeat;
         }
 
         button.button-dark-mode-support {
@@ -271,6 +327,10 @@ function enableConnectionsDarkMode() {
             background: #e4e4e4;
         }
 
+        button.RegiWall-module_log_in_link__NlizD {
+            color: white;
+        }
+
         /* Badges Page */
 
         .pz-moment__badgeDetail, .BadgeDetail-module_container__RKO_D {
@@ -278,12 +338,8 @@ function enableConnectionsDarkMode() {
             color: white;
         }
 
-        .pz-desktop .Congrats-module_wrapper__vzL87 {
-            background-color: #0f0f0f !important;
-        }
-
         .BadgeDetail-module_background__Y5IWc path {
-			fill: #2c132f !important;
+			fill: #005b6d !important;
 		}
 
         .BadgeDetail-module_helpCenterIcon__ZsJPD {
@@ -317,93 +373,94 @@ function enableConnectionsDarkMode() {
             background-color: #0f0f0f;
         }
 
+        /* How to Play Popup */
+
+        .darkPage1Gif, .darkPage3Gif {
+            visibility: hidden;
+        }
+
+        .Help-module_title___5yTv, .carousel-module_wrapper__ZdPMF {
+            background: #0f0f0f;
+            color: white;
+        }
+
+        .carousel-module_buttonsWrapper__sEp8T button {
+            border: 1px solid white;
+            color: white;
+        }
+
+        .carousel-module_currentDot__hbt8i {
+            background-color: white;
+        }
+
         /* Game Page */
 
+        .bubbles-module_hider__zoPog {
+            background-color: #0f0f0f;
+        }
+
         .pz-game-field {
-            background-color: #0f0f0f;
+            background: #0f0f0f;
             color: white;
         }
 
-        .Board-module_form__B5pmo {
+        .styles-module_strandsBtn__xobCT {
             color: white;
         }
 
-        .Card-module_label__U_Q2H {
-            background-color: white;
-            color: black;
+        .hint-module_lightbulb__YfeFm {
+            background: #0f0f0f;
+            border: 3px solid #9f9f9f;
         }
 
-        .Card-module_label__U_Q2H.Card-module_selected__cN2eT {
-            background-color: #777777;
-            color: white;
+        .hint-module_overlay___9ixH>div {
+            border: 3px solid #0f0f0f;
+            transform: none;
         }
 
-        .Mistakes-module_mistakesContent__nlijY {
-            color: white;
+        .hint-module_overlay___9ixH {
+            border: 3px solid white;
         }
 
-        .Mistakes-module_bubble__nDlOh {
-            background-color: white;
+        .hint-module_bluebulb__QtJ5d {
+            color: black !important;
+            background: white;
+            border: 2px solid white;
         }
 
-        .Mistakes-module_mistakesContent__nlijY.Mistakes-module_indicatorDisabled___J578 {
-            color: white;
+        .styles-module_invalidshake__KMQkk {
+            color: white !important;
         }
 
-        .ActionButton-module_button__IlhXt {
-            background-color: #0f0f0f;
-            color: white;
-            border-color: white;
-        }
-
-        .ActionButton-module_button__IlhXt:disabled {
-            background-color: #0f0f0f;
-            color: white;
-            border-color: white;
-            opacity: .5;
-        }
-
-        .ActionButton-module_button__IlhXt.ActionButton-module_filled__zUShw {
-            background-color: white;
-            color: black;
-        }
-
-        .ActionButton-module_button__IlhXt.ActionButton-module_filled__zUShw, 
-        .ActionButton-module_button__IlhXt.ActionButton-module_filled__zUShw:disabled {
-            border: 1px solid white;
-        }
-
-        .Toast-module_toast__YAoDa {
-            background-color: white;
-            color: black;
-        }
-
-        /* Track your Stats Not Logged In Popup */
-
-        .pz-moment:has(.LoginPrompt-module_lireContainer__Iqekx) {
+        .pz-game-wrapper {
             background-color: #0f0f0f !important;
         }
 
-        .pz-moment:has(.pz-moment__container) {
-            background-color: rgb(179, 167, 254) !important;
-        }
+        /* Hint Popup */
 
-        .pz-icon-close {
-            filter: invert(1);
-        }
-
-        .LoginPrompt-module_title__mWQeD, .LoginPrompt-module_subtitle__xO56q {
+        .strands-hint-modal {
+            background: #0f0f0f;
             color: white;
+            border: none;
+        }
+
+        .Hints-module_confirmButton__PyF6x {
+            background-color: white;
+            color: black;
         }
 
         /* Congrats Page */
 
-        .Congrats-module_modalContent__LWPwi, .css-adlkoi p, body .css-1gd2pxv {
+        .pz-moment.Congrats-module_wrapper__QikSo {
+            background-color: #0f0f0f !important;
+        }
+
+        .Congrats-module_fullscreenContent__hmx5w, .Congrats-module_shareDescriptor__XO5GF {
             color: white;
         }
 
-        body .css-1jvmgpk {
-            border-bottom: 1px solid white;
+        .Congrats-module_closeButton__e7oha {
+            filter: invert(1);
         }
 
         .BadgeCarousel-module_badgeHeader__H_g5M h3, .BadgeCarouselItem-module_displayName__GrwKg {
@@ -416,62 +473,88 @@ function enableConnectionsDarkMode() {
         }
 
         button.button-primary {
-            background-color: white;
+            background: white;
             color: black;
+            border: 1px solid white;
         }
 
         button.button-primary:hover:enabled {
-            background-color: #e4e4e4;
+            background: #e4e4e4;
         }
 
-        button.button-transparent {
+        button.css-15cgz6j {
+            background-color: #0f0f0f;
             color: white;
             border: 1px solid white;
         }
 
-        button.button-transparent:hover:enabled {
-            color: white;
+        button.css-27fpwl:hover {
+            outline: #b4b4b4 solid 3px;
         }
 
-        .GamesCarouselStack-module_frictionMitigationContent__sfyQO 
-        .GamesCarouselStack-module_carouselStackContainer__ogcQ6 hr {
-            border-color: #777777;
-            border-top: solid 2px white;
-        }
-
-        .GamesCarouselStack-module_frictionMitigationContent__sfyQO h4 {
-            color: white;
-        }
-
-        .pz-moment__close_text .inner-text {
-            color: white;
+        .Toast-module_toast__q1i0d {
+            background-color: white;
+            color: black;
         }
     `;
     const style = document.createElement("style");
-    style.id = "connectionsstyle";
-    style.innerText = connectionsCSS;
-    document.head.appendChild(style);
+    style.id = "strandsstyle";
+    style.textContent = strandsCSS;
+    (document.head || document.documentElement).appendChild(style);
+
+    applyDarkModeVideosIfEnabled();
+    strandsObserver = new MutationObserver(() => {
+        clearTimeout(strandsReplaceTimeout);
+        strandsReplaceTimeout = setTimeout(() => applyDarkModeVideosIfEnabled(), 0);
+    });
+    strandsObserver.observe(document.documentElement, {childList: true, subtree: true});
 }
 
-function disableConnectionsDarkMode() {
-    const styleElement = document.getElementById("connectionsstyle");
+function applyDarkModeVideosIfEnabled() {
+    if (!document.getElementById("strandsstyle")) return;
+    replaceVideo(".darkPage1Gif", "mp4s/FirstGIFH2P.mp4");
+    replaceVideo(".darkPage3Gif", "mp4s/ThirdGIFH2P.mp4");
+}
+
+
+function disableStrandsDarkMode() {
+    const styleElement = document.getElementById("strandsstyle");
     if (styleElement) {
         styleElement.remove();
     }
+
+    clearTimeout(strandsReplaceTimeout);
+    strandsReplaceTimeout = null;
+    restoreVideo(".darkPage1Gif");
+    restoreVideo(".darkPage3Gif");
+    if (strandsObserver) {
+        strandsObserver.disconnect();
+        strandsObserver = null;
+    }
+}
+
+function syncStrandsDarkMode() {
+    chrome.storage.sync.get(["strandsDarkModeEnabled", "gamesMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.gamesMasterEnabled !== false && Boolean(data.strandsDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("strandsstyle"));
+        if (shouldBeEnabled && !isEnabled) {
+            enableStrandsDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableStrandsDarkMode();
+        }
+    });
 }
 
 chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableConnectionsDarkMode") {
-        if (document.getElementById("connectionsstyle")) {
-            disableConnectionsDarkMode();
-        } else {
-            enableConnectionsDarkMode();
-        }
+    if (message.action === "enableStrandsDarkMode" || message.action === "syncDarkModeState") {
+        syncStrandsDarkMode();
     }
 });
 
-chrome.storage.sync.get("connectionsDarkModeEnabled", function(data) {
-    if (data.connectionsDarkModeEnabled) {
-        enableConnectionsDarkMode();
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("strandsDarkModeEnabled" in changes || "gamesMasterEnabled" in changes)) {
+        syncStrandsDarkMode();
     }
 });
+
+syncStrandsDarkMode();

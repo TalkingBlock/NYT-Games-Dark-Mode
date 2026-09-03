@@ -1,5 +1,6 @@
-function enableMiscPagesDarkMode() {
-    const miscPagesCSS = `
+function enableCrosswordStatsDarkMode() {
+    const imgURL_UpsellStats = chrome.runtime.getURL("imgs/upsell_stats.png");
+    const crosswordStatsCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -28,7 +29,6 @@ function enableMiscPagesDarkMode() {
 
         body .css-1igzjy9 {
             background-color: white;
-            border: 1px solid white;
         }
 
         body .css-1igzjy9 a {
@@ -53,7 +53,7 @@ function enableMiscPagesDarkMode() {
         .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
         }      
-            
+
         .pz-icon-daily {
             background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
         }
@@ -176,45 +176,86 @@ function enableMiscPagesDarkMode() {
             color: white;
         }
 
-        /* ----------------- */
-        /* PAGE 1: CROSSPLAY */
-        /* ----------------- */
+        /* Stats Page */
 
-        @media only screen and (max-width: 1024px) and (orientation: portrait) {
-            [data-app-variant=crossplay] .column-left, [data-app-variant=locked] .column-left {
-                color: white;
+        #stats-overview, .stats-subheader {
+            color: white;
+        }
+
+        .day-of-week {
+            color: white;
+        }
+
+        #weekly-stats .single-day.active {
+            box-shadow: 0 0 #0f0f0f, 0 0px #0f0f0f, -4px 0 4px 0px rgba(0, 0, 0, .6), 4px 0 4px 2px rgba(0, 0, 0, .6);
+        }
+
+        @media only screen and (min-width: 768px) {
+            #weekly-stats .single-day.active {
+                box-shadow: 0 0 #0f0f0f, 0 6px #0f0f0f, -4px 0 4px -2px rgba(0, 0, 0, .6), 4px 0 4px -2px rgba(0, 0, 0, .6);
             }
         }
 
-        .column {
+        #weekly-stats .single-day .no-stats {
+            background: repeating-linear-gradient(-45deg, #000, #000 5px, #0f0f0f 5px, #0f0f0f 10px);
+        }
+
+        /* Not Logged In Page */
+
+        .overlay-container {
+            background-color: rgba(0, 0, 0, .8);
             color: white;
         }
-    `;  
+
+        .overlay-body {
+            background-color: #0f0f0f;
+            box-shadow: 0 0 20px 0 rgba(255, 255, 255, .1);
+        }
+
+        #stats-root .info-container p {
+            color: white;
+        }
+
+        .image-container {
+            background: url("${imgURL_UpsellStats}") no-repeat;
+            background-size: contain;
+        }
+    `;
     const style = document.createElement("style");
-    style.id = "miscpagesstyle";
-    style.innerText = miscPagesCSS;
-    document.head.appendChild(style);
+    style.id = "crosswordstatsstyle";
+    style.textContent = crosswordStatsCSS;
+    (document.head || document.documentElement).appendChild(style);
 }
 
-function disableMiscPagesDarkMode() {
-    const styleElement = document.getElementById("miscpagesstyle");
+function disableCrosswordStatsDarkMode() {
+    const styleElement = document.getElementById("crosswordstatsstyle");
     if (styleElement) {
         styleElement.remove();
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableMiscPagesDarkMode") {
-        if (document.getElementById("miscpagesstyle")) {
-            disableMiscPagesDarkMode();
-        } else {
-            enableMiscPagesDarkMode();
+function syncCrosswordStatsDarkMode() {
+    chrome.storage.sync.get(["crosswordStatsDarkModeEnabled", "miscMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.miscMasterEnabled !== false && Boolean(data.crosswordStatsDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("crosswordstatsstyle"));
+        if (shouldBeEnabled && !isEnabled) {
+            enableCrosswordStatsDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableCrosswordStatsDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enableCrosswordStatsDarkMode" || message.action === "syncDarkModeState") {
+        syncCrosswordStatsDarkMode();
     }
 });
 
-chrome.storage.sync.get("miscPagesDarkModeEnabled", function(data) {
-    if (data.miscPagesDarkModeEnabled) {
-        enableMiscPagesDarkMode();
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("crosswordStatsDarkModeEnabled" in changes || "miscMasterEnabled" in changes)) {
+        syncCrosswordStatsDarkMode();
     }
 });
+
+syncCrosswordStatsDarkMode();

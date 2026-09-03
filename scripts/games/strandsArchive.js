@@ -1,5 +1,6 @@
-function enableLetterBoxedDarkMode() {
-    const letterBoxedCSS = `
+function enableStrandsArchiveDarkMode() {
+    const svgURL_DateArrow = chrome.runtime.getURL("svgs/date-picker-arrow.svg");
+    const strandsArchiveCSS = `
         /* Toolbar */
 
         html .pz-page {
@@ -51,7 +52,7 @@ function enableLetterBoxedDarkMode() {
 
         .pz-icon-nyt, .pz-icon-athletic {
             filter: invert(1);
-        }   
+        }      
             
         .pz-icon-daily {
             background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Crossword-Icon-Normalized-Color.svg");
@@ -151,7 +152,7 @@ function enableLetterBoxedDarkMode() {
             background-color: #e4e4e4;
         }
 
-        /* Ads + Loading Bar + Footer + Title */
+        /* Ads + Loading Bar + Footer */
 
         .pz-ad-box {
             background-color: #0f0f0f;
@@ -160,7 +161,7 @@ function enableLetterBoxedDarkMode() {
         .pz-ad-box::before {
             color: white;
             border: 1px solid white;
-        }
+        }        
 
         .xwd--loading-bar__fill {
             background-color: white;
@@ -175,126 +176,102 @@ function enableLetterBoxedDarkMode() {
             color: white;
         }
 
-        .pz-module {
-            color: white; 
+        /* Calendar Page */
+
+        .Header-module_archiveHeader__rjL9u {
+            color: white;
+            border-bottom: 1px solid white;
         }
 
-        /* Game Toolbar */
-
-        .ToolbarAdapter-module_toolbarContainer__Ni4KN {
-            background-color: #0f0f0f;
-        }
-
-        .ToolbarItem-module_toolbarColors__d6naZ, .ToolbarItem-module_toolbar_item__xrBr_ {
+        .ArchiveLayout-module_wrapper__agJhw {
             background-color: #0f0f0f;
             color: white;
         }
 
-        .Game-module_toolbarContainer__QaAst {
-            background-color: #0f0f0f;
+        .ArchiveCalendarGrid-module_daysOfWeekContainer__LjX8P {
+            border-bottom: 1px solid white;
         }
 
-        .ToolbarItem-module_toolbarColorsDesktop__WYw3W:hover, 
-        .ToolbarItem-module_toolbar_itemDesktop__jFTZJ:hover {
-            background-color: #777777;
-        }
-
-        [data-testid="icon-help"] path {
-            fill: white;
-        }
-
-        .Dropdown-module_dropdown__menuItem__FJHMg button, 
-        .Dropdown-module_dropdown__menuItem__FJHMg a, 
-        .Dropdown-module_dropdown__menuItem__FJHMg button {
-            background-color: #0f0f0f;
-            color: white;
-        }
-
-        .Dropdown-module_toolbarColorsDesktop__ptWzT:hover, 
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX a:hover, 
-        .Dropdown-module_dropdown__menuItemDesktop__tygNX button:hover {
-            background-color: #777777;
-        }
-
-        [data-testid="icon-arrow"] path {
-            fill: white;
-        }
-
-        /* Yesterday and Help Popups */
-
-        .xwd__modal--overlay {
-            background-color: #00000060;
-        }
-
-        .xwd__modal--body {
-            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .3);
-        }
-
-        .lb__modal {
-            background: #0f0f0f;
-            color: white;
-        }
-
-        .modal-wordlist {
-            color: white;
-        }
-
-        .modal-system-centered-content canvas {
-            filter: invert(1) hue-rotate(175deg) brightness(3.7);
-        }
-
-        .pz-icon-close {
-            filter: invert(1);
-        }
-
-        /* Congrats Popup */
-
-        .xwd__modal--body.modal-congrats-body {
-            background: #0f0f0f;
-            color: white;
-        }
-
-        body .css-1e3260o {
-            color: black;
-            background-color: white;
+        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH {
             border: 1px solid white;
+            background: #0f0f0f;
         }
 
-        body .css-1e3260o:hover {
-            color: black;
-            background-color: #777777;
+        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH:disabled {
             border: 1px solid #777777;
         }
-        
-        .css-1k8l6v3 hr {
-            border-top: 2px solid white;
-        } 
+
+        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH path {
+            fill: white;
+        }
+
+        .ArchiveDatePickerArrows-module_arrowButtons__qvxhH:disabled path {
+            fill: #777777;
+        }
+
+        select.ArchiveDatePicker-module_dropDownSelect__BqLa6 {
+            border: 1px solid white;
+            color: white;
+            background: url("${svgURL_DateArrow}") no-repeat #0f0f0f;
+            background-position: calc(100% - .75rem) center
+        }
+
+        /* Not Logged In Popup */
+
+        .xwd__modal--wrapper .ArchiveModalPaywall-module_modalOverlay__zCxO6 {
+            background: linear-gradient(180deg, rgba(15, 15, 15, 0) 0%, rgba(15, 15, 15, 0) 40%, #0f0f0f 55%);
+        }
+
+        .ArchiveModalPaywall-module_modalBody__QbLIt h3, 
+        .ArchiveModalPaywall-module_modalBody__QbLIt p {
+            color: white;
+        }
+
+        ._momentButton_e4jbe_2._primary_e4jbe_37 {
+            background: white;
+            color: black;
+        }
+
+        ._momentButton_e4jbe_2._secondary_e4jbe_42 {
+            color: white;
+            border: 1px solid white;
+        }
     `;
     const style = document.createElement("style");
-    style.id = "letterBoxedstyle";
-    style.innerText = letterBoxedCSS;
-    document.head.appendChild(style);
+    style.id = "strandsarchivestyle";
+    style.textContent = strandsArchiveCSS;
+    (document.head || document.documentElement).appendChild(style);
 }
 
-function disableLetterBoxedDarkMode() {
-    const styleElement = document.getElementById("letterBoxedstyle");
+function disableStrandsArchiveDarkMode() {
+    const styleElement = document.getElementById("strandsarchivestyle");
     if (styleElement) {
         styleElement.remove();
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableLetterBoxedDarkMode") {
-        if (document.getElementById("letterBoxedstyle")) {
-            disableLetterBoxedDarkMode();
-        } else {
-            enableLetterBoxedDarkMode();
+function syncStrandsArchiveDarkMode() {
+    chrome.storage.sync.get(["strandsArchiveDarkModeEnabled", "archivesMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.archivesMasterEnabled !== false && Boolean(data.strandsArchiveDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("strandsarchivestyle"));
+        if (shouldBeEnabled && !isEnabled) {
+            enableStrandsArchiveDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableStrandsArchiveDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enableStrandsArchiveDarkMode" || message.action === "syncDarkModeState") {
+        syncStrandsArchiveDarkMode();
     }
 });
 
-chrome.storage.sync.get("letterBoxedDarkModeEnabled", function(data) {
-    if (data.letterBoxedDarkModeEnabled) {
-        enableLetterBoxedDarkMode();
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("strandsArchiveDarkModeEnabled" in changes || "archivesMasterEnabled" in changes)) {
+        syncStrandsArchiveDarkMode();
     }
 });
+
+syncStrandsArchiveDarkMode();

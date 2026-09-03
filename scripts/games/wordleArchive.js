@@ -228,9 +228,9 @@ function enableWordleArchiveDarkMode() {
         }
     `;
     const style = document.createElement("style");
-    style.id = "wordlestyle";
-    style.innerText = wordleArchiveCSS;
-    document.head.appendChild(style);
+    style.id = "wordlearchivestyle";
+    style.textContent = wordleArchiveCSS;
+    (document.head || document.documentElement).appendChild(style);
 }
 
 function disableWordleArchiveDarkMode() {
@@ -240,18 +240,28 @@ function disableWordleArchiveDarkMode() {
     }
 }
 
-chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action == "enableWordleArchiveDarkMode") {
-        if (document.getElementById("wordlestyle")) {
-            disableWordleArchiveDarkMode();
-        } else {
+function syncWordleArchiveDarkMode() {
+    chrome.storage.sync.get(["wordleArchiveDarkModeEnabled", "archivesMasterEnabled"], function(data) {
+        const shouldBeEnabled = data.archivesMasterEnabled !== false && Boolean(data.wordleArchiveDarkModeEnabled);
+        const isEnabled = Boolean(document.getElementById("wordlearchivestyle"));
+        if (shouldBeEnabled && !isEnabled) {
             enableWordleArchiveDarkMode();
+        } else if (!shouldBeEnabled && isEnabled) {
+            disableWordleArchiveDarkMode();
         }
+    });
+}
+
+chrome.runtime.onMessage.addListener(function(message) {
+    if (message.action === "enableWordleArchiveDarkMode" || message.action === "syncDarkModeState") {
+        syncWordleArchiveDarkMode();
     }
 });
 
-chrome.storage.sync.get("wordleArchiveDarkModeEnabled", function(data) {
-    if (data.wordleArchiveDarkModeEnabled) {
-        enableWordleArchiveDarkMode();
+chrome.storage.onChanged.addListener(function(changes, areaName) {
+    if (areaName === "sync" && ("wordleArchiveDarkModeEnabled" in changes || "archivesMasterEnabled" in changes)) {
+        syncWordleArchiveDarkMode();
     }
 });
+
+syncWordleArchiveDarkMode();
