@@ -189,6 +189,45 @@ function enableMiscPagesDarkMode() {
         .column {
             color: white;
         }
+
+        /* ----------------- */
+        /* PAGE 2: BONUS HUB */
+        /* ----------------- */
+
+        .App-module_container__vQnEW {
+            border-bottom: 1px solid white;
+        }
+
+        .App-module_header__nKliJ {
+            color: white;
+        }
+
+        .DatePickerArrows-module_dropDate__E_9VM {
+            border: 1px solid white;
+            color: white;
+        }
+
+        .DatePickerArrows-module_arrowButtons__MlYRB {
+            border: 1px solid white;
+            background: #0f0f0f;
+        }
+
+        .DatePickerArrows-module_arrowButtons__MlYRB path {
+            fill: white;
+        }
+
+        .DatePickerArrows-module_arrowButtons__MlYRB:disabled {
+            opacity: 0.5;
+        }
+
+        .FeedbackLink-module_message__aScBi {
+            color: white;
+        }
+
+        .FeedbackLink-module_button__dTxgA a {
+            border: 1px solid white;
+            color: white;
+        }
     `;  
     const style = document.createElement("style");
     style.id = "miscpagesstyle";

@@ -217,14 +217,28 @@ export const popupStorageKeys = [
 // Cursor inset for the color picker so it can always be exactly at the corners
 export const svCursorInset = 4;
 
+// The icon that hex action button swaps to after a successful click + how long it stays
+export const hexActionCheckIcon = "svgs/popup/check.svg";
+export const hexActionCheckDuration = 1000;
+
+// The preset names
+export const displayPresetName = "display";
+export const customPresetNames = ["preset1", "preset2", "preset3"];
+
+// Which dark mode toggles decide the palette that the display preset previews
+export const displayPresetToggleIds = {
+    crosswords: ["the-crossword", "midi-crossword", "mini-crossword"],
+    sudoku: ["sudoku"]
+};
+
 // Grouped names of page buttons and their corresponding pages
 export const pageButtons = [
     "dark-mode-button",
     "custom-colors-button",
-    "extra-features-button"
+    "settings-button"
 ];
 export const pages = [
     "dark-mode-page",
     "custom-colors-page",
-    "extra-features-page"
+    "settings-page"
 ];

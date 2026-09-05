@@ -496,6 +496,16 @@ function enableStrandsDarkMode() {
             background-color: white;
             color: black;
         }
+
+        /* Bonus Puzzles */
+
+        .Congrats-module_bonusStatsDisclaimerIcon__oF2mJ {
+            filter: invert(1);
+        }
+
+        .BonusHubCTA-module_card__WI1lq {
+            color: black;
+        }
     `;
     const style = document.createElement("style");
     style.id = "strandsstyle";

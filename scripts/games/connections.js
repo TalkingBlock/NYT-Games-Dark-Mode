@@ -213,7 +213,7 @@ function enableConnectionsDarkMode() {
         }
 
         .xwd__modal--body {
-            box-shadow: 0 3px 12px -1px rgba(255, 255, 255 .3);
+            box-shadow: 0 3px 12px -1px rgba(255, 255, 255, .3);
         }
 
         .modal-stats-body {
@@ -447,6 +447,16 @@ function enableConnectionsDarkMode() {
 
         .pz-moment__close_text .inner-text {
             color: white;
+        }
+
+        /* Bonus Puzzles */
+
+        .Congrats-module_bonusStatsDisclaimerIcon__u08xL {
+            filter: invert(1);
+        }
+
+        .BonusHubCTA-module_card__WI1lq {
+            color: black;
         }
     `;
     const style = document.createElement("style");

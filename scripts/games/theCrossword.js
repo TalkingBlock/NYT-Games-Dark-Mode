@@ -323,6 +323,26 @@ function enableCrosswordDarkMode() {
             color: #959595;
         }
 
+        .xwd__printtools--button {
+            background-color: #0f0f0f;
+            color: white;
+            border: 1px solid white;
+        }
+
+        .xwd__printtools--button:hover:not(:disabled) {
+            background-color: #777777;
+            color: white;
+        }
+
+        .pz-icon-print-black {
+            filter: invert(1);
+        }
+
+        .xwd__print-modal--printModalContent .xwd__print-modal--cellDarkness 
+        .xwd__print-modal--opacityIcon .xwd__print-modal--userOpacity {
+            border: 1px solid white;
+        }
+
         .xwd__editorial-content--subGameplayGrid .xwd__editorial-content--header {
             border-top: solid 6px white;
         }
@@ -344,59 +364,16 @@ function enableCrosswordDarkMode() {
             background-color: #0f0f0f !important;
         }
 
-        .midi__congrats-modal--content {
-            color: white
-        }
-
-        body .css-1k8l6v3 hr {
-            border-top: 2px solid white;
+        .xwd__congrats-modal--content, .mini__congrats-modal--content {
+            color: white;
         }
 
         .xwd__modal--close:hover {
             color: #777777;
         }
 
-        .xwd__share-modal_shareLink {
-            color: white;
-        }
-
-        .xwd__share-modal_shareItem button i,
-        .xwd__share-modal_shareItem a i {
+        .midi-cta .arrow {
             filter: invert(1);
-        }
-
-        .xwd__share-modal_shareItem button:hover i,
-        .xwd__share-modal_shareItem a:hover i {
-            background-color: #aaaaaa;
-        }
-            
-        .xwd__share-modal_shareIcon {
-            background-color: #f0f0f0;
-            border: 1px solid #aaaaaa;
-        }
-
-        .xwd__share-modal_shareLinkButton.xwd__share-modal_copiedLink {
-            background-image: url("${svgURL_Checkmark}");
-        }
-
-        .xwd__printtools--button {
-            background-color: #0f0f0f;
-            color: white;
-            border: 1px solid white;
-        }
-
-        .xwd__printtools--button:hover:not(:disabled) {
-            background-color: #777777;
-            color: white;
-        }
-
-        .pz-icon-print-black {
-            filter: invert(1);
-        }
-
-        .xwd__print-modal--printModalContent .xwd__print-modal--cellDarkness 
-        .xwd__print-modal--opacityIcon .xwd__print-modal--userOpacity {
-            border: 1px solid white;
         }
 
         /* Error Page */
@@ -432,12 +409,25 @@ function enableCrosswordDarkMode() {
                 background-image: url("${svgURL_Error404XL}");
             }
         }
+
+        /* Bonus Puzzles */
+
+        .xwd__congrats-modal--content {
+            color: white;
+        }
+
+        p.xwd__congrats--bonus-stats-disclaimer .xwd__congrats--bonus-stats-disclaimer-icon {
+            filter: invert(1);
+        }
+
+        .BonusHubCTA-module_card__WI1lq {
+            color: black;
+        }
     `;
     const style = document.createElement("style");
     style.id = "crosswordstyle";
     style.textContent = crosswordCSS;
     (document.head || document.documentElement).appendChild(style);
-    loadStoredCrosswordColors();
 }
 
 function disableCrosswordDarkMode() {
@@ -456,6 +446,7 @@ function syncCrosswordDarkMode() {
         } else if (!shouldBeEnabled && isEnabled) {
             disableCrosswordDarkMode();
         }
+        setCrosswordDarkModeActive(shouldBeEnabled);
     });
 }
 

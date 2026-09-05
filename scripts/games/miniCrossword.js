@@ -412,12 +412,45 @@ function enableMiniDarkMode() {
                 background-image: url("${svgURL_Error404XL}");
             }
         }
+
+        /* Bonus Puzzles */
+
+        .xwd__printtools--button {
+            background-color: #0f0f0f;
+            color: white;
+            border: 1px solid white;
+        }
+
+        .xwd__printtools--button:hover:not(:disabled) {
+            background-color: #777777;
+            color: white;
+        }
+
+        .pz-icon-print-black {
+            filter: invert(1);
+        }
+
+        .xwd__print-modal--printModalContent .xwd__print-modal--cellDarkness 
+        .xwd__print-modal--opacityIcon .xwd__print-modal--userOpacity {
+            border: 1px solid white;
+        }
+
+        .xwd__congrats-modal--content, .mini__congrats-modal--content {
+            color: white;
+        }
+
+        p.xwd__congrats--bonus-stats-disclaimer .xwd__congrats--bonus-stats-disclaimer-icon {
+            filter: invert(1);
+        }
+
+        .BonusHubCTA-module_card__WI1lq {
+            color: black;
+        }
     `;
     const style = document.createElement("style");
     style.id = "ministyle";
     style.textContent = miniCSS;
     (document.head || document.documentElement).appendChild(style);
-    loadStoredCrosswordColors();
 }
 
 function disableMiniDarkMode() {
@@ -436,6 +469,7 @@ function syncMiniDarkMode() {
         } else if (!shouldBeEnabled && isEnabled) {
             disableMiniDarkMode();
         }
+        setCrosswordDarkModeActive(shouldBeEnabled);
     });
 }
 

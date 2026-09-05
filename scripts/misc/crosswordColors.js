@@ -135,26 +135,38 @@ function removeCrosswordColors() {
     }
 }
 
+// Custom color presets for all crosswords and a check to see if its on or not
+const customCrosswordPresetNames = ["preset1", "preset2", "preset3"];
+let crosswordDarkModeActive = false;
+
+// Loads the correct preset; if display then track dark mode toggles, if custom then check saved one
 function loadStoredCrosswordColors() {
     chrome.storage.sync.get(cwColorsStorageKey, (data) => {
         const settings = data?.[cwColorsStorageKey] || {};
-        const preset = settings.crosswordPreset || "light";
-        let colors;
-        if (preset === "dark") {
-            colors = {...darkCrosswordColors};
-        } else if (preset === "custom") {
-            const saved = settings.crosswords || {};
-            colors = {...lightCrosswordColors};
-            for (const [key, value] of Object.entries(saved)) {
-                if (value?.hex) {
-                    colors[key] = value.hex;
-                }
+        const preset = settings.crosswordPreset;
+        if (!customCrosswordPresetNames.includes(preset)) {
+            if (crosswordDarkModeActive) {
+                applyCrosswordColors(darkCrosswordColors);
+            } else {
+                removeCrosswordColors();
             }
-        } else {
-            colors = {...lightCrosswordColors};
+            return;
+        }
+        const saved = settings.crosswords?.[preset] || {};
+        const colors = {...lightCrosswordColors};
+        for (const [key, value] of Object.entries(saved)) {
+            if (value?.hex) {
+                colors[key] = value.hex;
+            }
         }
         applyCrosswordColors(colors);
     });
+}
+
+// Function called by all crosswords.js whenever a dark mode state is modified
+function setCrosswordDarkModeActive(isActive) {
+    crosswordDarkModeActive = isActive;
+    loadStoredCrosswordColors();
 }
 
 chrome.runtime.onMessage.addListener(function(message) {
@@ -168,5 +180,3 @@ chrome.storage.onChanged.addListener(function(changes, areaName) {
         loadStoredCrosswordColors();
     }
 });
-
-loadStoredCrosswordColors();

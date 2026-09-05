@@ -341,7 +341,6 @@ function enableSudokuDarkMode() {
     style.id = "sudokustyle";
     style.textContent = sudokuCSS;
     (document.head || document.documentElement).appendChild(style);
-    loadStoredSudokuColors();
 }
 
 function disableSudokuDarkMode() {
@@ -360,6 +359,7 @@ function syncSudokuDarkMode() {
         } else if (!shouldBeEnabled && isEnabled) {
             disableSudokuDarkMode();
         }
+        setSudokuDarkModeActive(shouldBeEnabled);
     });
 }
 

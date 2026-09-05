@@ -1,6 +1,6 @@
 // Import functions and variables
 import {popupState} from "./states.js";
-import {pageButtons, pages, dmToggleGroups, svCursorInset} from "./defaultExports.js";
+import {pageButtons, pages, dmToggleGroups, svCursorInset, displayPresetName} from "./defaultExports.js";
 import {hsvToHex} from "./colorMath.js";
 
 // Functions to get HTML elements for updating, these are called throughout the file to read and update the popup's DOM
@@ -91,8 +91,8 @@ export function updatePresetUI() {
     document.querySelectorAll(".color-preset").forEach((presetButton) => {
         presetButton.classList.toggle("enabled", presetButton.dataset.preset === activePreset);
     });
-    const crosswordLocked = popupState.activeCrosswordPreset !== "custom";
-    const sudokuLocked = popupState.activeSudokuPreset !== "custom";
+    const crosswordLocked = popupState.activeCrosswordPreset === displayPresetName;
+    const sudokuLocked = popupState.activeSudokuPreset === displayPresetName;
     const crosswordPanel = getCrosswordPanel();
     if (crosswordPanel) {
         crosswordPanel.classList.toggle("preset-locked", crosswordLocked);
@@ -101,10 +101,16 @@ export function updatePresetUI() {
     if (sudokuPanel) {
         sudokuPanel.classList.toggle("preset-locked", sudokuLocked);
     }
+    const pickerLocked = onSudoku ? sudokuLocked : crosswordLocked;
     const colorPicker = document.querySelector(".color-picker");
     if (colorPicker) {
-        const pickerLocked = onSudoku ? sudokuLocked : crosswordLocked;
         colorPicker.classList.toggle("locked", pickerLocked);
+    }
+    for (const buttonId of ["importPreset", "exportPreset", "clearPreset"]) {
+        const actionButton = document.getElementById(buttonId);
+        if (actionButton) {
+            actionButton.disabled = pickerLocked;
+        }
     }
 }
 

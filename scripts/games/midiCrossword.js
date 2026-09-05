@@ -417,7 +417,6 @@ function enableMidiDarkMode() {
     style.id = "midistyle";
     style.textContent = midiCSS;
     (document.head || document.documentElement).appendChild(style);
-    loadStoredCrosswordColors();
 }
 
 function disableMidiDarkMode() {
@@ -436,6 +435,7 @@ function syncMidiDarkMode() {
         } else if (!shouldBeEnabled && isEnabled) {
             disableMidiDarkMode();
         }
+        setCrosswordDarkModeActive(shouldBeEnabled);
     });
 }
 

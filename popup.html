@@ -25,10 +25,10 @@
                     Custom Colors
                 </button>
             </div>
-            <div class="extra-features-button">
-                <button class="center" data-page="extra-features-button">
-                    <img src="svgs/popup/tools.svg">
-                    Extra Features
+            <div class="settings-button">
+                <button class="center" data-page="settings-button">
+                    <img src="svgs/popup/settings.svg">
+                    Settings
                 </button>
             </div>
         </div>
@@ -230,11 +230,13 @@
                                 <div class="row hex-row">
                                     <div class="value" id="hexOut">
                                         <span class="hex-text">#FF0000</span>
-                                        <span class="hex-indicator" id="hexIndicator" aria-live="polite"></span>
                                         <span class="hex-actions">
-                                            <button id="copyHex" title="Copy Hexcode"><img src="svgs/popup/copy.svg"></button>
-                                            <button id="pasteHex" title="Paste Hexcode"><img src="svgs/popup/paste.svg"></button>
-                                            <button id="resetHex" title="Reset Hexcode"><img src="svgs/popup/reset.svg"></button>
+                                            <button id="copyHex" title="Copy Hexcode"><img src="svgs/popup/copy.svg" alt="Copy"></button>
+                                            <button id="pasteHex" title="Paste Hexcode"><img src="svgs/popup/paste.svg" alt="Paste"></button>
+                                            <button id="resetHex" title="Reset Hexcode"><img src="svgs/popup/reset.svg" alt="Reset"></button>
+                                            <button id="importPreset" title="Import Preset"><img src="svgs/popup/import.svg" alt="Import"></button>
+                                            <button id="exportPreset" title="Export Preset"><img src="svgs/popup/export.svg" alt="Export"></button>
+                                            <button id="clearPreset" title="Clear Preset"><img src="svgs/popup/trash.svg" alt="Clear"></button>
                                         </span>
                                     </div>
                                 </div>
@@ -541,17 +543,102 @@
                                 </div>
                             </div>
                             <div class="color-presets">
-                                <button class="color-preset enabled" data-preset="light">Light</button>
-                                <button class="color-preset" data-preset="dark">Dark</button>
-                                <button class="color-preset" data-preset="custom">Custom</button>
+                                <div class="preset-group">
+                                    <span class="preset-group-label">Default</span>
+                                    <div class="preset-buttons">
+                                        <button class="color-preset enabled" data-preset="display">Display</button>
+                                    </div>
+                                </div>
+                                <div class="preset-group preset-group-custom">
+                                    <span class="preset-group-label">Custom Presets</span>
+                                    <div class="preset-buttons">
+                                        <button class="color-preset" data-preset="preset1" title="Custom Preset 1">1</button>
+                                        <button class="color-preset" data-preset="preset2" title="Custom Preset 2">2</button>
+                                        <button class="color-preset" data-preset="preset3" title="Custom Preset 3">3</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="modal-overlay" id="modalOverlay">
+                    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+                        <span class="modal-title" id="modalTitle"></span>
+                        <p class="modal-message" id="modalMessage"></p>
+                        <textarea class="modal-code" id="modalCode" spellcheck="false" autocomplete="off"></textarea>
+                        <p class="modal-error" id="modalError" role="alert"></p>
+                        <div class="modal-actions">
+                            <button class="modal-button" id="modalConfirm"></button>
+                            <button class="modal-button" id="modalCancel"></button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="extra-features-page center hidden">
+            <div class="settings-page center hidden">
                 <div class="wrap">
-                    <div class="extra-features-box">Extra Features Coming Soon!</div>
+                    <div class="settings-list">
+                        <section class="settings-section" data-section="data">
+                            <h2 class="settings-section-title">Data</h2>
+                            <div class="settings-row">
+                                <span class="settings-row-label">Backup all settings</span>
+                                <button class="settings-action" id="backupSettings">Copy Code</button>
+                            </div>
+                            <div class="settings-row">
+                                <span class="settings-row-label">Restore from a code</span>
+                                <button class="settings-action" id="restoreSettings">Paste Code</button>
+                            </div>
+                            <div class="settings-row">
+                                <span class="settings-row-label">Reset to defaults</span>
+                                <button class="settings-action" id="resetSettings">Reset</button>
+                            </div>
+                        </section>
+                        <section class="settings-section" data-section="behavior">
+                            <h2 class="settings-section-title">Behavior</h2>
+                            <div class="settings-row">
+                                <span class="settings-row-label">Default page on open</span>
+                                <div class="settings-choice" id="defaultPage" role="group" aria-label="Default page on open">
+                                    <button class="settings-action enabled" data-default-page="last-used">Last Used</button>
+                                    <button class="settings-action" data-default-page="dark-mode-button">Dark Mode</button>
+                                    <button class="settings-action" data-default-page="custom-colors-button">Custom Colors</button>
+                                </div>
+                            </div>
+                            <div class="settings-row">
+                                <span class="settings-row-label">Default color panel on open</span>
+                                <div class="settings-choice" id="defaultColorPanel" role="group" aria-label="Default color panel on open">
+                                    <button class="settings-action enabled" data-default-panel="last-used">Last Used</button>
+                                    <button class="settings-action" data-default-panel="crosswords">Crosswords</button>
+                                    <button class="settings-action" data-default-panel="sudoku">Sudoku</button>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="settings-section" data-section="support">
+                            <h2 class="settings-section-title">Support</h2>
+                            <div class="settings-row">
+                                <span class="settings-row-label">View changelog</span>
+                                <button class="settings-action" id="viewChangelog">Open</button>
+                            </div>
+                            <div class="settings-row">
+                                <span class="settings-row-label">Report a bug</span>
+                                <button class="settings-action" id="reportBug">Open</button>
+                            </div>
+                        </section>
+                        <section class="settings-section" data-section="about">
+                            <h2 class="settings-section-title">About</h2>
+                            <div class="settings-row">
+                                <span class="settings-row-label">Version</span>
+                                <span class="settings-row-value" id="extensionVersion">&mdash;</span>
+                            </div>
+                            <div class="settings-row">
+                                <span class="settings-row-label">Created by</span>
+                                <span class="settings-row-value">Mateo V.</span>
+                            </div>
+                            <div class="settings-row">
+                                <span class="settings-row-label">GitHub</span>
+                                <button class="settings-action" id="openGithub">Open</button>
+                            </div>
+                            <p class="settings-note">Your settings stay in your browser. Nothing is ever sent anywhere.</p>
+                        </section>
+                    </div>
                 </div>
             </div>
         </div>

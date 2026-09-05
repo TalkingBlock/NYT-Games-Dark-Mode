@@ -102,26 +102,38 @@ function removeSudokuColors() {
     }
 }
 
+// Custom color presets for sudoku and a check to see if its on or not
+const customSudokuPresetNames = ["preset1", "preset2", "preset3"];
+let sudokuDarkModeActive = false;
+
+// Loads the correct preset; if display then track dark mode toggles, if custom then check saved one
 function loadStoredSudokuColors() {
     chrome.storage.sync.get("crosswordColorSettings", (data) => {
         const settings = data?.["crosswordColorSettings"] || {};
-        const preset = settings.sudokuPreset || "light";
-        let colors;
-        if (preset === "dark") {
-            colors = {...darkSudokuColors};
-        } else if (preset === "custom") {
-            const saved = settings.sudoku || {};
-            colors = {...lightSudokuColors};
-            for (const [key, value] of Object.entries(saved)) {
-                if (value?.hex) {
-                    colors[key] = value.hex;
-                }
+        const preset = settings.sudokuPreset;
+        if (!customSudokuPresetNames.includes(preset)) {
+            if (sudokuDarkModeActive) {
+                applySudokuColors(darkSudokuColors);
+            } else {
+                removeSudokuColors();
             }
-        } else {
-            colors = {...lightSudokuColors};
+            return;
+        }
+        const saved = settings.sudoku?.[preset] || {};
+        const colors = {...lightSudokuColors};
+        for (const [key, value] of Object.entries(saved)) {
+            if (value?.hex) {
+                colors[key] = value.hex;
+            }
         }
         applySudokuColors(colors);
     });
+}
+
+// Function called by sudoku.js whenever a dark mode state is modified
+function setSudokuDarkModeActive(isActive) {
+    sudokuDarkModeActive = isActive;
+    loadStoredSudokuColors();
 }
 
 chrome.runtime.onMessage.addListener(function(message) {
@@ -135,5 +147,3 @@ chrome.storage.onChanged.addListener(function(changes, areaName) {
         loadStoredSudokuColors();
     }
 });
-
-loadStoredSudokuColors();

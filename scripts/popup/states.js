@@ -3,8 +3,8 @@
 export const popupState = {
     activePageButtonClass: "dark-mode-button",
     activeColorPanel: "crosswords",
-    activeCrosswordPreset: "light",
-    activeSudokuPreset: "light",
+    activeCrosswordPreset: "display",
+    activeSudokuPreset: "display",
     selectedCrosswordColorKey: null,
     selectedSudokuColorKey: null,
     lastCrosswordColorKey: null,
@@ -18,6 +18,5 @@ export const popupState = {
     customSudokuColors: {},
     saveTimerId: null,
     crosswordUpdateTimerId: null,
-    sudokuUpdateTimerId: null,
-    hexFeedbackTimerId: null
+    sudokuUpdateTimerId: null
 };

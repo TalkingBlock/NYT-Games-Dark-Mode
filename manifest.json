@@ -1,7 +1,7 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Adds a toggleable dark mode to NYT Games :D",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab", "storage", "clipboardRead", "clipboardWrite"],
   "action": {
@@ -16,7 +16,9 @@
   "content_scripts": [
     {
       "matches": ["https://www.nytimes.com/crosswords/game/daily*",
-                  "https://www.nytimes.com/crosswords/game/bonus*"],
+                  "https://www.nytimes.com/crosswords/game/bonus*",
+                  "https://www.nytimes.com/games/bonus/crossword/monthly/*",
+                  "https://www.nytimes.com/games/bonus/crossword/easy-mode/*"],
       "js": ["scripts/misc/crosswordColors.js", "scripts/games/theCrossword.js"],
       "run_at": "document_start"
     }, {
@@ -24,13 +26,15 @@
       "js": ["scripts/misc/crosswordColors.js", "scripts/games/midiCrossword.js"],
       "run_at": "document_start"
     }, {
-      "matches": ["https://www.nytimes.com/crosswords/game/mini*"],
+      "matches": ["https://www.nytimes.com/crosswords/game/mini*",
+                  "https://www.nytimes.com/games/bonus/crossword/mini/*"],
       "js": ["scripts/misc/crosswordColors.js", "scripts/games/miniCrossword.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/games/connections",
                   "https://www.nytimes.com/games/connections/20*",
-                  "https://www.nytimes.com/games/connections?utm_source=wordle&utm_medium=referral&utm_campaign=wordle_nav"],
+                  "https://www.nytimes.com/games/connections?utm_source=wordle&utm_medium=referral&utm_campaign=wordle_nav",
+                  "https://www.nytimes.com/games/bonus/connections/3x3/*"],
       "js": ["scripts/games/connections.js"],
       "run_at": "document_start"
     }, {
@@ -46,7 +50,8 @@
     }, {
       "matches": ["https://www.nytimes.com/games/strands",
                   "https://www.nytimes.com/games/strands/20*",
-                  "https://www.nytimes.com/games/strands?utm_source=wordle&utm_medium=referral&utm_campaign=wordle_nav"],
+                  "https://www.nytimes.com/games/strands?utm_source=wordle&utm_medium=referral&utm_campaign=wordle_nav",
+                  "https://www.nytimes.com/games/bonus/strands/*"],
       "js": ["scripts/games/strands.js"],
       "run_at": "document_start"
     }, {
@@ -101,7 +106,8 @@
       "js": ["scripts/games/taConnections.js"],
       "run_at": "document_start"
     }, {
-      "matches": ["https://www.nytimes.com/games/crossplay"],
+      "matches": ["https://www.nytimes.com/games/crossplay",
+                  "https://www.nytimes.com/games/bonus/hub/*"],
       "js": ["scripts/misc/miscPages.js"],
       "run_at": "document_start"
     }, {

@@ -33,7 +33,6 @@
 /* Base adjustments */
 body {
     width: 510px;
-    height: 510px;
     margin: 0;
     padding: 15px;
     font-family: Arial, sans-serif;
@@ -51,8 +50,20 @@ body {
 header {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 12px;
     font-weight: bold;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.2;
+}
+
+.logo img {
+    display: block;
+    width: 38px;
+    height: 38px;
 }
 
 .center {
@@ -62,7 +73,15 @@ header {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
+}
+
+/* Font */
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
 }
 
 /* Top page buttons */
@@ -137,9 +156,9 @@ header {
 /* Page containers */
 .dark-mode-page,
 .custom-colors-page,
-.extra-features-page {
+.settings-page {
     width: 510px;
-    height: 375px;
+    height: 417px;
     gap: 10px;
     box-sizing: border-box;
     background: var(--page-bg);
@@ -316,6 +335,7 @@ header {
 /* Custom colors page */
 .custom-colors-page {
     align-items: stretch;
+    position: relative;
 }
 
 .custom-colors-page > .wrap {
@@ -342,19 +362,26 @@ header {
 }
 
 /* Color picker UI */
+.color-picker > .wrap {
+    --sv-max-size: 190px;
+    gap: 0;
+}
+
 .top {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0;
     flex: 1;
     min-height: 0;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .sv {
     position: relative;
     width: 100%;
+    max-width: var(--sv-max-size);
     aspect-ratio: 1 / 1;
+    margin: max(0px, calc((100% - var(--sv-max-size)) / 2)) auto 0;
     border-radius: 12px;
     overflow: visible;
     user-select: none;
@@ -405,7 +432,7 @@ header {
     align-items: center;
     gap: 10px;
     height: 34px;
-    margin: 12px 0;
+    margin: auto 0;
 }
 
 .preview {
@@ -467,24 +494,10 @@ header {
     white-space: nowrap;
     overflow: hidden;
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr auto;
     align-items: center;
     gap: 8px;
     width: 100%;
-}
-
-.hex-indicator {
-    font-size: 11px;
-    font-weight: 700;
-    color: white;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-}
-
-.hex-indicator.visible {
-    opacity: 1;
 }
 
 .value button {
@@ -503,22 +516,25 @@ header {
 .hex-text {
     overflow: hidden;
     white-space: nowrap;
+    font-size: 14px;
+    text-align: center;
 }
 
 .hex-actions {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(3, 26px);
     gap: 6px;
 }
 
 .hex-actions button {
     all: unset;
+    box-sizing: border-box;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 26px;
+    height: 26px;
     border-radius: 6px;
     border: 1px solid var(--border);
 }
@@ -528,10 +544,140 @@ header {
 }
 
 .hex-actions img {
-    width: 14px;
-    height: 14px;
+    width: 17px;
+    height: 17px;
     display: block;
-    filter: invert(1);
+}
+
+.hex-actions button:disabled {
+    cursor: default;
+    opacity: 0.3;
+}
+
+.hex-actions button:disabled:hover {
+    background: none;
+}
+
+/* Modal for custom colors */
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    opacity: 0;
+    visibility: hidden;
+    background: rgba(var(--panel-tone), 0.5);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease, visibility 0s;
+}
+
+.modal {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 340px;
+    padding: 14px;
+    box-sizing: border-box;
+    background: rgba(var(--panel-tone), 0.97);
+    border-radius: 14px;
+    transform: translateY(6px);
+    transition: transform 0.2s ease;
+}
+
+.modal-overlay.open .modal {
+    transform: translateY(0);
+}
+
+.modal-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.modal-message {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--text-soft);
+}
+
+.modal-code {
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+    width: 100%;
+    height: 130px;
+    padding: 8px;
+    resize: none;
+    font-size: 11px;
+    line-height: 1.4;
+    word-break: break-all;
+    color: var(--text);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.modal-code:focus {
+    outline: none;
+}
+
+.modal-error {
+    margin: 0;
+    min-height: 14px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #FF8A8A;
+}
+
+.modal-error:empty {
+    display: none;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.modal-button {
+    all: unset;
+    box-sizing: border-box;
+    min-width: 96px;
+    padding: 7px 14px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--text-soft);
+    background: var(--control-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+}
+
+.modal-button:hover {
+    color: var(--text);
+    background: var(--control-bg-hover);
+    border-color: var(--border-strong);
+}
+
+.modal-button:focus-visible {
+    outline: 1px solid var(--focus-ring);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--focus-halo);
 }
 
 /* Color info */
@@ -635,15 +781,45 @@ header {
 .color-presets {
     flex: 0 0 auto;
     display: flex;
-    gap: 8px;
+    align-items: flex-end;
+    gap: 10px;
     padding-top: 8px;
     margin-top: auto;
     border-top: 1px solid var(--border);
 }
 
+.preset-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.preset-group-custom {
+    flex: 1;
+    padding-left: 10px;
+    border-left: 1px solid var(--border);
+}
+
+.preset-group-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--text-dim);
+}
+
+.preset-buttons {
+    display: flex;
+    gap: 6px;
+}
+
 .color-preset {
     flex: 1;
     height: 26px;
+    padding: 0 12px;
     cursor: pointer;
     font-size: 11px;
     font-weight: 700;
@@ -696,7 +872,7 @@ header {
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-/* Color picker message (when light/dark are active) */
+/* Color picker message (when default is active) */
 .color-picker::before {
     inset: 0;
     border-radius: 12px;
@@ -706,7 +882,7 @@ header {
 }
 
 .color-picker::after {
-    content: "Light and Dark are preset colors.\A Switch to Custom to edit them.";
+    content: "This is the standard light/dark mode preset that is applied depending on your color choice.\ASwitch to a custom preset to create and edit your own color palette for crossword and/or sudoku boards.";
     left: 12px;
     right: 12px;
     top: 50%;
@@ -720,7 +896,6 @@ header {
     line-height: 1.5;
     color: var(--text-soft);
     background: rgba(var(--panel-tone), 0.94);
-    border: 1px solid var(--border);
     border-radius: 12px;
 }
 
@@ -798,15 +973,103 @@ header {
     background: radial-gradient(circle at center, var(--text-soft) 0 45%, transparent 46% 100%);
 }
 
-/* Extra features page */
-.extra-features-box {
+/* Settings page */
+.settings-list {
     flex: 1;
-    min-width: 0;
-    padding: 5px;
+    min-height: 0;
+    padding-right: 6px;
+    overflow-y: auto;
+    scrollbar-color: var(--border-strong) transparent;
+}
+
+.settings-section {
+    padding: 5px 8px;
     box-sizing: border-box;
     background: var(--panel-bg);
     border: 1px solid var(--border);
     border-radius: 12px;
+}
+
+.settings-section + .settings-section {
+    margin-top: 8px;
+}
+
+.settings-section-title {
+    margin: 3px 0 6px;
+    font-size: 17px;
+    font-weight: bold;
+    color: var(--text);
+}
+
+.settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin: 3px 0;
+    min-height: 26px;
+    margin-left: 4px;
+}
+
+.settings-row-label {
+    font-size: 13px;
+    color: var(--text);
+}
+
+.settings-row-value {
+    font-size: 13px;
+    color: var(--text-dim);
+}
+
+.settings-note {
+    margin: 6px 4px 3px;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--text-dim);
+}
+
+.settings-action {
+    flex: none;
+    min-width: 76px;
+    height: 26px;
+    padding: 0 12px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    background: var(--control-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.settings-choice {
+    display: flex;
+    flex: 1;
+    gap: 4px;
+    min-width: 0;
+    justify-content: flex-end;
+}
+
+.settings-choice .settings-action {
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.settings-action.enabled {
+    color: var(--text-soft);
+    background: var(--control-bg-active);
+    border-color: var(--border-strong);
+}
+
+.settings-action:hover {
+    color: var(--text-soft);
+    background: var(--control-bg-hover);
+    border-color: var(--border-strong);
 }
 
 /* Focus indicators */
@@ -814,6 +1077,7 @@ header {
 .color-info-tab:focus-visible,
 .color-info-help:focus-visible,
 .color-preset:focus-visible,
+.settings-action:focus-visible,
 .value button:focus-visible,
 .hex-actions button:focus-visible,
 .switch input:focus-visible + .slider,
@@ -832,15 +1096,17 @@ header {
     .slider,
     .slider::before,
     .slider::after,
-    .hex-indicator,
     .color-info-tab,
     .color-info-help,
     .color-preset,
+    .settings-action,
     .radio-ui,
     .color-info-panels,
     .color-picker > .wrap,
     .color-picker::before,
-    .color-picker::after {
+    .color-picker::after,
+    .modal-overlay,
+    .modal {
         transition: none;
     }
 }
