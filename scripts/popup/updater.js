@@ -101,6 +101,13 @@ export function updatePresetUI() {
     if (sudokuPanel) {
         sudokuPanel.classList.toggle("preset-locked", sudokuLocked);
     }
+    const hexInput = getHexOutputText();
+    if (hexInput) {
+        hexInput.readOnly = Boolean(
+            (popupState.selectedCrosswordColorKey && crosswordLocked) ||
+            (popupState.selectedSudokuColorKey && sudokuLocked)
+        );
+    }
     const pickerLocked = onSudoku ? sudokuLocked : crosswordLocked;
     const colorPicker = document.querySelector(".color-picker");
     if (colorPicker) {
@@ -201,7 +208,9 @@ export function updatePicker() {
     }
     previewSwatch.style.background = currentHex;
     if (hexOutputText) {
-        hexOutputText.textContent = currentHex;
+        if (document.activeElement !== hexOutputText) {
+            hexOutputText.value = currentHex.slice(1);
+        }
     } else {
         hexOutput.textContent = currentHex;
     }

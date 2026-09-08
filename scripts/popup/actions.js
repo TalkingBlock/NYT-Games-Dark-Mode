@@ -31,6 +31,7 @@ export async function initializePopup() {
     attachDMToggleHandlers();
     attachPickerHandlers();
     attachClipboardHandlers();
+    attachHexInputHandlers();
     attachResetHandler();
     attachColorPanelScrollHandlers();
     attachPresetActionHandlers();
@@ -42,7 +43,7 @@ export async function initializePopup() {
 function loadVersionLabel() {
     const versionLabel = document.getElementById("extensionVersion");
     if (!versionLabel) return;
-    versionLabel.textContent = chrome.runtime.getManifest().version;
+    versionLabel.textContent = `v${chrome.runtime.getManifest().version}`;
 }
 
 // Keeps the scroll affordance for color options synced while scrolling
@@ -459,6 +460,50 @@ function attachClipboardHandlers() {
             console.error("Error pasting hex: ", error, error?.name, error?.message);
         }
     });
+}
+
+// Allows the hexcode under the picker to be typed into and commits when enter is press or when focus leaves
+function attachHexInputHandlers() {
+    const hexInput = document.getElementById("hexInput");
+    if (!hexInput) return;
+    hexInput.addEventListener("focus", () => {
+        hexInput.select();
+    });
+    hexInput.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        hexInput.blur();
+    });
+    hexInput.addEventListener("blur", () => {
+        commitTypedHex(hexInput);
+    });
+}
+
+// Reads whatever was typed into the hex field and moves the picker onto that color or falls back to old/black color
+function commitTypedHex(hexInput) {
+    const pickerHex = getCurrentPickerHex();
+    const typedValue = hexInput.value.trim().toUpperCase();
+    if (!typedValue || isActiveEditingLocked()) {
+        hexInput.value = pickerHex.slice(1);
+        return;
+    }
+    const typedHex = /^[0-9A-F]{1,6}$/.test(typedValue) ? `#${typedValue.padEnd(6, "0")}` : "#000000";
+    hexInput.value = typedHex.slice(1);
+    if (typedHex === pickerHex) return;
+    const hsv = hexToHsv(typedHex);
+    if (!hsv) return;
+    popupState.pickerHue = hsv.h;
+    popupState.pickerSaturation = hsv.s;
+    popupState.pickerValue = hsv.v;
+    applyPickerColorToSelectedOption();
+    updateAll();
+    saveThemeNow();
+    if (popupState.selectedCrosswordColorKey) {
+        sendCrosswordColorsNow();
+    }
+    if (popupState.selectedSudokuColorKey) {
+        sendSudokuColorsNow();
+    }
 }
 
 // Allows for the resetting of the current color picker's color to the object's default value

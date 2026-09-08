@@ -229,14 +229,19 @@
                             <div class="bottom">
                                 <div class="row hex-row">
                                     <div class="value" id="hexOut">
-                                        <span class="hex-text">#FF0000</span>
+                                        <span class="hex-field">
+                                            <span class="hex-hash" aria-hidden="true">#</span>
+                                            <input class="hex-text" id="hexInput" type="text" value="FF0000"
+                                                maxlength="6" spellcheck="false" autocomplete="off"
+                                                aria-label="Hex color value">
+                                        </span>
                                         <span class="hex-actions">
                                             <button id="copyHex" title="Copy Hexcode"><img src="svgs/popup/copy.svg" alt="Copy"></button>
                                             <button id="pasteHex" title="Paste Hexcode"><img src="svgs/popup/paste.svg" alt="Paste"></button>
                                             <button id="resetHex" title="Reset Hexcode"><img src="svgs/popup/reset.svg" alt="Reset"></button>
                                             <button id="importPreset" title="Import Preset"><img src="svgs/popup/import.svg" alt="Import"></button>
                                             <button id="exportPreset" title="Export Preset"><img src="svgs/popup/export.svg" alt="Export"></button>
-                                            <button id="clearPreset" title="Clear Preset"><img src="svgs/popup/trash.svg" alt="Clear"></button>
+                                            <button id="clearPreset" title="Clear Preset"><img src="svgs/popup/clear.svg" alt="Clear"></button>
                                         </span>
                                     </div>
                                 </div>
@@ -248,7 +253,9 @@
                             <div class="color-info-tabs">
                                 <button class="color-info-tab enabled" data-color-panel="crosswords">Crosswords</button>
                                 <button class="color-info-tab" data-color-panel="sudoku">Sudoku</button>
-                                <button class="color-info-help">?</button>
+                                <button class="color-info-tab">Wordle</button>
+                                <button class="color-info-tab">Connections</button>
+                                <button class="color-info-help" title="Help" aria-label="Help">?</button>
                             </div>
                             <div class="color-info-panels">
                                 <div class="color-info-panel" id="panel-crosswords">
@@ -578,13 +585,16 @@
                 <div class="wrap">
                     <div class="settings-list">
                         <section class="settings-section" data-section="data">
-                            <h2 class="settings-section-title">Data</h2>
+                            <h2 class="settings-section-title">
+                                <img src="svgs/popup/data.svg" alt="">
+                                Data
+                            </h2>
                             <div class="settings-row">
-                                <span class="settings-row-label">Backup all settings</span>
+                                <span class="settings-row-label">Backup data</span>
                                 <button class="settings-action" id="backupSettings">Copy Code</button>
                             </div>
                             <div class="settings-row">
-                                <span class="settings-row-label">Restore from a code</span>
+                                <span class="settings-row-label">Restore data</span>
                                 <button class="settings-action" id="restoreSettings">Paste Code</button>
                             </div>
                             <div class="settings-row">
@@ -593,13 +603,17 @@
                             </div>
                         </section>
                         <section class="settings-section" data-section="behavior">
-                            <h2 class="settings-section-title">Behavior</h2>
+                            <h2 class="settings-section-title">
+                                <img src="svgs/popup/behavior.svg" alt="">
+                                Behavior
+                            </h2>
                             <div class="settings-row">
                                 <span class="settings-row-label">Default page on open</span>
                                 <div class="settings-choice" id="defaultPage" role="group" aria-label="Default page on open">
                                     <button class="settings-action enabled" data-default-page="last-used">Last Used</button>
                                     <button class="settings-action" data-default-page="dark-mode-button">Dark Mode</button>
                                     <button class="settings-action" data-default-page="custom-colors-button">Custom Colors</button>
+                                    <button class="settings-action" data-default-page="settings-button">Settings</button>
                                 </div>
                             </div>
                             <div class="settings-row">
@@ -608,11 +622,16 @@
                                     <button class="settings-action enabled" data-default-panel="last-used">Last Used</button>
                                     <button class="settings-action" data-default-panel="crosswords">Crosswords</button>
                                     <button class="settings-action" data-default-panel="sudoku">Sudoku</button>
+                                    <button class="settings-action" data-default-panel="wordle">Wordle</button>
+                                    <button class="settings-action" data-default-panel="connections">Connections</button>
                                 </div>
                             </div>
                         </section>
                         <section class="settings-section" data-section="support">
-                            <h2 class="settings-section-title">Support</h2>
+                            <h2 class="settings-section-title">
+                                <img src="svgs/popup/support.svg" alt="">
+                                Support
+                            </h2>
                             <div class="settings-row">
                                 <span class="settings-row-label">View changelog</span>
                                 <button class="settings-action" id="viewChangelog">Open</button>
@@ -623,7 +642,10 @@
                             </div>
                         </section>
                         <section class="settings-section" data-section="about">
-                            <h2 class="settings-section-title">About</h2>
+                            <h2 class="settings-section-title">
+                                <img src="svgs/popup/about.svg" alt="">
+                                About
+                            </h2>
                             <div class="settings-row">
                                 <span class="settings-row-label">Version</span>
                                 <span class="settings-row-value" id="extensionVersion">&mdash;</span>
@@ -636,7 +658,7 @@
                                 <span class="settings-row-label">GitHub</span>
                                 <button class="settings-action" id="openGithub">Open</button>
                             </div>
-                            <p class="settings-note">Your settings stay in your browser. Nothing is ever sent anywhere.</p>
+                            <p class="settings-note">Your settings stay in your browser, information is not shared between others.</p>
                         </section>
                     </div>
                 </div>
