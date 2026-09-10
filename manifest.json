@@ -1,7 +1,7 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Adds a toggleable dark mode to NYT Games :D",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab", "storage", "clipboardRead", "clipboardWrite"],
   "action": {
@@ -35,13 +35,17 @@
                   "https://www.nytimes.com/games/connections/20*",
                   "https://www.nytimes.com/games/connections?utm_source=wordle&utm_medium=referral&utm_campaign=wordle_nav",
                   "https://www.nytimes.com/games/bonus/connections/3x3/*"],
-      "js": ["scripts/games/connections.js"],
+      "js": ["scripts/misc/connectionsColors.js", "scripts/games/connections.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/puzzles/spelling-bee",
                   "https://www.nytimes.com/puzzles/spelling-bee/20*",
                   "https://www.nytimes.com/puzzles/spelling-bee?utm_source=wordle&utm_medium=referral&utm_campaign=wordle_nav"],
       "js": ["scripts/games/spellingBee.js"],
+      "run_at": "document_start"
+    }, {
+      "matches": ["https://www.nytimes.com/games/wordle/*"],
+      "js": ["scripts/misc/wordleColors.js"],
       "run_at": "document_start"
     }, {
       "matches": ["https://www.nytimes.com/games/pips*"],

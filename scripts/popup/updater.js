@@ -1,14 +1,16 @@
 // Import functions and variables
 import {popupState} from "./states.js";
-import {pageButtons, pages, dmToggleGroups, svCursorInset, displayPresetName} from "./defaultExports.js";
+import {
+    pageButtons, pages, dmToggleGroups, svCursorInset,
+    displayPresetName, prebuiltPresetNames, presetLabels,
+    prebuiltPresetSwatches, displayLightSwatch, displayDarkSwatch, customPresetSwatch,
+    customPresetNames, colorPanelConfig, colorPanelNames
+} from "./defaultExports.js";
 import {hsvToHex} from "./colorMath.js";
 
 // Functions to get HTML elements for updating, these are called throughout the file to read and update the popup's DOM
-function getCrosswordPanel() {
-    return document.getElementById("panel-crosswords");
-}
-function getSudokuPanel() {
-    return document.getElementById("panel-sudoku");
+function getColorPanel(panelName) {
+    return document.getElementById(colorPanelConfig[panelName].panelId);
 }
 function getSaturationValueArea() {
     return document.getElementById("sv");
@@ -36,7 +38,7 @@ function getSaturationValueMask() {
 }
 
 // Gets the current color from the color picker and converts it into a usable Hex value
-function getCurrentPickerHex() {
+export function getCurrentPickerHex() {
     return hsvToHex(
         popupState.pickerHue,
         popupState.pickerSaturation,
@@ -84,40 +86,125 @@ export function updateScrollAffordance() {
     panelsContainer.classList.toggle("can-scroll-up", visiblePanel.scrollTop > 2);
 }
 
-// Updates the preset buttons and dims/locks the color UI when light or dark is active
+// Updates the preset buttons and dims/locks the color UI when a default or prebuilt preset is active
 export function updatePresetUI() {
-    const onSudoku = popupState.activeColorPanel === "sudoku";
-    const activePreset = onSudoku ? popupState.activeSudokuPreset : popupState.activeCrosswordPreset;
-    document.querySelectorAll(".color-preset").forEach((presetButton) => {
-        presetButton.classList.toggle("enabled", presetButton.dataset.preset === activePreset);
-    });
-    const crosswordLocked = popupState.activeCrosswordPreset === displayPresetName;
-    const sudokuLocked = popupState.activeSudokuPreset === displayPresetName;
-    const crosswordPanel = getCrosswordPanel();
-    if (crosswordPanel) {
-        crosswordPanel.classList.toggle("preset-locked", crosswordLocked);
-    }
-    const sudokuPanel = getSudokuPanel();
-    if (sudokuPanel) {
-        sudokuPanel.classList.toggle("preset-locked", sudokuLocked);
+    const activePreset = popupState.activePresets[popupState.activeColorPanel];
+    updatePresetSelect(activePreset);
+    for (const panelName of colorPanelNames) {
+        const colorPanel = getColorPanel(panelName);
+        if (colorPanel) {
+            colorPanel.classList.toggle("preset-locked", isPresetLocked(popupState.activePresets[panelName]));
+        }
     }
     const hexInput = getHexOutputText();
     if (hexInput) {
-        hexInput.readOnly = Boolean(
-            (popupState.selectedCrosswordColorKey && crosswordLocked) ||
-            (popupState.selectedSudokuColorKey && sudokuLocked)
-        );
+        hexInput.readOnly = !popupState.selectedColorKey ||
+            isPresetLocked(popupState.activePresets[popupState.selectedPanel]);
     }
-    const pickerLocked = onSudoku ? sudokuLocked : crosswordLocked;
+    
+    const pickerLocked = isPresetLocked(activePreset);
+    const activeIsPrebuilt = prebuiltPresetNames.includes(activePreset);
     const colorPicker = document.querySelector(".color-picker");
     if (colorPicker) {
         colorPicker.classList.toggle("locked", pickerLocked);
+        colorPicker.classList.toggle("prebuilt", activeIsPrebuilt);
+        if (activeIsPrebuilt) {
+            colorPicker.dataset.lockedPreset = presetLabels[activePreset];
+        } else {
+            delete colorPicker.dataset.lockedPreset;
+        }
+        colorPicker.dataset.lockedGame = colorPanelConfig[popupState.activeColorPanel].label;
     }
-    for (const buttonId of ["importPreset", "exportPreset", "clearPreset"]) {
+    const exportButton = document.getElementById("exportPreset");
+    if (exportButton) {
+        exportButton.disabled = activePreset === displayPresetName;
+    }
+    for (const buttonId of ["importPreset", "clearPreset"]) {
         const actionButton = document.getElementById(buttonId);
         if (actionButton) {
             actionButton.disabled = pickerLocked;
         }
+    }
+}
+
+// Returns true for the presets that come with the extension
+function isPresetLocked(presetName) {
+    return presetName === displayPresetName || prebuiltPresetNames.includes(presetName);
+}
+
+// Previews whichever preset the dark mode toggles are enabled for the display preset
+export function isDisplayPresetDark(panelName) {
+    const groupToggle = document.getElementById("games-main");
+    if (groupToggle && !groupToggle.checked) return false;
+    return (colorPanelConfig[panelName].displayToggleIds || []).some(
+        (toggleId) => document.getElementById(toggleId)?.checked
+    );
+}
+
+// The name a preset shows in the dropdown for custom presets
+export function getPresetDisplayName(panelName, presetName) {
+    return popupState.presetMeta[panelName]?.[presetName]?.name || presetLabels[presetName] || presetName;
+}
+
+// The dot color a preset shows in the dropdown for custom presets
+export function getCustomPresetColor(panelName, presetName) {
+    return popupState.presetMeta[panelName]?.[presetName]?.color || null;
+}
+
+// Returns the hex a preset shows as its dropdown dot
+function getPresetSwatchHex(presetName) {
+    const panelName = popupState.activeColorPanel;
+    if (presetName === displayPresetName) {
+        const ownsNoToggle = !(colorPanelConfig[panelName].displayToggleIds || []).length;
+        return ownsNoToggle || isDisplayPresetDark(panelName) ? displayDarkSwatch : displayLightSwatch;
+    }
+    if (prebuiltPresetNames.includes(presetName)) {
+        return prebuiltPresetSwatches[presetName] || customPresetSwatch;
+    }
+    return getCustomPresetColor(panelName, presetName) || customPresetSwatch;
+}
+
+// Puts the active preset on the dropdown button and marks it in the popup page
+function updatePresetSelect(activePreset) {
+    const panelName = popupState.activeColorPanel;
+    const selectName = document.querySelector("#presetSelectButton .preset-select-name");
+    const selectSwatch = document.querySelector("#presetSelectButton .preset-select-swatch");
+    if (selectName) {
+        selectName.textContent = getPresetDisplayName(panelName, activePreset);
+    }
+    if (selectSwatch) {
+        selectSwatch.style.background = getPresetSwatchHex(activePreset);
+    }
+
+    document.querySelectorAll("#presetMenu .preset-menu-item").forEach((menuItem) => {
+        const presetName = menuItem.dataset.preset;
+        const isActive = presetName === activePreset;
+        menuItem.classList.toggle("enabled", isActive);
+        menuItem.setAttribute("aria-selected", String(isActive));
+        const menuName = menuItem.querySelector(".preset-menu-name");
+        if (menuName) {
+            menuName.textContent = getPresetDisplayName(panelName, presetName);
+        }
+        const swatch = menuItem.querySelector(".preset-menu-swatch");
+        if (swatch) {
+            swatch.style.background = getPresetSwatchHex(presetName);
+        }
+    });
+    const editButton = document.getElementById("editPreset");
+    if (editButton) {
+        editButton.disabled = !customPresetNames.includes(activePreset);
+    }
+}
+
+// Shows or hides the preset dropdown menu and keeps the button's expanded state synced
+export function updatePresetMenuOpenState() {
+    const menu = document.getElementById("presetMenu");
+    const selectButton = document.getElementById("presetSelectButton");
+    if (menu) {
+        menu.classList.toggle("open", popupState.presetMenuOpen);
+    }
+    if (selectButton) {
+        selectButton.setAttribute("aria-expanded", String(popupState.presetMenuOpen));
     }
 }
 
@@ -149,20 +236,23 @@ export function updateGameColorButton() {
 
 // Updates and displays whichever game color panel is active and visible to the user
 export function updateGameColorPanel() {
-    const crosswordPanel = getCrosswordPanel();
-    const sudokuPanel = getSudokuPanel();
-    if (crosswordPanel) {
-        crosswordPanel.classList.toggle("hidden", popupState.activeColorPanel !== "crosswords");
-    }
-    if (sudokuPanel) {
-        sudokuPanel.classList.toggle("hidden", popupState.activeColorPanel !== "sudoku");
+    for (const panelName of colorPanelNames) {
+        const colorPanel = getColorPanel(panelName);
+        if (colorPanel) {
+            colorPanel.classList.toggle("hidden", popupState.activeColorPanel !== panelName);
+        }
     }
 }
 
 // Updates and displays and updates all game color objects
 export function updateAllGamesColorObjects() {
-    updateOneGamesColorObjects("#panel-crosswords .color-option[data-key]", popupState.crosswordColors, popupState.selectedCrosswordColorKey);
-    updateOneGamesColorObjects("#panel-sudoku .color-option[data-key]", popupState.sudokuColors, popupState.selectedSudokuColorKey);
+    for (const panelName of colorPanelNames) {
+        updateOneGamesColorObjects(
+            `#${colorPanelConfig[panelName].panelId} .color-option[data-key]`,
+            popupState.colors[panelName] || {},
+            popupState.selectedPanel === panelName ? popupState.selectedColorKey : null
+        );
+    }
 }
 
 // Helper function for updateGameColorObject() that updates all game color objects for the given game

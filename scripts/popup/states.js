@@ -1,22 +1,19 @@
-// File acts like the popup's memory state, actions.js updates the properties and render.js reads them
+// File acts like the popup's memory state, actions.js updates the properties and popup.js loads them
 
 export const popupState = {
     activePageButtonClass: "dark-mode-button",
     activeColorPanel: "crosswords",
-    activeCrosswordPreset: "display",
-    activeSudokuPreset: "display",
-    selectedCrosswordColorKey: null,
-    selectedSudokuColorKey: null,
-    lastCrosswordColorKey: null,
-    lastSudokuColorKey: null,
+    activePresets: {},
+    presetMenuOpen: false,
+    selectedPanel: null,
+    selectedColorKey: null,
+    lastColorKeys: {},
     pickerHue: 0,
     pickerSaturation: 1,
     pickerValue: 1,
-    crosswordColors: {},
-    customCrosswordColors: {},
-    sudokuColors: {},
-    customSudokuColors: {},
+    colors: {},
+    customColors: {},
+    presetMeta: {},
     saveTimerId: null,
-    crosswordUpdateTimerId: null,
-    sudokuUpdateTimerId: null
+    panelUpdateTimerIds: {}
 };

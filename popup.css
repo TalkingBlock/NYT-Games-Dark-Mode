@@ -773,6 +773,86 @@ select {
     outline: none;
 }
 
+/* Rename + swatch fields, shown only by the edit preset dialog */
+.modal-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+}
+
+.modal-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-field-label {
+    flex: 0 0 52px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+}
+
+.modal-field-hex {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    padding-left: 8px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.modal-field-swatch {
+    flex: 0 0 auto;
+    width: 13px;
+    height: 13px;
+    border-radius: 999px;
+    outline: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.modal-field-hash {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-dim);
+}
+
+.modal-field-input {
+    flex: 1;
+    min-width: 0;
+    padding: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.modal-field-hex .modal-field-input {
+    padding-left: 0;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    text-transform: uppercase;
+}
+
+.modal-field-input:focus {
+    outline: none;
+    border-color: var(--border-strong);
+}
+
+.modal-field-hex:focus-within {
+    border-color: var(--border-strong);
+}
+
+.modal-field-hex .modal-field-input:focus {
+    border-color: transparent;
+}
+
 .modal-error {
     margin: 0;
     min-height: 14px;
@@ -959,7 +1039,7 @@ select {
     flex: 0 0 auto;
     display: flex;
     align-items: flex-end;
-    gap: 10px;
+    gap: 8px;
     padding-top: 8px;
     margin-top: auto;
     border-top: 1px solid transparent;
@@ -973,13 +1053,16 @@ select {
     min-width: 0;
 }
 
-.preset-group-custom {
+.preset-group-fill {
     flex: 1;
-    padding-left: 10px;
-    border-left: 1px solid transparent;
-    border-image: linear-gradient(180deg,
-        rgba(var(--accent-a), 0.7), rgba(var(--accent-b), 0.7)
-    ) 1;
+}
+
+/* The dropdown and the edit button share the row, with no rule between them */
+.preset-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
 }
 
 .preset-group-label {
@@ -992,35 +1075,163 @@ select {
     color: var(--text-dim);
 }
 
-.preset-buttons {
-    display: flex;
-    gap: 6px;
+/* Preset dropdown, anchored so its menu opens upward over the color options */
+.preset-select {
+    position: relative;
+    flex: 1;
+    min-width: 0;
 }
 
-.color-preset {
-    flex: 1;
+.preset-edit-button {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
     height: 26px;
-    padding: 0 12px;
+    padding: 0;
     cursor: pointer;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-dim);
     background: var(--control-bg);
     border: 1px solid var(--border);
     border-radius: 999px;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    transition: background 0.15s, border-color 0.15s, opacity 0.15s;
 }
 
-.color-preset:hover {
-    color: var(--text-soft);
+.preset-edit-button img {
+    width: 13px;
+    height: 13px;
+    opacity: 0.75;
+    transition: opacity 0.15s;
+}
+
+.preset-edit-button:hover:not(:disabled) {
     background: var(--control-bg-hover);
 }
 
-.color-preset.enabled {
+.preset-edit-button:hover:not(:disabled) img {
+    opacity: 1;
+}
+
+.preset-edit-button:disabled {
+    cursor: default;
+    opacity: 0.35;
+}
+
+.preset-select-button {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
+    height: 26px;
+    padding: 0 9px;
+    box-sizing: border-box;
+    cursor: pointer;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
     color: var(--text);
     background: var(--accent-gradient-soft);
-    border-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
     box-shadow: 0 2px 6px rgba(var(--accent-a), 0.16);
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.preset-select-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.preset-select-swatch,
+.preset-menu-swatch {
+    flex: 0 0 auto;
+    width: 11px;
+    height: 11px;
+    border-radius: 999px;
+    outline: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.preset-select-caret {
+    flex: 0 0 auto;
+    width: 0;
+    height: 0;
+    opacity: 0.75;
+    border-top: 4px solid currentColor;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    transition: transform 0.15s ease;
+}
+
+.preset-select-button[aria-expanded="true"] .preset-select-caret {
+    transform: rotate(180deg);
+}
+
+.preset-menu {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 6px);
+    left: 0;
+    z-index: 20;
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px;
+    background: rgba(var(--panel-tone), 0.96);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--border-strong);
+    border-radius: 12px;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+}
+
+.preset-menu.open {
+    display: flex;
+}
+
+.preset-menu-label {
+    padding: 5px 8px 3px;
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+.preset-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 8px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-soft);
+    background: transparent;
+    border: 0;
+    border-radius: 7px;
+    transition: background 0.15s, color 0.15s;
+}
+
+.preset-menu-item:hover {
+    color: var(--text);
+    background: var(--control-bg-hover);
+}
+
+.preset-menu-item.enabled {
+    color: var(--text);
+    background: var(--accent-gradient-soft);
+}
+
+.preset-menu-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .color-info-panel.preset-locked {
@@ -1064,7 +1275,7 @@ select {
 }
 
 .color-picker::after {
-    content: "This is the standard light/dark mode preset that is applied depending on your color choice.\ASwitch to a custom preset to create and edit your own color palette for crossword and/or sudoku boards.";
+    content: "This is the standard light/dark mode preset that is applied based on your dark mode choice.\A Switch to a custom preset to be able to modify the board colors for " attr(data-locked-game) ".";
     left: 12px;
     right: 12px;
     top: 50%;
@@ -1079,6 +1290,11 @@ select {
     color: var(--text-soft);
     background: rgba(var(--panel-tone), 0.94);
     border-radius: 12px;
+}
+
+/* Color picker UI appearance (when a prebuilt preset is active) */
+.color-picker.prebuilt::after {
+    content: "This is the " attr(data-locked-preset) " preset, one of the presets that comes with the extension using fixed colors.\A Switch to a custom preset to be able to modify the board colors for " attr(data-locked-game) ".";
 }
 
 .color-picker.locked::before,
@@ -1305,7 +1521,8 @@ select {
 .page-buttons button:focus-visible,
 .color-info-tab:focus-visible,
 .color-info-help:focus-visible,
-.color-preset:focus-visible,
+.preset-select-button:focus-visible,
+.preset-menu-item:focus-visible,
 .settings-action:focus-visible,
 .value button:focus-visible,
 .hex-actions button:focus-visible,
@@ -1328,7 +1545,9 @@ select {
     .color-info-tab,
     .color-info-help,
     .hex-field,
-    .color-preset,
+    .preset-select-button,
+    .preset-select-caret,
+    .preset-menu-item,
     .settings-action,
     .radio-ui,
     .radio-ui::before,

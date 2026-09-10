@@ -330,22 +330,8 @@ function enableConnectionsDarkMode() {
             color: white;
         }
 
-        .Card-module_label__U_Q2H {
-            background-color: white;
-            color: black;
-        }
-
-        .Card-module_label__U_Q2H.Card-module_selected__cN2eT {
-            background-color: #777777;
-            color: white;
-        }
-
         .Mistakes-module_mistakesContent__nlijY {
             color: white;
-        }
-
-        .Mistakes-module_bubble__nDlOh {
-            background-color: white;
         }
 
         .Mistakes-module_mistakesContent__nlijY.Mistakes-module_indicatorDisabled___J578 {
@@ -435,6 +421,10 @@ function enableConnectionsDarkMode() {
             color: white;
         }
 
+        .Stats-module_inline_right_caret__CGkGb {
+            filter: invert(1);
+        }
+
         .GamesCarouselStack-module_frictionMitigationContent__sfyQO 
         .GamesCarouselStack-module_carouselStackContainer__ogcQ6 hr {
             border-color: #777777;
@@ -481,6 +471,7 @@ function syncConnectionsDarkMode() {
         } else if (!shouldBeEnabled && isEnabled) {
             disableConnectionsDarkMode();
         }
+        setConnectionsDarkModeActive(shouldBeEnabled);
     });
 }
 

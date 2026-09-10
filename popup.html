@@ -253,8 +253,8 @@
                             <div class="color-info-tabs">
                                 <button class="color-info-tab enabled" data-color-panel="crosswords">Crosswords</button>
                                 <button class="color-info-tab" data-color-panel="sudoku">Sudoku</button>
-                                <button class="color-info-tab">Wordle</button>
-                                <button class="color-info-tab">Connections</button>
+                                <button class="color-info-tab" data-color-panel="wordle">Wordle</button>
+                                <button class="color-info-tab" data-color-panel="connections">Connections</button>
                                 <button class="color-info-help" title="Help" aria-label="Help">?</button>
                             </div>
                             <div class="color-info-panels">
@@ -548,20 +548,267 @@
                                         <span class="radio-ui"></span>
                                     </label>
                                 </div>
+                                <div class="color-info-panel hidden" id="panel-wordle">
+                                    <label class="color-option" data-key="wd_empty_tile_border">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Empty Tile Border</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="wordle-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="wd_absent_tile_background">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Absent Tile + Key</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="wordle-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="wd_present_tile_background">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Present Tile + Key</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="wordle-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="wd_correct_tile_background">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Correct Tile + Key</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="wordle-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="wd_unused_letter_key_background">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Unused Letter Key</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="wordle-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="wd_tile_text">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Tile + Key Text</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="wordle-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                </div>
+                                <div class="color-info-panel hidden" id="panel-connections">
+                                    <label class="color-option" data-key="cn_card_background">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Card Background</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_card_text">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Card Text</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_selected_card_background">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Selected Card BG</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_selected_card_text">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Selected Card Text</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_solved_category_background_1">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Solved Category BG #1</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_solved_category_text_1">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Solved Category Text #1</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_solved_category_background_2">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Solved Category BG #2</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_solved_category_text_2">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Solved Category Text #2</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_solved_category_background_3">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Solved Category BG #3</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_solved_category_text_3">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Solved Category Text #3</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_solved_category_background_4">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Solved Category BG #4</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_solved_category_text_4">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Solved Category Text #4</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="cn_mistakes_bubbles">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Mistakes Bubbles</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                </div>
                             </div>
                             <div class="color-presets">
-                                <div class="preset-group">
-                                    <span class="preset-group-label">Default</span>
-                                    <div class="preset-buttons">
-                                        <button class="color-preset enabled" data-preset="display">Display</button>
+                                <div class="preset-group preset-group-fill">
+                                    <span class="preset-group-label" id="presetSelectLabel">Preset</span>
+                                    <div class="preset-row">
+                                    <div class="preset-select">
+                                        <div class="preset-menu" id="presetMenu" role="listbox" aria-labelledby="presetSelectLabel">
+                                            <span class="preset-menu-label">Default</span>
+                                            <button class="preset-menu-item" type="button" role="option" data-preset="display">
+                                                <span class="preset-menu-swatch" aria-hidden="true"></span>
+                                                <span class="preset-menu-name">Display</span>
+                                            </button>
+                                            <span class="preset-menu-label">Prebuilt</span>
+                                            <button class="preset-menu-item" type="button" role="option" data-preset="midnight">
+                                                <span class="preset-menu-swatch" aria-hidden="true"></span>
+                                                <span class="preset-menu-name">Midnight</span>
+                                            </button>
+                                            <button class="preset-menu-item" type="button" role="option" data-preset="forest">
+                                                <span class="preset-menu-swatch" aria-hidden="true"></span>
+                                                <span class="preset-menu-name">Forest</span>
+                                            </button>
+                                            <button class="preset-menu-item" type="button" role="option" data-preset="magma">
+                                                <span class="preset-menu-swatch" aria-hidden="true"></span>
+                                                <span class="preset-menu-name">Magma</span>
+                                            </button>
+                                            <span class="preset-menu-label">Custom</span>
+                                            <button class="preset-menu-item" type="button" role="option" data-preset="preset1">
+                                                <span class="preset-menu-swatch" aria-hidden="true"></span>
+                                                <span class="preset-menu-name">Preset 1</span>
+                                            </button>
+                                            <button class="preset-menu-item" type="button" role="option" data-preset="preset2">
+                                                <span class="preset-menu-swatch" aria-hidden="true"></span>
+                                                <span class="preset-menu-name">Preset 2</span>
+                                            </button>
+                                            <button class="preset-menu-item" type="button" role="option" data-preset="preset3">
+                                                <span class="preset-menu-swatch" aria-hidden="true"></span>
+                                                <span class="preset-menu-name">Preset 3</span>
+                                            </button>
+                                        </div>
+                                        <button class="preset-select-button" id="presetSelectButton" type="button" aria-haspopup="listbox" aria-expanded="false">
+                                            <span class="preset-select-swatch" aria-hidden="true"></span>
+                                            <span class="preset-select-name">Display</span>
+                                            <span class="preset-select-caret" aria-hidden="true"></span>
+                                        </button>
                                     </div>
-                                </div>
-                                <div class="preset-group preset-group-custom">
-                                    <span class="preset-group-label">Custom Presets</span>
-                                    <div class="preset-buttons">
-                                        <button class="color-preset" data-preset="preset1" title="Custom Preset 1">1</button>
-                                        <button class="color-preset" data-preset="preset2" title="Custom Preset 2">2</button>
-                                        <button class="color-preset" data-preset="preset3" title="Custom Preset 3">3</button>
+                                        <button class="preset-edit-button" id="editPreset" type="button" title="Edit Preset" aria-label="Edit Preset">
+                                            <img src="svgs/popup/edit.svg" alt="">
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -573,6 +820,20 @@
                         <span class="modal-title" id="modalTitle"></span>
                         <p class="modal-message" id="modalMessage"></p>
                         <textarea class="modal-code" id="modalCode" spellcheck="false" autocomplete="off"></textarea>
+                        <div class="modal-fields" id="modalFields">
+                            <label class="modal-field">
+                                <span class="modal-field-label">Name</span>
+                                <input class="modal-field-input" id="modalPresetName" type="text" maxlength="14" spellcheck="false" autocomplete="off">
+                            </label>
+                            <label class="modal-field">
+                                <span class="modal-field-label">Color</span>
+                                <span class="modal-field-hex">
+                                    <span class="modal-field-swatch" id="modalPresetSwatch" aria-hidden="true"></span>
+                                    <span class="modal-field-hash" aria-hidden="true">#</span>
+                                    <input class="modal-field-input" id="modalPresetColor" type="text" maxlength="6" spellcheck="false" autocomplete="off">
+                                </span>
+                            </label>
+                        </div>
                         <p class="modal-error" id="modalError" role="alert"></p>
                         <div class="modal-actions">
                             <button class="modal-button" id="modalConfirm"></button>

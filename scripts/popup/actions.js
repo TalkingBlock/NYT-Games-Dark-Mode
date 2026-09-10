@@ -2,17 +2,19 @@
 import {popupState} from "./states.js";
 import {
     popupActivePageStorageKey, popupActiveColorPanelStorageKey,
-    lightCrosswordColors, darkCrosswordColors,
-    lightSudokuColors, darkSudokuColors,
-    dmToggleConfig, dmToggleGroups, cwColorsStorageKey,
+    colorPanelConfig, colorPanelNames,
+    dmToggleConfig, dmToggleGroups, gameColorsStorageKey,
     dmGroupMasterStorageKeys, legacyGroupStorageKeys, popupStorageKeys,
-    displayPresetName, customPresetNames, displayPresetToggleIds, 
-    syncDarkModeAction, pageButtons, svCursorInset,
+    displayPresetName, customPresetNames, prebuiltPresetNames, presetLabels, presetNameMaxLength, customPresetSwatch,
+    syncDarkModeAction, applyGameColorsAction, pageButtons, svCursorInset,
     hexActionCheckIcon, hexActionCheckDuration
 } from "./defaultExports.js";
-import {clamp, hexToHsv, normalizeHexColor, hsvToHex} from "./colorMath.js";
+import {clamp, hexToHsv, normalizeHexColor} from "./colorMath.js";
 import {saveTheme, readSyncValues, writeSyncValue, removeSyncValues, sendMessageToActiveTab} from "./storage.js";
-import {updateAll, updateScrollAffordance} from "./updater.js";
+import {
+    updateAll, updateScrollAffordance, updatePresetMenuOpenState,
+    isDisplayPresetDark, getPresetDisplayName, getCustomPresetColor, getCurrentPickerHex
+} from "./updater.js";
 
 // Call from main.js which starts the popup and calls all functions to display it
 export async function initializePopup() {
@@ -23,7 +25,7 @@ export async function initializePopup() {
     loadSavedPageState(savedValues);
     loadDMToggleStates(savedValues);
     loadSavedColorPanelState(savedValues);
-    loadThemeState(savedValues[cwColorsStorageKey] || null);
+    loadThemeState(savedValues[gameColorsStorageKey] || null);
     attachPageButtonHandlers();
     attachGameColorPanelHandlers();
     attachGameColorObjectHandlers();
@@ -80,37 +82,29 @@ function loadDMToggleStates(savedValues) {
 // Helper function that loads the color panel from storage
 function loadSavedColorPanelState(savedValues) {
     const savedPanel = savedValues[popupActiveColorPanelStorageKey];
-    if (savedPanel === "crosswords" || savedPanel === "sudoku") {
+    if (colorPanelNames.includes(savedPanel)) {
         popupState.activeColorPanel = savedPanel;
     }
 }
 
-// Loads and applies the crossword and sudoku color themes from storage
+// Loads and applies every game's color theme from storage
 function loadThemeState(savedTheme) {
-    loadCustomPresets({
-        selector: "#panel-crosswords .color-option[data-key]",
-        defaults: lightCrosswordColors,
-        savedPresets: normalizeSavedPresets(savedTheme?.crosswords),
-        targetMap: popupState.customCrosswordColors
-    });
-    loadCustomPresets({
-        selector: "#panel-sudoku .color-option[data-key]",
-        defaults: lightSudokuColors,
-        savedPresets: normalizeSavedPresets(savedTheme?.sudoku),
-        targetMap: popupState.customSudokuColors
-    });
-    popupState.activeCrosswordPreset = resolvePresetName(savedTheme?.crosswordPreset);
-    buildActiveCrosswordColors();
-    popupState.activeSudokuPreset = resolvePresetName(savedTheme?.sudokuPreset);
-    buildActiveSudokuColors();
-    popupState.lastCrosswordColorKey = resolveColorKey(
-        savedTheme?.activeCrosswordKey,
-        popupState.crosswordColors
-    );
-    popupState.lastSudokuColorKey = resolveColorKey(
-        savedTheme?.activeSudokuKey,
-        popupState.sudokuColors
-    );
+    for (const panelName of colorPanelNames) {
+        const panelConfig = colorPanelConfig[panelName];
+        const savedPresets = savedTheme?.[panelConfig.presetsStorageField] || {};
+        popupState.customColors[panelName] = loadCustomPresets({
+            selector: `#${panelConfig.panelId} .color-option[data-key]`,
+            defaults: panelConfig.lightColors,
+            savedPresets
+        });
+        popupState.presetMeta[panelName] = loadPresetMeta(savedTheme?.presetMeta?.[panelName]);
+        popupState.activePresets[panelName] = resolvePresetName(savedTheme?.[panelConfig.presetStorageField]);
+        buildActivePanelColors(panelName);
+        popupState.lastColorKeys[panelName] = resolveColorKey(
+            savedTheme?.[panelConfig.activeKeyStorageField],
+            popupState.colors[panelName]
+        );
+    }
     selectColorForActivePanel(false);
 }
 
@@ -122,36 +116,60 @@ function resolveColorKey(savedKey, colorMap) {
 
 // Selects the remembered color of whichever color panel is currently displayed
 function selectColorForActivePanel(shouldSave = true) {
-    if (popupState.activeColorPanel === "sudoku") {
-        const sudokuColorKey = resolveColorKey(popupState.lastSudokuColorKey, popupState.sudokuColors);
-        if (sudokuColorKey) {
-            selectSudokuColor(sudokuColorKey, shouldSave, false);
-        }
+    const panelName = popupState.activeColorPanel;
+    const colorKey = resolveColorKey(popupState.lastColorKeys[panelName], popupState.colors[panelName]);
+    if (!colorKey) {
+        popupState.selectedPanel = panelName;
+        popupState.selectedColorKey = null;
         return;
     }
-    const crosswordColorKey = resolveColorKey(popupState.lastCrosswordColorKey, popupState.crosswordColors);
-    if (crosswordColorKey) {
-        selectCrosswordColor(crosswordColorKey, shouldSave, false);
-    }
+    selectPanelColor(panelName, colorKey, shouldSave, false);
+}
+
+// Returns the color state the picker is currently editing, or null when the panel has nothing selected
+function getSelectedColorState() {
+    if (!popupState.selectedPanel || !popupState.selectedColorKey) return null;
+    return popupState.colors[popupState.selectedPanel]?.[popupState.selectedColorKey] || null;
+}
+
+// Moves the picker onto whichever color is selected right now
+function syncPickerToSelectedColor() {
+    const colorState = getSelectedColorState();
+    if (!colorState) return;
+    popupState.pickerHue = colorState.h;
+    popupState.pickerSaturation = colorState.s;
+    popupState.pickerValue = colorState.v;
 }
 
 // Returns the saved preset if it is still one the popup offers, otherwise the display one.
 function resolvePresetName(savedPreset) {
     if (customPresetNames.includes(savedPreset)) return savedPreset;
-    if (savedPreset === "custom") return customPresetNames[0];
+    if (prebuiltPresetNames.includes(savedPreset)) return savedPreset;
     return displayPresetName;
 }
 
-// Fixes previous versions of popup that had only one preset slot (now saved in slot 1)
-function normalizeSavedPresets(savedColors) {
-    if (!savedColors || typeof savedColors !== "object") return {};
-    if (customPresetNames.some((presetName) => presetName in savedColors)) return savedColors;
-    if (!Object.keys(savedColors).length) return {};
-    return {[customPresetNames[0]]: savedColors};
+// Returns true when the preset comes with the extension
+function isPrebuiltPreset(presetName) {
+    return prebuiltPresetNames.includes(presetName);
+}
+
+// Reads the saved names and dot colors for one game's custom presets, keeping only what is valid
+function loadPresetMeta(savedMeta) {
+    const meta = {};
+    for (const presetName of customPresetNames) {
+        const saved = savedMeta?.[presetName] || {};
+        const name = typeof saved.name === "string" ? saved.name.trim().slice(0, presetNameMaxLength) : "";
+        meta[presetName] = {
+            name: name || presetLabels[presetName],
+            color: normalizeHexColor(saved.color) || null
+        };
+    }
+    return meta;
 }
 
 // Helper function for loadThemeState() that creates all three custom preset maps for one game.
-function loadCustomPresets({selector, defaults, savedPresets, targetMap}) {
+function loadCustomPresets({selector, defaults, savedPresets}) {
+    const targetMap = {};
     const colorKeys = [...document.querySelectorAll(selector)].map((colorOption) => colorOption.dataset.key);
     for (const presetName of customPresetNames) {
         const savedColors = savedPresets[presetName] || {};
@@ -180,36 +198,19 @@ function loadCustomPresets({selector, defaults, savedPresets, targetMap}) {
         }
         targetMap[presetName] = presetMap;
     }
-}
-
-// Previews whichever palette the dark mode toggles are enabled for the display preset
-function isDisplayPresetDark(panelName) {
-    const groupToggle = document.getElementById("games-main");
-    if (groupToggle && !groupToggle.checked) return false;
-    return (displayPresetToggleIds[panelName] || []).some(
-        (toggleId) => document.getElementById(toggleId)?.checked
-    );
+    return targetMap;
 }
 
 // Rebuilds the display preset's colors after a dark mode change so the preview gets updated
 function refreshDisplayPresetColors() {
     let didRebuild = false;
-    if (popupState.activeCrosswordPreset === displayPresetName) {
-        buildActiveCrosswordColors();
-        didRebuild = true;
-    }
-    if (popupState.activeSudokuPreset === displayPresetName) {
-        buildActiveSudokuColors();
+    for (const panelName of colorPanelNames) {
+        if (popupState.activePresets[panelName] !== displayPresetName) continue;
+        buildActivePanelColors(panelName);
         didRebuild = true;
     }
     if (!didRebuild) return;
-    const colorState = popupState.selectedSudokuColorKey
-        ? popupState.sudokuColors[popupState.selectedSudokuColorKey]
-        : popupState.crosswordColors[popupState.selectedCrosswordColorKey];
-    if (!colorState) return;
-    popupState.pickerHue = colorState.h;
-    popupState.pickerSaturation = colorState.s;
-    popupState.pickerValue = colorState.v;
+    syncPickerToSelectedColor();
 }
 
 // Builds a fresh color-state map from a plain hex palette
@@ -223,80 +224,48 @@ function buildColorStateMap(palette) {
     return map;
 }
 
-// Points popupState.crosswordColors at the palette for the active preset
-function buildActiveCrosswordColors() {
-    if (popupState.activeCrosswordPreset === displayPresetName) {
-        popupState.crosswordColors = buildColorStateMap(
-            isDisplayPresetDark("crosswords") ? darkCrosswordColors : lightCrosswordColors
+// Points popupState.colors[panelName] at the palette for that game's active preset
+function buildActivePanelColors(panelName) {
+    const panelConfig = colorPanelConfig[panelName];
+    const presetName = popupState.activePresets[panelName];
+    if (presetName === displayPresetName) {
+        popupState.colors[panelName] = buildColorStateMap(
+            isDisplayPresetDark(panelName) ? panelConfig.darkColors : panelConfig.lightColors
         );
+    } else if (isPrebuiltPreset(presetName)) {
+        popupState.colors[panelName] = buildColorStateMap(panelConfig.prebuiltColors[presetName]);
     } else {
-        popupState.crosswordColors = popupState.customCrosswordColors[popupState.activeCrosswordPreset];
+        popupState.colors[panelName] = popupState.customColors[panelName][presetName];
     }
 }
 
-// Returns true when the selected crossword color cannot be edited
-function isCrosswordEditingLocked() {
-    return popupState.activeCrosswordPreset === displayPresetName;
+// Returns true when the given game's colors cannot be edited
+function isPanelEditingLocked(panelName) {
+    const presetName = popupState.activePresets[panelName];
+    return presetName === displayPresetName || isPrebuiltPreset(presetName);
 }
 
-// Switches the active crossword preset, rebuilds the displayed colors, applies and saves
-function applyCrosswordPreset(presetName) {
-    if (presetName !== displayPresetName && !customPresetNames.includes(presetName)) return;
-    popupState.activeCrosswordPreset = presetName;
-    buildActiveCrosswordColors();
-    if (!popupState.selectedCrosswordColorKey || !popupState.crosswordColors[popupState.selectedCrosswordColorKey]) {
-        popupState.selectedCrosswordColorKey = resolveColorKey(popupState.lastCrosswordColorKey, popupState.crosswordColors);
-    }
-    popupState.lastCrosswordColorKey = popupState.selectedCrosswordColorKey;
-    const selectedColor = popupState.crosswordColors[popupState.selectedCrosswordColorKey];
-    if (selectedColor) {
-        popupState.pickerHue = selectedColor.h;
-        popupState.pickerSaturation = selectedColor.s;
-        popupState.pickerValue = selectedColor.v;
-    }
-    saveThemeNow();
-    updateAll();
-}
-
-// Points popupState.sudokuColors at the palette for the active preset
-function buildActiveSudokuColors() {
-    if (popupState.activeSudokuPreset === displayPresetName) {
-        popupState.sudokuColors = buildColorStateMap(
-            isDisplayPresetDark("sudoku") ? darkSudokuColors : lightSudokuColors
-        );
-    } else {
-        popupState.sudokuColors = popupState.customSudokuColors[popupState.activeSudokuPreset];
-    }
-}
-
-// Returns true when the selected sudoku color cannot be edited
-function isSudokuEditingLocked() {
-    return popupState.activeSudokuPreset === displayPresetName;
-}
-
-// Returns true when the selected color is on a non-editable preset
+// Returns true when nothing is selected or the selected color is on a non-editable preset
 function isActiveEditingLocked() {
-    return Boolean(
-        (popupState.selectedCrosswordColorKey && isCrosswordEditingLocked()) ||
-        (popupState.selectedSudokuColorKey && isSudokuEditingLocked())
-    );
+    if (!popupState.selectedPanel || !popupState.selectedColorKey) return true;
+    return isPanelEditingLocked(popupState.selectedPanel);
 }
 
-// Switches the active sudoku preset, rebuilds the displayed colors, applies and saves
-function applySudokuPreset(presetName) {
-    if (presetName !== displayPresetName && !customPresetNames.includes(presetName)) return;
-    popupState.activeSudokuPreset = presetName;
-    buildActiveSudokuColors();
-    if (!popupState.selectedSudokuColorKey || !popupState.sudokuColors[popupState.selectedSudokuColorKey]) {
-        popupState.selectedSudokuColorKey = resolveColorKey(popupState.lastSudokuColorKey, popupState.sudokuColors);
+// Switches a game's active preset, rebuilds the displayed colors, applies and saves
+function applyPanelPreset(panelName, presetName) {
+    const isKnownPreset = presetName === displayPresetName ||
+        isPrebuiltPreset(presetName) ||
+        customPresetNames.includes(presetName);
+    if (!isKnownPreset) return;
+    popupState.activePresets[panelName] = presetName;
+    buildActivePanelColors(panelName);
+    const panelColors = popupState.colors[panelName];
+    if (popupState.selectedPanel !== panelName || !panelColors[popupState.selectedColorKey]) {
+        popupState.selectedPanel = panelName;
+        popupState.selectedColorKey = resolveColorKey(popupState.lastColorKeys[panelName], panelColors);
     }
-    popupState.lastSudokuColorKey = popupState.selectedSudokuColorKey;
-    const selectedColor = popupState.sudokuColors[popupState.selectedSudokuColorKey];
-    if (selectedColor) {
-        popupState.pickerHue = selectedColor.h;
-        popupState.pickerSaturation = selectedColor.s;
-        popupState.pickerValue = selectedColor.v;
-    }
+    popupState.lastColorKeys[panelName] = popupState.selectedColorKey;
+    syncPickerToSelectedColor();
     saveThemeNow();
     updateAll();
 }
@@ -328,41 +297,55 @@ function attachGameColorPanelHandlers() {
     });
 }
 
-// Allows for the toggling between crossword color presets
+// Opens and closes the preset dropdown, and applies whichever preset is picked from it
 function attachColorPresetHandlers() {
-    document.querySelectorAll(".color-preset").forEach((presetButton) => {
-        presetButton.addEventListener("click", () => {
-            const presetName = presetButton.dataset.preset;
+    const selectButton = document.getElementById("presetSelectButton");
+    const menu = document.getElementById("presetMenu");
+    if (!selectButton || !menu) return;
+    selectButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        setPresetMenuOpen(!popupState.presetMenuOpen);
+    });
+    menu.querySelectorAll(".preset-menu-item").forEach((menuItem) => {
+        menuItem.addEventListener("click", () => {
+            const presetName = menuItem.dataset.preset;
+            setPresetMenuOpen(false);
             if (!presetName) return;
-            if (popupState.activeColorPanel === "sudoku") {
-                applySudokuPreset(presetName);
-            } else {
-                applyCrosswordPreset(presetName);
-            }
+            applyPanelPreset(popupState.activeColorPanel, presetName);
         });
     });
+    document.addEventListener("click", (event) => {
+        if (!popupState.presetMenuOpen) return;
+        if (event.target.closest(".preset-select")) return;
+        setPresetMenuOpen(false);
+    });
+    document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || !popupState.presetMenuOpen) return;
+        setPresetMenuOpen(false);
+        selectButton.focus();
+    });
+}
+
+// Shows or hides the preset dropdown menu
+function setPresetMenuOpen(shouldOpen) {
+    popupState.presetMenuOpen = shouldOpen;
+    updatePresetMenuOpenState();
 }
 
 // Allows for the toggling between game color objects
 function attachGameColorObjectHandlers() {
-    document.querySelectorAll("#panel-crosswords .color-option input[type='radio']").forEach((radioInput) => {
-        radioInput.addEventListener("change", () => {
-            if (!radioInput.checked) return;
-            const colorOption = radioInput.closest(".color-option");
-            const colorKey = colorOption?.dataset.key;
-            if (!colorKey) return;
-            selectCrosswordColor(colorKey);
+    for (const panelName of colorPanelNames) {
+        const panelSelector = `#${colorPanelConfig[panelName].panelId} .color-option input[type='radio']`;
+        document.querySelectorAll(panelSelector).forEach((radioInput) => {
+            radioInput.addEventListener("change", () => {
+                if (!radioInput.checked) return;
+                const colorOption = radioInput.closest(".color-option");
+                const colorKey = colorOption?.dataset.key;
+                if (!colorKey) return;
+                selectPanelColor(panelName, colorKey);
+            });
         });
-    });
-    document.querySelectorAll("#panel-sudoku .color-option input[type='radio']").forEach((radioInput) => {
-        radioInput.addEventListener("change", () => {
-            if (!radioInput.checked) return;
-            const colorOption = radioInput.closest(".color-option");
-            const colorKey = colorOption?.dataset.key;
-            if (!colorKey) return;
-            selectSudokuColor(colorKey);
-        });
-    });
+    }
 }
 
 // Allows for the toggling of all dark mode sliders
@@ -425,7 +408,6 @@ function showHexActionCheck(button) {
 function attachClipboardHandlers() {
     const copyButton = document.getElementById("copyHex");
     const pasteButton = document.getElementById("pasteHex");
-
     copyButton?.addEventListener("click", async () => {
         try {
             await navigator.clipboard.writeText(getCurrentPickerHex());
@@ -450,12 +432,7 @@ function attachClipboardHandlers() {
             updateAll();
             saveThemeNow();
             showHexActionCheck(pasteButton);
-            if (popupState.selectedCrosswordColorKey) {
-                sendCrosswordColorsNow();
-            }
-            if (popupState.selectedSudokuColorKey) {
-                sendSudokuColorsNow();
-            }
+            sendSelectedPanelColorsNow();
         } catch (error) {
             console.error("Error pasting hex: ", error, error?.name, error?.message);
         }
@@ -495,15 +472,11 @@ function commitTypedHex(hexInput) {
     popupState.pickerHue = hsv.h;
     popupState.pickerSaturation = hsv.s;
     popupState.pickerValue = hsv.v;
+
     applyPickerColorToSelectedOption();
     updateAll();
     saveThemeNow();
-    if (popupState.selectedCrosswordColorKey) {
-        sendCrosswordColorsNow();
-    }
-    if (popupState.selectedSudokuColorKey) {
-        sendSudokuColorsNow();
-    }
+    sendSelectedPanelColorsNow();
 }
 
 // Allows for the resetting of the current color picker's color to the object's default value
@@ -522,12 +495,7 @@ function attachResetHandler() {
         updateAll();
         saveThemeNow();
         showHexActionCheck(resetButton);
-        if (popupState.selectedCrosswordColorKey) {
-            sendCrosswordColorsNow();
-        }
-        if (popupState.selectedSudokuColorKey) {
-            sendSudokuColorsNow();
-        }
+        sendSelectedPanelColorsNow();
     });
 }
 
@@ -535,7 +503,6 @@ function attachResetHandler() {
 function attachDragHandler(element, moveHandler) {
     if (!element) return;
     let isDragging = false;
-
     element.addEventListener("pointerdown", (event) => {
         isDragging = true;
         element.setPointerCapture?.(event.pointerId);
@@ -574,12 +541,7 @@ function updateSaturationAndValueFromCursor(event) {
     applyPickerColorToSelectedOption();
     updateAll();
     scheduleThemeSave();
-    if (popupState.selectedCrosswordColorKey) {
-        scheduleCrosswordUpdate();
-    }
-    if (popupState.selectedSudokuColorKey) {
-        scheduleSudokuUpdate();
-    }
+    scheduleSelectedPanelUpdate();
 }
 
 // Updates the hue of the color picker based on the slider's position
@@ -599,42 +561,18 @@ function updateHueFromSlider(event) {
     applyPickerColorToSelectedOption();
     updateAll();
     scheduleThemeSave();
-    if (popupState.selectedCrosswordColorKey) {
-        scheduleCrosswordUpdate();
-    }
-    if (popupState.selectedSudokuColorKey) {
-        scheduleSudokuUpdate();
-    }
+    scheduleSelectedPanelUpdate();
 }
 
-// Helper function that updates the color picker to match the selected crossword object color and saves the theme
-function selectCrosswordColor(colorKey, shouldSave = true, shouldSetPanel = true) {
-    const colorState = popupState.crosswordColors[colorKey];
+// Helper function that updates the color picker to match the selected object color and saves the theme
+function selectPanelColor(panelName, colorKey, shouldSave = true, shouldSetPanel = true) {
+    const colorState = popupState.colors[panelName]?.[colorKey];
     if (!colorState) return;
-    popupState.selectedCrosswordColorKey = colorKey;
-    popupState.lastCrosswordColorKey = colorKey;
-    popupState.selectedSudokuColorKey = null;
+    popupState.selectedPanel = panelName;
+    popupState.selectedColorKey = colorKey;
+    popupState.lastColorKeys[panelName] = colorKey;
     if (shouldSetPanel) {
-        popupState.activeColorPanel = "crosswords";
-    }
-    popupState.pickerHue = colorState.h;
-    popupState.pickerSaturation = colorState.s;
-    popupState.pickerValue = colorState.v;
-    if (shouldSave) {
-        scheduleThemeSave();
-    }
-    updateAll();
-}
-
-// Helper function that updates the color picker to match the selected sudoku object color and saves the theme
-function selectSudokuColor(colorKey, shouldSave = true, shouldSetPanel = true) {
-    const colorState = popupState.sudokuColors[colorKey];
-    if (!colorState) return;
-    popupState.selectedSudokuColorKey = colorKey;
-    popupState.lastSudokuColorKey = colorKey;
-    popupState.selectedCrosswordColorKey = null;
-    if (shouldSetPanel) {
-        popupState.activeColorPanel = "sudoku";
+        popupState.activeColorPanel = panelName;
     }
     popupState.pickerHue = colorState.h;
     popupState.pickerSaturation = colorState.s;
@@ -647,103 +585,67 @@ function selectSudokuColor(colorKey, shouldSave = true, shouldSetPanel = true) {
 
 // Copies the picker's current color to the object's color for display and saves the theme
 function applyPickerColorToSelectedOption() {
-    const currentHex = getCurrentPickerHex();
-    if (popupState.selectedCrosswordColorKey && !isCrosswordEditingLocked()) {
-        const colorState = popupState.crosswordColors[popupState.selectedCrosswordColorKey];
-        if (colorState) {
-            colorState.h = popupState.pickerHue;
-            colorState.s = popupState.pickerSaturation;
-            colorState.v = popupState.pickerValue;
-            colorState.hex = currentHex;
-        }
-    }
-    if (popupState.selectedSudokuColorKey && !isSudokuEditingLocked()) {
-        const colorState = popupState.sudokuColors[popupState.selectedSudokuColorKey];
-        if (colorState) {
-            colorState.h = popupState.pickerHue;
-            colorState.s = popupState.pickerSaturation;
-            colorState.v = popupState.pickerValue;
-            colorState.hex = currentHex;
-        }
-    }
-}
-
-// Helper function that gets the current hex value of the color picker
-function getCurrentPickerHex() {
-    return hsvToHex(
-        popupState.pickerHue,
-        popupState.pickerSaturation,
-        popupState.pickerValue
-    );
+    if (isActiveEditingLocked()) return;
+    const colorState = getSelectedColorState();
+    if (!colorState) return;
+    colorState.h = popupState.pickerHue;
+    colorState.s = popupState.pickerSaturation;
+    colorState.v = popupState.pickerValue;
+    colorState.hex = getCurrentPickerHex();
 }
 
 // Helper function that gets the default hex value of the selected object's color
 function getSelectedDefaultHex() {
-    if (popupState.selectedCrosswordColorKey) {
-        return popupState.crosswordColors[popupState.selectedCrosswordColorKey]?.defaultHex || "#FFFFFF";
-    }
-    if (popupState.selectedSudokuColorKey) {
-        return popupState.sudokuColors[popupState.selectedSudokuColorKey]?.defaultHex || "#FFFFFF";
-    }
-    return "#FFFFFF";
+    return getSelectedColorState()?.defaultHex || "#FFFFFF";
 }
 
-// Creates the payload for applying crossword colors to the user's active browser tab
-function buildCrosswordColorPayload() {
+// Creates the payload for applying one game's colors to the user's active browser tab
+function buildPanelColorPayload(panelName) {
     const payload = {};
-    for (const [colorKey, colorState] of Object.entries(popupState.crosswordColors)) {
-        payload[colorKey] = colorState?.hex || darkCrosswordColors[colorKey];
+    for (const [colorKey, colorState] of Object.entries(popupState.colors[panelName] || {})) {
+        payload[colorKey] = colorState.hex;
     }
     return payload;
 }
 
-// Creates the payload for applying sudoku colors to the user's active browser tab
-function buildSudokuColorPayload() {
-    const payload = {};
-    for (const [colorKey, colorState] of Object.entries(popupState.sudokuColors)) {
-        payload[colorKey] = colorState?.hex || darkSudokuColors[colorKey];
-    }
-    return payload;
-}
-
-// Applies the current crossword colors to the user's active browser tab
-function sendCrosswordColorsNow() {
+// Applies one game's current colors to the user's active browser tab
+function sendPanelColorsNow(panelName) {
     sendMessageToActiveTab({
-        action: "applyCrosswordColors",
-        colors: buildCrosswordColorPayload()
+        action: applyGameColorsAction,
+        panel: panelName,
+        colors: buildPanelColorPayload(panelName)
     });
 }
 
-// Applies the current sudoku colors to the user's active browser tab
-function sendSudokuColorsNow() {
-    sendMessageToActiveTab({
-        action: "applySudokuColors",
-        colors: buildSudokuColorPayload()
-    });
+// Applies the colors of whichever game owns the selected color to the user's active browser tab
+function sendSelectedPanelColorsNow() {
+    if (!popupState.selectedPanel || !popupState.selectedColorKey) return;
+    sendPanelColorsNow(popupState.selectedPanel);
 }
 
-// Delays the sending of the crossword colors by 35ms to prevent unnecessary messages while dragging the color picker
-function scheduleCrosswordUpdate() {
-    clearTimeout(popupState.crosswordUpdateTimerId);
-    popupState.crosswordUpdateTimerId = setTimeout(() => { sendCrosswordColorsNow(); }, 35);
+// Delays the sending of one game's colors by 35ms to prevent unnecessary messages while dragging the color picker
+function schedulePanelUpdate(panelName) {
+    clearTimeout(popupState.panelUpdateTimerIds[panelName]);
+    popupState.panelUpdateTimerIds[panelName] = setTimeout(() => { sendPanelColorsNow(panelName); }, 35);
 }
 
-// Delays the sending of the sudoku colors by 35ms to prevent unnecessary messages while dragging the color picker
-function scheduleSudokuUpdate() {
-    clearTimeout(popupState.sudokuUpdateTimerId);
-    popupState.sudokuUpdateTimerId = setTimeout(() => { sendSudokuColorsNow(); }, 35);
+// Delays the sending of the selected game's colors the same way, for whichever panel the picker is on
+function scheduleSelectedPanelUpdate() {
+    if (!popupState.selectedPanel || !popupState.selectedColorKey) return;
+    schedulePanelUpdate(popupState.selectedPanel);
 }
 
 // Saves the current theme to storage
 function saveThemeNow() {
-    saveTheme({
-        crosswords: serializeCustomPresets(popupState.customCrosswordColors),
-        crosswordPreset: popupState.activeCrosswordPreset,
-        sudoku: serializeCustomPresets(popupState.customSudokuColors),
-        sudokuPreset: popupState.activeSudokuPreset,
-        activeCrosswordKey: popupState.lastCrosswordColorKey,
-        activeSudokuKey: popupState.lastSudokuColorKey
-    });
+    const themeData = {presetMeta: {}};
+    for (const panelName of colorPanelNames) {
+        themeData.presetMeta[panelName] = popupState.presetMeta[panelName];
+        const panelConfig = colorPanelConfig[panelName];
+        themeData[panelConfig.presetsStorageField] = serializeCustomPresets(popupState.customColors[panelName]);
+        themeData[panelConfig.presetStorageField] = popupState.activePresets[panelName];
+        themeData[panelConfig.activeKeyStorageField] = popupState.lastColorKeys[panelName];
+    }
+    saveTheme(themeData);
 }
 
 // Stores only the colors a preset changes from the default colors (NYT base light theme)
@@ -771,25 +673,28 @@ function scheduleThemeSave() {
     clearTimeout(popupState.saveTimerId);
     popupState.saveTimerId = setTimeout(() => { saveThemeNow(); }, 250);
 }
+
 // Bumped if the code format ever changes so old codes can be rejected with a clear reason
 const presetCodeVersion = 1;
 
 // Returns whatever panel and slot the user is on
 function getActivePresetContext() {
-    const onSudoku = popupState.activeColorPanel === "sudoku";
+    const panelName = popupState.activeColorPanel;
+    const presetName = popupState.activePresets[panelName];
     return {
-        kind: onSudoku ? "sudoku" : "crosswords",
-        presetName: onSudoku ? popupState.activeSudokuPreset : popupState.activeCrosswordPreset,
-        presetMaps: onSudoku ? popupState.customSudokuColors : popupState.customCrosswordColors,
-        locked: onSudoku ? isSudokuEditingLocked() : isCrosswordEditingLocked()
+        kind: panelName,
+        presetName,
+        presetMaps: popupState.customColors[panelName],
+        prebuilt: isPrebuiltPreset(presetName),
+        locked: isPanelEditingLocked(panelName)
     };
 }
 
 // Packs the active preset into a base64 code for import/export
 function buildPresetCode() {
-    const {kind, presetMaps, presetName} = getActivePresetContext();
+    const {kind} = getActivePresetContext();
     const colors = {};
-    for (const [colorKey, colorState] of Object.entries(presetMaps[presetName] || {})) {
+    for (const [colorKey, colorState] of Object.entries(popupState.colors[kind] || {})) {
         colors[colorKey] = colorState.hex;
     }
     return btoa(JSON.stringify({v: presetCodeVersion, kind, colors}));
@@ -808,7 +713,10 @@ function readPresetCode(code) {
     }
     const {kind} = getActivePresetContext();
     if (payload.kind !== kind) {
-        const codePanel = payload.kind === "sudoku" ? "Sudoku" : "Crosswords";
+        const codePanel = colorPanelConfig[payload.kind]?.label;
+        if (!codePanel) {
+            return {error: "Code came from a different version of the extension."};
+        }
         return {error: "This is " + codePanel + " code. Switch to the " + codePanel + " tab to load it."};
     }
     return {colors: payload.colors || {}};
@@ -850,22 +758,10 @@ function clearActivePreset() {
 
 // Resyncs the picker, persists, redraws and pushes colors to the page
 function refreshAfterPresetWrite() {
-    const colorState = popupState.selectedSudokuColorKey
-        ? popupState.sudokuColors[popupState.selectedSudokuColorKey]
-        : popupState.crosswordColors[popupState.selectedCrosswordColorKey];
-    if (colorState) {
-        popupState.pickerHue = colorState.h;
-        popupState.pickerSaturation = colorState.s;
-        popupState.pickerValue = colorState.v;
-    }
+    syncPickerToSelectedColor();
     saveThemeNow();
     updateAll();
-    if (popupState.selectedCrosswordColorKey) {
-        sendCrosswordColorsNow();
-    }
-    if (popupState.selectedSudokuColorKey) {
-        sendSudokuColorsNow();
-    }
+    sendSelectedPanelColorsNow();
 }
 
 // Variable to know which dialog is currently open
@@ -880,19 +776,41 @@ function getModalElements() {
         code: document.getElementById("modalCode"),
         error: document.getElementById("modalError"),
         confirm: document.getElementById("modalConfirm"),
-        cancel: document.getElementById("modalCancel")
+        cancel: document.getElementById("modalCancel"),
+        fields: document.getElementById("modalFields"),
+        presetName: document.getElementById("modalPresetName"),
+        presetColor: document.getElementById("modalPresetColor"),
+        presetSwatch: document.getElementById("modalPresetSwatch")
     };
 }
 
-// Opens the export, import or clear dialog
+// Opens the edit, export, import or clear dialog for presets
 function openPresetModal(mode) {
     const modal = getModalElements();
     if (!modal.overlay) return;
     activeModalMode = mode;
     modal.error.textContent = "";
-    if (mode === "export") {
-        modal.title.textContent = "Export Preset";
-        modal.message.textContent = "This is your preset code. Copy it and make sure to store it to be able to share this preset.";
+    modal.fields.classList.toggle("hidden", mode !== "edit");
+
+    if (mode === "edit") {
+        const panelName = popupState.activeColorPanel;
+        const presetName = popupState.activePresets[panelName];
+        modal.title.textContent = "Edit Preset";
+        modal.message.textContent = `Rename this preset and give it a color in the list. This only changes the appearance in the popup's dropdown and does not affect the board colors for ${colorPanelConfig[panelName].label}.`;
+        modal.code.classList.add("hidden");
+        modal.presetName.value = getPresetDisplayName(panelName, presetName);
+        modal.presetName.placeholder = presetLabels[presetName];
+        modal.presetColor.value = (getCustomPresetColor(panelName, presetName) || customPresetSwatch).slice(1);
+        updateEditSwatch();
+        modal.confirm.textContent = "Save";
+        modal.cancel.textContent = "Cancel";
+        modal.cancel.classList.remove("hidden");
+    } else if (mode === "export") {
+        const {prebuilt, presetName} = getActivePresetContext();
+        modal.title.textContent = prebuilt ? "Export Prebuilt Preset" : "Export Preset";
+        modal.message.textContent = prebuilt
+            ? `This is the ${presetLabels[presetName]} preset code. ${presetLabels[presetName]} itself cannot be edited, so load this code into one of your custom slots to make your own version of it.`
+            : "This is your preset code. Copy it and make sure to store it to be able to share this preset.";
         modal.code.classList.remove("hidden");
         modal.code.readOnly = true;
         modal.code.value = buildPresetCode();
@@ -922,9 +840,38 @@ function openPresetModal(mode) {
         modal.code.select();
     } else if (mode === "import") {
         modal.code.focus();
+    } else if (mode === "edit") {
+        modal.presetName.focus();
+        modal.presetName.select();
     } else {
         modal.cancel.focus();
     }
+}
+
+// Keeps the dialog's dot synced with whatever hex has been typed
+function updateEditSwatch() {
+    const modal = getModalElements();
+    if (!modal.presetSwatch) return;
+    const hex = normalizeHexColor(modal.presetColor.value);
+    modal.presetSwatch.style.background = hex || "transparent";
+}
+
+// Reads the edit dialog, rejects a bad hex if needed, and writes the name and color onto the active slot
+function saveEditedPreset() {
+    const modal = getModalElements();
+    const panelName = popupState.activeColorPanel;
+    const presetName = popupState.activePresets[panelName];
+    if (!customPresetNames.includes(presetName)) return {error: "Only custom presets can be renamed."};
+    const hex = normalizeHexColor(modal.presetColor.value);
+    if (!hex) return {error: "That is not a valid hex color. Use six characters, for example 8FBCE8."};
+    const typedName = modal.presetName.value.trim().slice(0, presetNameMaxLength);
+    popupState.presetMeta[panelName][presetName] = {
+        name: typedName || presetLabels[presetName],
+        color: hex
+    };
+    saveThemeNow();
+    updateAll();
+    return {};
 }
 
 // Closes the dialog
@@ -933,18 +880,29 @@ function closePresetModal() {
     document.getElementById("modalOverlay")?.classList.remove("open");
 }
 
-// Wires the import, export and clear buttons to the dialog
+// Wires the edit, import, export and clear buttons to the dialog
 function attachPresetActionHandlers() {
     const exportButton = document.getElementById("exportPreset");
     const importButton = document.getElementById("importPreset");
     const clearButton = document.getElementById("clearPreset");
+    const editButton = document.getElementById("editPreset");
     const modal = getModalElements();
     exportButton?.addEventListener("click", () => openPresetModal("export"));
     importButton?.addEventListener("click", () => openPresetModal("import"));
     clearButton?.addEventListener("click", () => openPresetModal("clear"));
-
-    // These three confirm through the dialog itself, so they do not flash a checkmark
+    editButton?.addEventListener("click", () => openPresetModal("edit"));
+    modal.presetColor?.addEventListener("input", updateEditSwatch);
+    
     modal.confirm?.addEventListener("click", () => {
+        if (activeModalMode === "edit") {
+            const result = saveEditedPreset();
+            if (result.error) {
+                modal.error.textContent = result.error;
+                return;
+            }
+            closePresetModal();
+            return;
+        }
         if (activeModalMode === "export") {
             closePresetModal();
             return;

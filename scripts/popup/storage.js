@@ -1,5 +1,5 @@
 // Import variable
-import {cwColorsStorageKey} from "./defaultExports.js";
+import {gameColorsStorageKey} from "./defaultExports.js";
 
 // Reads every given key from chrome.storage.sync and returns them as an object
 export function readSyncValues(keys) {
@@ -24,9 +24,9 @@ export function removeSyncValues(keys) {
     });
 }
 
-// Saves the current crossword color theme to chrome storage
+// Saves every game's color theme to chrome storage.
 export function saveTheme(themeData) {
-    return writeSyncValue(cwColorsStorageKey, themeData);
+    return writeSyncValue(gameColorsStorageKey, themeData);
 }
 
 // Sends a void runtime message to the active tab the user is on to prevent unneeded console errors

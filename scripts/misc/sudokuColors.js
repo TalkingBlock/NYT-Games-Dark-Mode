@@ -1,5 +1,10 @@
 // Shared sudoku color layer, loaded before sudoku.js
-const sdColorsStorageKey = "sudokuColorSettings";
+const gameColorsStorageKey = "gameColorSettings";
+const sdPanelName = "sudoku";
+const sdActivePresetKey = "sudokuPreset";
+const applyGameColorsAction = "applyGameColors";
+
+// Default presets that are either made by NYT (light) or by the extension (dark)
 const lightSudokuColors = {
     sd_board_frame:               "#121212",
     sd_empty_cell:                "#FFFFFF",
@@ -27,6 +32,50 @@ const darkSudokuColors = {
     sd_candidate_number:          "#D3D3D3"
 };
 
+// Prebuilt presets that come with the extension (Midnight, Forest, Magma)
+const prebuiltSudokuColors = {
+    midnight: {
+        sd_board_frame:               "#8FA8C4",
+        sd_empty_cell:                "#16202E",
+        sd_prefilled_cell:            "#2B3A4E",
+        sd_affected_no_number_cell:   "#1E3B5F",
+        sd_affected_number_cell:      "#2B5385",
+        sd_selected_cell:             "#3E8FE8",
+        sd_filled_selected_number:    "#634E8C",
+        sd_selected_number:           "#7A5FA8",
+        sd_prefilled_selected_number: "#4C3A6E",
+        sd_numbers:                   "#E8EEF6",
+        sd_candidate_number:          "#93A9C2"
+    },
+    forest: {
+        sd_board_frame:               "#9BBBA1",
+        sd_empty_cell:                "#1A241C",
+        sd_prefilled_cell:            "#2E3D31",
+        sd_affected_no_number_cell:   "#1E4429",
+        sd_affected_number_cell:      "#2E6B41",
+        sd_selected_cell:             "#5CA372",
+        sd_filled_selected_number:    "#6B4F63",
+        sd_selected_number:           "#835F79",
+        sd_prefilled_selected_number: "#523C4D",
+        sd_numbers:                   "#EAF1EA",
+        sd_candidate_number:          "#A6BCAA"
+    },
+    magma: {
+        sd_board_frame:               "#D9B8A6",
+        sd_empty_cell:                "#241A18",
+        sd_prefilled_cell:            "#45302A",
+        sd_affected_no_number_cell:   "#5E3418",
+        sd_affected_number_cell:      "#874C22",
+        sd_selected_cell:             "#DE9440",
+        sd_filled_selected_number:    "#356B66",
+        sd_selected_number:           "#427F79",
+        sd_prefilled_selected_number: "#2A5551",
+        sd_numbers:                   "#F9EEE6",
+        sd_candidate_number:          "#CFB3A3"
+    }
+};
+
+// Getter for sudoku colors, merging dark colors with custom colors
 function getSudokuColors(customColors = {}) {
     return {
         ...darkSudokuColors,
@@ -34,6 +83,7 @@ function getSudokuColors(customColors = {}) {
     };
 }
 
+// CSS builder for sudoku board colors
 function buildSudokuColorsCSS(customColors = {}) {
     const sdColors = getSudokuColors(customColors);
     return `
@@ -85,6 +135,7 @@ function buildSudokuColorsCSS(customColors = {}) {
     `;
 }
 
+// Function to apply sudoku colors to the page
 function applySudokuColors(customColors = {}) {
     let style = document.getElementById("nyt-sudoku-color-style");
     if (!style) {
@@ -95,6 +146,7 @@ function applySudokuColors(customColors = {}) {
     style.textContent = buildSudokuColorsCSS(customColors);
 }
 
+// Function to remove sudoku colors from the page
 function removeSudokuColors() {
     const style = document.getElementById("nyt-sudoku-color-style");
     if (style) {
@@ -102,15 +154,20 @@ function removeSudokuColors() {
     }
 }
 
-// Custom color presets for sudoku and a check to see if its on or not
+// Custom color preset names for sudoku and a check to see if its on or not
 const customSudokuPresetNames = ["preset1", "preset2", "preset3"];
+const prebuiltSudokuPresetNames = Object.keys(prebuiltSudokuColors);
 let sudokuDarkModeActive = false;
 
-// Loads the correct preset; if display then track dark mode toggles, if custom then check saved one
+// Loads the correct preset; if display then track dark mode toggles, if prebuilt then apply it, if custom then check saved one
 function loadStoredSudokuColors() {
-    chrome.storage.sync.get("crosswordColorSettings", (data) => {
-        const settings = data?.["crosswordColorSettings"] || {};
-        const preset = settings.sudokuPreset;
+    chrome.storage.sync.get(gameColorsStorageKey, (data) => {
+        const settings = data?.[gameColorsStorageKey] || {};
+        const preset = settings[sdActivePresetKey];
+        if (prebuiltSudokuPresetNames.includes(preset)) {
+            applySudokuColors(prebuiltSudokuColors[preset]);
+            return;
+        }
         if (!customSudokuPresetNames.includes(preset)) {
             if (sudokuDarkModeActive) {
                 applySudokuColors(darkSudokuColors);
@@ -119,7 +176,7 @@ function loadStoredSudokuColors() {
             }
             return;
         }
-        const saved = settings.sudoku?.[preset] || {};
+        const saved = settings[sdPanelName]?.[preset] || {};
         const colors = {...lightSudokuColors};
         for (const [key, value] of Object.entries(saved)) {
             if (value?.hex) {
@@ -136,14 +193,16 @@ function setSudokuDarkModeActive(isActive) {
     loadStoredSudokuColors();
 }
 
+// Listens for messages from the popup to apply colors immediately
 chrome.runtime.onMessage.addListener(function(message) {
-    if (message.action === "applySudokuColors") {
+    if (message.action === applyGameColorsAction && message.panel === sdPanelName) {
         applySudokuColors(message.colors || {});
     }
 });
 
+// Listens for changes to the storage and reloads the colors if sudoku settings have changed
 chrome.storage.onChanged.addListener(function(changes, areaName) {
-    if (areaName === "sync" && "crosswordColorSettings" in changes) {
+    if (areaName === "sync" && gameColorsStorageKey in changes) {
         loadStoredSudokuColors();
     }
 });
