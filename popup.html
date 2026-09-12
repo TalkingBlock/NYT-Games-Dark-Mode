@@ -2,7 +2,13 @@
 <html lang="en-US">
     <head>
         <title>NYT Games Dark Mode</title>
-        <link rel="stylesheet" href="popup.css">
+        <link rel="stylesheet" href="styles/theme.css">
+        <link rel="stylesheet" href="styles/shell.css">
+        <link rel="stylesheet" href="styles/darkmode.css">
+        <link rel="stylesheet" href="styles/colors.css">
+        <link rel="stylesheet" href="styles/modal.css">
+        <link rel="stylesheet" href="styles/settings.css">
+        <link rel="stylesheet" href="styles/accessibility.css">
         <script type="module" src="scripts/popup/popup.js"></script>
     </head>
     <body>
@@ -11,6 +17,10 @@
                 <img src="icons/nytdark48.png">
             </div>
             <h1>NYT Games Dark Mode</h1>
+            <span class="header-toast" id="headerToast" role="status" aria-live="polite">
+                <img src="svgs/popup/check.svg" alt="">
+                <span class="header-toast-text"></span>
+            </span>
         </header>
         <div class="page-buttons center">
             <div class="dark-mode-button enabled">
@@ -815,32 +825,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-overlay" id="modalOverlay">
-                    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-                        <span class="modal-title" id="modalTitle"></span>
-                        <p class="modal-message" id="modalMessage"></p>
-                        <textarea class="modal-code" id="modalCode" spellcheck="false" autocomplete="off"></textarea>
-                        <div class="modal-fields" id="modalFields">
-                            <label class="modal-field">
-                                <span class="modal-field-label">Name</span>
-                                <input class="modal-field-input" id="modalPresetName" type="text" maxlength="14" spellcheck="false" autocomplete="off">
-                            </label>
-                            <label class="modal-field">
-                                <span class="modal-field-label">Color</span>
-                                <span class="modal-field-hex">
-                                    <span class="modal-field-swatch" id="modalPresetSwatch" aria-hidden="true"></span>
-                                    <span class="modal-field-hash" aria-hidden="true">#</span>
-                                    <input class="modal-field-input" id="modalPresetColor" type="text" maxlength="6" spellcheck="false" autocomplete="off">
-                                </span>
-                            </label>
-                        </div>
-                        <p class="modal-error" id="modalError" role="alert"></p>
-                        <div class="modal-actions">
-                            <button class="modal-button" id="modalConfirm"></button>
-                            <button class="modal-button" id="modalCancel"></button>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="settings-page center hidden">
                 <div class="wrap">
@@ -921,6 +905,34 @@
                             </div>
                             <p class="settings-note">Your settings stay in your browser, information is not shared between others.</p>
                         </section>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-overlay" id="modalOverlay">
+                <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+                    <span class="modal-title" id="modalTitle"></span>
+                    <p class="modal-message" id="modalMessage"></p>
+                    <ul class="modal-notes" id="modalNotes"></ul>
+                    <textarea class="modal-code" id="modalCode" spellcheck="false" autocomplete="off"></textarea>
+                    <div class="modal-fields" id="modalFields">
+                        <label class="modal-field">
+                            <span class="modal-field-label">Name</span>
+                            <input class="modal-field-input" id="modalPresetName" type="text" maxlength="14" spellcheck="false" autocomplete="off">
+                        </label>
+                        <label class="modal-field">
+                            <span class="modal-field-label">Color</span>
+                            <span class="modal-field-hex">
+                                <span class="modal-field-swatch" id="modalPresetSwatch" aria-hidden="true"></span>
+                                <span class="modal-field-hash" aria-hidden="true">#</span>
+                                <input class="modal-field-input" id="modalPresetColor" type="text" maxlength="6" spellcheck="false" autocomplete="off">
+                            </span>
+                        </label>
+                    </div>
+                    <a class="modal-link" id="modalLink" target="_blank" rel="noreferrer"></a>
+                    <p class="modal-error" id="modalError" role="alert"></p>
+                    <div class="modal-actions">
+                        <button class="modal-button" id="modalConfirm"></button>
+                        <button class="modal-button" id="modalCancel"></button>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,81 @@
+/* Theme palette, shared by stylesheets */
+:root {
+    /* Page background */
+    --gradient-start: #6AA1D9;
+    --gradient-mid: #d96a9e;
+    --gradient-end: #615C62;
+    --backdrop-mix: #9c9c9c;
+
+    /* Surfaces */
+    --page-bg: #1C1C1CAA;
+    --panel-bg: none;
+    --panel-tone: 24, 24, 24;
+
+    /* Borders */
+    --border: rgba(255, 255, 255, 0.25);
+    --border-strong: rgba(255, 255, 255, 0.55);
+
+    /* Text */
+    --text: #ffffff;
+    --text-soft: rgba(255, 255, 255, 0.82);
+    --text-dim: rgba(255, 255, 255, 0.6);
+
+    /* Tabs, presets, hex buttons */
+    --control-bg: rgba(255, 255, 255, 0.06);
+    --control-bg-hover: rgba(255, 255, 255, 0.13);
+    --control-bg-active: rgba(255, 255, 255, 0.16);
+
+    /* Gradient accents */
+    --accent-a: 217, 106, 158;
+    --accent-b: 106, 161, 217;
+    --accent-gradient: linear-gradient(135deg, var(--gradient-mid), var(--gradient-start));
+    --accent-gradient-soft: linear-gradient(135deg, rgba(var(--accent-a), 0.5), rgba(var(--accent-b), 0.5));
+    --accent-line: linear-gradient(90deg, rgba(var(--accent-a), 0.7), rgba(var(--accent-b), 0.7));
+    --accent-tint: linear-gradient(140deg, rgba(var(--accent-a), 0.1), rgba(var(--accent-b), 0.1));
+
+    /* Box outline */
+    --ring-w: 1.25px;
+    --page-ring: var(--border);
+    --panel-ring: linear-gradient(135deg,
+        rgba(var(--accent-a), 0.85), rgba(var(--accent-b), 0.85)
+    );
+
+    /* Focus indicators */
+    --focus-ring: #ffffff;
+    --focus-halo: rgba(0, 0, 0, 0.85);
+}
+
+/* Base adjustments */
+body {
+    width: 510px;
+    margin: 0;
+    padding: 15px;
+    font-family: Arial, sans-serif;
+    color: var(--text);
+    background-color: var(--backdrop-mix);
+    background-image: radial-gradient(
+        110% 72% at 50% 0%,
+        var(--gradient-start) 0%,
+        var(--gradient-mid) 65%,
+        var(--gradient-end) 100%
+    );
+    background-blend-mode: multiply;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Font */
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}

@@ -1,0 +1,124 @@
+/* Settings page */
+.settings-list {
+    flex: 1;
+    min-height: 0;
+    padding-right: 6px;
+    overflow-y: auto;
+    scrollbar-color: var(--border-strong) transparent;
+}
+
+.settings-section {
+    position: relative;
+    padding: 5px 8px;
+    box-sizing: border-box;
+    background: var(--accent-tint), rgba(var(--panel-tone), 0.28);
+    border-radius: 12px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.settings-section + .settings-section {
+    margin-top: 8px;
+}
+
+.settings-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 3px 0 6px;
+    padding-bottom: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text);
+    border-bottom: 1px solid transparent;
+    border-image: var(--accent-line) 1;
+}
+
+.settings-section-title img {
+    display: block;
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    opacity: 0.9;
+}
+
+.settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 7px 0;
+    min-height: 22px;
+    margin-left: 4px;
+}
+
+.settings-row-label {
+    font-size: 13px;
+    color: var(--text);
+}
+
+.settings-row-value {
+    font-size: 13px;
+    color: var(--text-dim);
+}
+
+.settings-note {
+    margin: 6px 4px 3px;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--text-dim);
+}
+
+.settings-action {
+    flex: none;
+    min-width: 66px;
+    height: 22px;
+    padding: 0 10px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-dim);
+    background: var(--control-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.settings-choice {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+    justify-content: flex-end;
+}
+
+.settings-section[data-section="behavior"] .settings-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+}
+
+.settings-section[data-section="behavior"] .settings-choice {
+    justify-content: flex-start;
+}
+
+.settings-choice .settings-action {
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 0 9px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.settings-action:hover {
+    color: var(--text-soft);
+    background: var(--control-bg-hover);
+}
+
+.settings-action.enabled {
+    color: var(--text);
+    background: var(--accent-gradient-soft);
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 2px 6px rgba(var(--accent-a), 0.16);
+}

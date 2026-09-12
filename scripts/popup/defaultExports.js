@@ -5,6 +5,31 @@ export const popupActivePageStorageKey = "popupActivePage";
 export const popupActiveColorPanelStorageKey = "popupActiveColorPanel";
 export const gameColorsStorageKey = "gameColorSettings";
 
+// Key exports for the settings page's behavior choices
+export const defaultPageStorageKey = "defaultPageOnOpen";
+export const defaultColorPanelStorageKey = "defaultColorPanelOnOpen";
+
+// The behavior choice of opening the last page and game color the user was on in the popup
+export const lastUsedOptionValue = "last-used";
+
+// GitHub URLs for the extension's repository and changelog
+export const githubUrl = "https://github.com/TalkingBlock/NYT-Games-Dark-Mode";
+export const changelogUrl = "https://github.com/TalkingBlock/NYT-Games-Dark-Mode/releases";
+
+// The changelog dialog's notes (updated with every release)
+export const changelogNotes = [
+    "Settings page is now functional",
+    "New confirmation toast after a successful action gets committed",
+    "Changed sidebar coloring for all games to be consistent with Wordle",
+    "Fixed tiles and letter boxed redirects from wordle"
+];
+
+// Support email for bug reports, feedback and questions
+export const supportEmail = "speakingblock@gmail.com";
+
+// Only pages on this origin are ever attached to a bug report
+export const gameUrlPrefix = "https://www.nytimes.com/";
+
 // Key exports for master switches
 export const dmGroupMasterStorageKeys = {
     "games-main": "gamesMasterEnabled",
@@ -408,10 +433,12 @@ export const dmToggleGroups = {
     ]
 };
 
-// Variable of every key the popup reads when opened so the switches are not wrong before storage is reached
+// Every key the popup reads when opened so the switches are not wrong before storage is reached
 export const popupStorageKeys = [
     popupActivePageStorageKey,
     popupActiveColorPanelStorageKey,
+    defaultPageStorageKey,
+    defaultColorPanelStorageKey,
     gameColorsStorageKey,
     ...Object.values(dmGroupMasterStorageKeys),
     ...Object.values(dmToggleConfig).map((toggleConfig) => toggleConfig.storageKey)
@@ -420,9 +447,8 @@ export const popupStorageKeys = [
 // Cursor inset for the color picker so it can always be exactly at the corners
 export const svCursorInset = 4;
 
-// The icon that hex action button swaps to after a successful click + how long it stays
-export const hexActionCheckIcon = "svgs/popup/check.svg";
-export const hexActionCheckDuration = 1000;
+// How long the confirmation beside the title stays up after an action succeeds
+export const headerToastDuration = 2000;
 
 // The preset names
 export const displayPresetName = "display";

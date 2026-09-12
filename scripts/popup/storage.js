@@ -17,6 +17,13 @@ export function writeSyncValue(key, value) {
     });
 }
 
+// Saves a whole object of keys and values to chrome.storage.sync in one go
+export function writeSyncValues(values) {
+    return new Promise((resolve) => {
+        chrome.storage.sync.set(values, resolve);
+    });
+}
+
 // Deletes keys from chrome.storage.sync
 export function removeSyncValues(keys) {
     return new Promise((resolve) => {

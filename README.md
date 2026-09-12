@@ -26,4 +26,4 @@ Lots of ideas are planned and will be implemented within the near future (ex: co
 
 Created by Mateo V.
 
-If any problems, questions or ideas arise regarding the google extension, feel free to reach out to me at villmateo07@gmail.com.
+If any problems, questions or ideas arise regarding the google extension, feel free to reach out to me at speakingblock@gmail.com.

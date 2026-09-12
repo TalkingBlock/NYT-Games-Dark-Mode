@@ -1,0 +1,34 @@
+/* Acessibility rules that must load last */
+.page-buttons button:focus-visible,
+.color-info-tab:focus-visible,
+.color-info-help:focus-visible,
+.preset-select-button:focus-visible,
+.preset-menu-item:focus-visible,
+.settings-action:focus-visible,
+.modal-link:focus-visible,
+.value button:focus-visible,
+.hex-actions button:focus-visible,
+.switch input:focus-visible + .slider,
+.color-option input[type="radio"]:focus-visible + .radio-ui {
+    outline: 1px solid var(--focus-ring);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--focus-halo);
+}
+
+.switch input:focus-visible + .slider {
+    outline-offset: 3px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .slider, .slider::before, .slider::after,
+    .color-info-tab, .color-info-help, .hex-field,
+    .preset-select-button, .preset-select-caret, .preset-menu-item,
+    .settings-action, .header-toast,
+    .radio-ui, .radio-ui::before,
+    .color-option, .color-info-panels,
+    .color-picker > .wrap > *, .color-picker::before, .color-picker::after,
+    .modal-overlay, .modal {
+        transition: none;
+    }
+}

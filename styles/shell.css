@@ -1,0 +1,194 @@
+/* Header */
+header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: bold;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.2;
+}
+
+.logo img {
+    display: block;
+    width: 38px;
+    height: 38px;
+}
+
+/* Confirmation toasts after actions */
+.header-toast {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--text);
+    background: var(--accent-gradient-soft);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(var(--accent-a), 0.16);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+}
+
+.header-toast.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s;
+}
+
+.header-toast img {
+    display: block;
+    width: 12px;
+    height: 12px;
+}
+
+/* Top page buttons */
+.page-buttons {
+    width: 450px;
+    margin: 15px auto 0;
+    align-items: flex-end;
+    gap: 3px;
+}
+
+.page-buttons > div {
+    flex: 1;
+    min-width: 0;
+}
+
+.page-buttons button {
+    position: relative;
+    gap: 8px;
+    width: 100%;
+    height: 52px;
+    padding: 8px 6px;
+    cursor: pointer;
+    overflow: hidden;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--text-dim);
+    background: rgba(var(--panel-tone), 0.4);
+    border: none;
+    border-radius: 14px 14px 0 0;
+    transition: background 0.2s, color 0.2s;
+}
+
+.page-buttons img {
+    width: 26px;
+    height: 26px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.page-buttons button:hover {
+    color: var(--text);
+    background: rgba(var(--panel-tone), 0.6);
+}
+
+.page-buttons button:hover img {
+    opacity: 1;
+}
+
+.page-buttons .enabled button {
+    height: 60px;
+    color: var(--text);
+    background: var(--page-bg);
+}
+
+.page-buttons .enabled button::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background-image: linear-gradient(to right,
+        var(--gradient-mid), var(--gradient-start)
+    );
+}
+
+.page-buttons .enabled img {
+    opacity: 1;
+}
+
+/* Page containers */
+.extension-pages {
+    position: relative;
+}
+
+.dark-mode-page,
+.custom-colors-page,
+.settings-page {
+    position: relative;
+    width: 510px;
+    height: 417px;
+    gap: 10px;
+    box-sizing: border-box;
+    background:
+        radial-gradient(115% 80% at 0% 0%, rgba(var(--accent-a), 0.28), transparent 58%),
+        var(--page-bg);
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(var(--accent-a), 0.12);
+}
+
+.dark-mode-page {
+    align-items: stretch;
+}
+
+/* Page edge border */
+.dark-mode-page::before,
+.custom-colors-page::before,
+.settings-page::before {
+    position: absolute;
+    content: "";
+    inset: 0;
+    z-index: 1;
+    padding: var(--ring-w);
+    pointer-events: none;
+    border-radius: 15px;
+    background: var(--page-ring);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+}
+
+.color-info::before,
+.games-sliders::before,
+.archives-sliders::before,
+.misc-sliders::before,
+.settings-section::before {
+    position: absolute;
+    content: "";
+    inset: 0;
+    z-index: 1;
+    padding: var(--ring-w);
+    pointer-events: none;
+    border-radius: 12px;
+    background: var(--panel-ring);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+}
+
+/* Wrap padding layout for panels */
+.wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}

@@ -2,30 +2,24 @@
 import {popupState} from "./states.js";
 import {
     popupActivePageStorageKey, popupActiveColorPanelStorageKey,
+    defaultPageStorageKey, defaultColorPanelStorageKey, lastUsedOptionValue,
     colorPanelConfig, colorPanelNames,
     dmToggleConfig, dmToggleGroups, gameColorsStorageKey,
     dmGroupMasterStorageKeys, legacyGroupStorageKeys, popupStorageKeys,
     displayPresetName, customPresetNames, prebuiltPresetNames, presetLabels, presetNameMaxLength, customPresetSwatch,
-    syncDarkModeAction, applyGameColorsAction, pageButtons, svCursorInset,
-    hexActionCheckIcon, hexActionCheckDuration
+    syncDarkModeAction, applyGameColorsAction, pageButtons, svCursorInset
 } from "./defaultExports.js";
 import {clamp, hexToHsv, normalizeHexColor} from "./colorMath.js";
 import {saveTheme, readSyncValues, writeSyncValue, removeSyncValues, sendMessageToActiveTab} from "./storage.js";
+import {getModalElements, openModal} from "./modal.js";
 import {
-    updateAll, updateScrollAffordance, updatePresetMenuOpenState,
+    updateAll, updateScrollAffordance, updatePresetMenuOpenState, showHeaderToast,
     isDisplayPresetDark, getPresetDisplayName, getCustomPresetColor, getCurrentPickerHex
 } from "./updater.js";
 
 // Call from main.js which starts the popup and calls all functions to display it
 export async function initializePopup() {
-    const [savedValues] = await Promise.all([
-        readSyncValues(popupStorageKeys),
-        removeSyncValues(legacyGroupStorageKeys)
-    ]);
-    loadSavedPageState(savedValues);
-    loadDMToggleStates(savedValues);
-    loadSavedColorPanelState(savedValues);
-    loadThemeState(savedValues[gameColorsStorageKey] || null);
+    await loadPopupState();
     attachPageButtonHandlers();
     attachGameColorPanelHandlers();
     attachGameColorObjectHandlers();
@@ -38,6 +32,27 @@ export async function initializePopup() {
     attachColorPanelScrollHandlers();
     attachPresetActionHandlers();
     loadVersionLabel();
+    updateAll();
+}
+
+// Reads every saved value out of storage and pours it into the popup's memory state
+async function loadPopupState() {
+    const [savedValues] = await Promise.all([
+        readSyncValues(popupStorageKeys),
+        removeSyncValues(legacyGroupStorageKeys)
+    ]);
+    loadBehaviorSettings(savedValues);
+    loadSavedPageState(savedValues);
+    loadDMToggleStates(savedValues);
+    loadSavedColorPanelState(savedValues);
+    loadThemeState(savedValues[gameColorsStorageKey] || null);
+}
+
+// Called by the settings page after it rewrites storage to keep the user on the page they are looking at
+export async function reloadPopupState() {
+    const currentPage = popupState.activePageButtonClass;
+    await loadPopupState();
+    popupState.activePageButtonClass = currentPage;
     updateAll();
 }
 
@@ -57,8 +72,20 @@ function attachColorPanelScrollHandlers() {
     });
 }
 
-// Loads the page state from storage and displays whatever page is active
+// Loads the settings page's behavior choices
+function loadBehaviorSettings(savedValues) {
+    const savedDefaultPage = savedValues[defaultPageStorageKey];
+    popupState.defaultPage = pageButtons.includes(savedDefaultPage) ? savedDefaultPage : lastUsedOptionValue;
+    const savedDefaultPanel = savedValues[defaultColorPanelStorageKey];
+    popupState.defaultColorPanel = colorPanelNames.includes(savedDefaultPanel) ? savedDefaultPanel : lastUsedOptionValue;
+}
+
+// Loads the page state and displays whatever page is active
 function loadSavedPageState(savedValues) {
+    if (pageButtons.includes(popupState.defaultPage)) {
+        popupState.activePageButtonClass = popupState.defaultPage;
+        return;
+    }
     const savedPage = savedValues[popupActivePageStorageKey];
     if (pageButtons.includes(savedPage)) {
         popupState.activePageButtonClass = savedPage;
@@ -79,8 +106,12 @@ function loadDMToggleStates(savedValues) {
     }
 }
 
-// Helper function that loads the color panel from storage
+// Helper function that loads the color panel
 function loadSavedColorPanelState(savedValues) {
+    if (colorPanelNames.includes(popupState.defaultColorPanel)) {
+        popupState.activeColorPanel = popupState.defaultColorPanel;
+        return;
+    }
     const savedPanel = savedValues[popupActiveColorPanelStorageKey];
     if (colorPanelNames.includes(savedPanel)) {
         popupState.activeColorPanel = savedPanel;
@@ -385,25 +416,6 @@ function attachPickerHandlers() {
     });
 }
 
-// Makes all buttons have their own timer so two buttons can show a checkmark at the same time
-const hexActionCheckTimers = new WeakMap();
-
-// Switches a hex action button's icon to a checkmark as interaction confirmation, then puts it back
-function showHexActionCheck(button) {
-    const icon = button?.querySelector("img");
-    if (!icon) return;
-    if (!icon.dataset.defaultIcon) {
-        icon.dataset.defaultIcon = icon.getAttribute("src");
-    }
-    icon.setAttribute("src", hexActionCheckIcon);
-    button.classList.add("confirmed");
-    clearTimeout(hexActionCheckTimers.get(button));
-    hexActionCheckTimers.set(button, setTimeout(() => {
-        icon.setAttribute("src", icon.dataset.defaultIcon);
-        button.classList.remove("confirmed");
-    }, hexActionCheckDuration));
-}
-
 // Allows for copying and pasting of the current color picker's hex value
 function attachClipboardHandlers() {
     const copyButton = document.getElementById("copyHex");
@@ -411,7 +423,7 @@ function attachClipboardHandlers() {
     copyButton?.addEventListener("click", async () => {
         try {
             await navigator.clipboard.writeText(getCurrentPickerHex());
-            showHexActionCheck(copyButton);
+            showHeaderToast("Copied hex to clipboard");
         } catch (error) {
             console.error("Error copying hex: ", error);
         }
@@ -431,7 +443,7 @@ function attachClipboardHandlers() {
             applyPickerColorToSelectedOption();
             updateAll();
             saveThemeNow();
-            showHexActionCheck(pasteButton);
+            showHeaderToast("Pasted hex to selection");
             sendSelectedPanelColorsNow();
         } catch (error) {
             console.error("Error pasting hex: ", error, error?.name, error?.message);
@@ -494,7 +506,7 @@ function attachResetHandler() {
         applyPickerColorToSelectedOption();
         updateAll();
         saveThemeNow();
-        showHexActionCheck(resetButton);
+        showHeaderToast("Reset selected hex to default");
         sendSelectedPanelColorsNow();
     });
 }
@@ -764,88 +776,72 @@ function refreshAfterPresetWrite() {
     sendSelectedPanelColorsNow();
 }
 
-// Variable to know which dialog is currently open
-let activeModalMode = null;
-
-// Gets all dialog types
-function getModalElements() {
-    return {
-        overlay: document.getElementById("modalOverlay"),
-        title: document.getElementById("modalTitle"),
-        message: document.getElementById("modalMessage"),
-        code: document.getElementById("modalCode"),
-        error: document.getElementById("modalError"),
-        confirm: document.getElementById("modalConfirm"),
-        cancel: document.getElementById("modalCancel"),
-        fields: document.getElementById("modalFields"),
-        presetName: document.getElementById("modalPresetName"),
-        presetColor: document.getElementById("modalPresetColor"),
-        presetSwatch: document.getElementById("modalPresetSwatch")
-    };
+// Opens the dialog that renames the active custom preset and gives it a color dot in the dropdown
+function openEditPresetModal() {
+    const panelName = popupState.activeColorPanel;
+    const presetName = popupState.activePresets[panelName];
+    openModal({
+        title: "Edit Preset",
+        message: `Rename this preset and give it a color in the list. This only changes the appearance in the popup's dropdown and does not affect the board colors for ${colorPanelConfig[panelName].label}.`,
+        showFields: true,
+        confirmLabel: "Save",
+        cancelLabel: "Cancel",
+        focus: "name",
+        onOpen: (modal) => {
+            modal.presetName.value = getPresetDisplayName(panelName, presetName);
+            modal.presetName.placeholder = presetLabels[presetName];
+            modal.presetColor.value = (getCustomPresetColor(panelName, presetName) || customPresetSwatch).slice(1);
+            updateEditSwatch();
+        },
+        onConfirm: saveEditedPreset
+    });
 }
 
-// Opens the edit, export, import or clear dialog for presets
-function openPresetModal(mode) {
-    const modal = getModalElements();
-    if (!modal.overlay) return;
-    activeModalMode = mode;
-    modal.error.textContent = "";
-    modal.fields.classList.toggle("hidden", mode !== "edit");
-
-    if (mode === "edit") {
-        const panelName = popupState.activeColorPanel;
-        const presetName = popupState.activePresets[panelName];
-        modal.title.textContent = "Edit Preset";
-        modal.message.textContent = `Rename this preset and give it a color in the list. This only changes the appearance in the popup's dropdown and does not affect the board colors for ${colorPanelConfig[panelName].label}.`;
-        modal.code.classList.add("hidden");
-        modal.presetName.value = getPresetDisplayName(panelName, presetName);
-        modal.presetName.placeholder = presetLabels[presetName];
-        modal.presetColor.value = (getCustomPresetColor(panelName, presetName) || customPresetSwatch).slice(1);
-        updateEditSwatch();
-        modal.confirm.textContent = "Save";
-        modal.cancel.textContent = "Cancel";
-        modal.cancel.classList.remove("hidden");
-    } else if (mode === "export") {
-        const {prebuilt, presetName} = getActivePresetContext();
-        modal.title.textContent = prebuilt ? "Export Prebuilt Preset" : "Export Preset";
-        modal.message.textContent = prebuilt
+// Opens the dialog that changes the active preset's details into a shareable code
+function openExportPresetModal() {
+    const {prebuilt, presetName} = getActivePresetContext();
+    openModal({
+        title: prebuilt ? "Export Prebuilt Preset" : "Export Preset",
+        message: prebuilt
             ? `This is the ${presetLabels[presetName]} preset code. ${presetLabels[presetName]} itself cannot be edited, so load this code into one of your custom slots to make your own version of it.`
-            : "This is your preset code. Copy it and make sure to store it to be able to share this preset.";
-        modal.code.classList.remove("hidden");
-        modal.code.readOnly = true;
-        modal.code.value = buildPresetCode();
-        modal.confirm.textContent = "Done";
-        modal.cancel.classList.add("hidden");
-    } else if (mode === "import") {
-        modal.title.textContent = "Import Preset";
-        modal.message.textContent = "Paste in the code that was given to you on preset export.";
-        modal.code.classList.remove("hidden");
-        modal.code.readOnly = false;
-        modal.code.value = "";
-        modal.confirm.textContent = "Load";
-        modal.cancel.textContent = "Cancel";
-        modal.cancel.classList.remove("hidden");
-    } else {
-        modal.title.textContent = "Clear Preset";
-        modal.message.textContent = "Are you sure you want to clear this preset? Every color in it goes back to the light default. This cannot be undone!";
-        modal.code.classList.add("hidden");
-        modal.confirm.textContent = "Clear";
-        modal.cancel.textContent = "Cancel";
-        modal.cancel.classList.remove("hidden");
-    }
+            : "This is your preset code. Copy it and make sure to store it to be able to share this preset.",
+        code: {value: buildPresetCode(), readOnly: true},
+        confirmLabel: "Done",
+        focus: "code-select"
+    });
+}
 
-    modal.overlay.classList.add("open");
-    if (mode === "export") {
-        modal.code.focus();
-        modal.code.select();
-    } else if (mode === "import") {
-        modal.code.focus();
-    } else if (mode === "edit") {
-        modal.presetName.focus();
-        modal.presetName.select();
-    } else {
-        modal.cancel.focus();
-    }
+// Opens the dialog that replaces someone else's preset details into the active slot
+function openImportPresetModal() {
+    openModal({
+        title: "Import Preset",
+        message: "Paste in the code that was given to you on preset export.",
+        code: {value: "", readOnly: false},
+        confirmLabel: "Load",
+        cancelLabel: "Cancel",
+        focus: "code",
+        onConfirm: (modal) => {
+            const result = readPresetCode(modal.code.value);
+            if (result.error) return result;
+            applyPresetCode(result.colors);
+            showHeaderToast("Imported preset via code");
+        }
+    });
+}
+
+// Opens the dialog that puts every color and its name in the active preset back to its default
+function openClearPresetModal() {
+    openModal({
+        title: "Clear Preset",
+        message: "Are you sure you want to clear this preset? Every color in it goes back to the light default. This CANNOT be undone!",
+        confirmLabel: "Clear",
+        cancelLabel: "Cancel",
+        focus: "cancel",
+        onConfirm: () => {
+            clearActivePreset();
+            showHeaderToast("Cleared preset to default");
+        }
+    });
 }
 
 // Keeps the dialog's dot synced with whatever hex has been typed
@@ -857,8 +853,7 @@ function updateEditSwatch() {
 }
 
 // Reads the edit dialog, rejects a bad hex if needed, and writes the name and color onto the active slot
-function saveEditedPreset() {
-    const modal = getModalElements();
+function saveEditedPreset(modal) {
     const panelName = popupState.activeColorPanel;
     const presetName = popupState.activePresets[panelName];
     if (!customPresetNames.includes(presetName)) return {error: "Only custom presets can be renamed."};
@@ -874,60 +869,11 @@ function saveEditedPreset() {
     return {};
 }
 
-// Closes the dialog
-function closePresetModal() {
-    activeModalMode = null;
-    document.getElementById("modalOverlay")?.classList.remove("open");
-}
-
-// Wires the edit, import, export and clear buttons to the dialog
+// Wires the edit, import, export and clear buttons to their dialogs
 function attachPresetActionHandlers() {
-    const exportButton = document.getElementById("exportPreset");
-    const importButton = document.getElementById("importPreset");
-    const clearButton = document.getElementById("clearPreset");
-    const editButton = document.getElementById("editPreset");
-    const modal = getModalElements();
-    exportButton?.addEventListener("click", () => openPresetModal("export"));
-    importButton?.addEventListener("click", () => openPresetModal("import"));
-    clearButton?.addEventListener("click", () => openPresetModal("clear"));
-    editButton?.addEventListener("click", () => openPresetModal("edit"));
-    modal.presetColor?.addEventListener("input", updateEditSwatch);
-    
-    modal.confirm?.addEventListener("click", () => {
-        if (activeModalMode === "edit") {
-            const result = saveEditedPreset();
-            if (result.error) {
-                modal.error.textContent = result.error;
-                return;
-            }
-            closePresetModal();
-            return;
-        }
-        if (activeModalMode === "export") {
-            closePresetModal();
-            return;
-        }
-        if (activeModalMode === "import") {
-            const result = readPresetCode(modal.code.value);
-            if (result.error) {
-                modal.error.textContent = result.error;
-                return;
-            }
-            applyPresetCode(result.colors);
-            closePresetModal();
-            return;
-        }
-        if (activeModalMode === "clear") {
-            clearActivePreset();
-            closePresetModal();
-        }
-    });
-
-    modal.cancel?.addEventListener("click", closePresetModal);
-    modal.overlay?.addEventListener("click", (event) => {
-        if (event.target === modal.overlay) closePresetModal();
-    });
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && activeModalMode) closePresetModal();
-    });
+    document.getElementById("editPreset")?.addEventListener("click", openEditPresetModal);
+    document.getElementById("exportPreset")?.addEventListener("click", openExportPresetModal);
+    document.getElementById("importPreset")?.addEventListener("click", openImportPresetModal);
+    document.getElementById("clearPreset")?.addEventListener("click", openClearPresetModal);
+    getModalElements().presetColor?.addEventListener("input", updateEditSwatch);
 }

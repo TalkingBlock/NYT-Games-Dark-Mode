@@ -42,11 +42,10 @@ function enableLetterBoxedDarkMode() {
 
         .pz-nav-drawer {
             background: #0f0f0f;
-            scrollbar-color: white #0f0f0f;
         }
 
         .CustomNav-module_customNav__RX0TG, .pz-nav-drawer nav {
-            background-color: #0f0f0f;
+            background-color: #1b1b1b;
         }
 
         .pz-icon-nyt, .pz-icon-athletic {
@@ -97,6 +96,20 @@ function enableLetterBoxedDarkMode() {
             background-image: url("https://www.nytimes.com/games-assets/v2/assets/wordle/nav-icons/Sudoku-Icon-Normalized-Color.svg");
         }
 
+        .BonusHubHamburgerCTA-module_bonusHubCTAContainer__EieaJ {
+            background-color: #424242;
+        }
+
+        .BonusHubHamburgerCTA-module_newLabel__SVmF2, .BonusHubHamburgerCTA-module_heading__Svs95 h2,
+        .BonusHubHamburgerCTA-module_heading__Svs95 p {
+            color: white;
+        }
+
+        .BonusHubHamburgerCTA-module_ctaButton__lBT18 {
+            color: black;
+            background-color: white;
+        }
+
         .DirectLink-module_directLink__description__SPUgJ,
         .LinkGroup-module_linkGroup__header__e8tYm,
         body .ExpansionButton-module_ExpansionButton__lqTjh,
@@ -111,9 +124,17 @@ function enableLetterBoxedDarkMode() {
 
         .CollapsibleLink-module_collapsibleLink__NvSrT:hover, 
         .CollapsibleLink-module_isexpanded__AGnRL, 
-        .DirectLink-module_directLink__kSggP:hover,
+        .DirectLink-module_directLink__kSggP:hover {
+            background-color: #363636;
+        }
+
         .pz-nav-drawer__link:hover {
-            background-color: #777777;
+            background-color: #2f2f31;
+        }
+
+        .LinkGroup-module_linkGroup__jAkmD ul.LinkGroup-module_isGameLink__V32y3 
+        .LinkGroup-module_link__wwRAz:not(:first-child)::before {
+            border-top: 1px solid #363636;
         }
 
         .DirectLink-module_directLink__pill__lFxm9 {
@@ -128,8 +149,9 @@ function enableLetterBoxedDarkMode() {
         }
 
         .pz-nav-drawer__account-actions .pz-nav__button {
-            background-color: white;
-            color: black;
+            background-color: #0f0f0f;
+            color: white;
+            border: 1px solid white;
         }
 
         .pz-nav__button:hover {

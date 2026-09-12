@@ -3,6 +3,8 @@
 export const popupState = {
     activePageButtonClass: "dark-mode-button",
     activeColorPanel: "crosswords",
+    defaultPage: "last-used",
+    defaultColorPanel: "last-used",
     activePresets: {},
     presetMenuOpen: false,
     selectedPanel: null,

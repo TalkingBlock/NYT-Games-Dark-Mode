@@ -4,7 +4,7 @@ import {
     pageButtons, pages, dmToggleGroups, svCursorInset,
     displayPresetName, prebuiltPresetNames, presetLabels,
     prebuiltPresetSwatches, displayLightSwatch, displayDarkSwatch, customPresetSwatch,
-    customPresetNames, colorPanelConfig, colorPanelNames
+    customPresetNames, colorPanelConfig, colorPanelNames, headerToastDuration
 } from "./defaultExports.js";
 import {hsvToHex} from "./colorMath.js";
 
@@ -55,7 +55,39 @@ export function updateAll() {
     updateAllGamesColorObjects();
     updatePicker();
     updatePresetUI();
+    updateSettingsChoices();
     updateScrollAffordance();
+}
+
+// Marks whichever behavior choice the settings page has saved
+export function updateSettingsChoices() {
+    updateChoiceGroup("#defaultPage [data-default-page]", "defaultPage", popupState.defaultPage);
+    updateChoiceGroup("#defaultColorPanel [data-default-panel]", "defaultPanel", popupState.defaultColorPanel);
+}
+
+// Helper function for updateSettingsChoices() that lights up the selected behavior preference
+function updateChoiceGroup(selector, datasetKey, activeValue) {
+    document.querySelectorAll(selector).forEach((choiceButton) => {
+        choiceButton.classList.toggle("enabled", choiceButton.dataset[datasetKey] === activeValue);
+    });
+}
+
+// Keeps the confirmation beside the title up for its full time even when it gets shown again
+let headerToastTimerId = null;
+
+// Flashes a short toast confirmation beside the popup's title, used once an action has been successful
+export function showHeaderToast(message) {
+    const toast = document.getElementById("headerToast");
+    if (!toast) return;
+    const toastText = toast.querySelector(".header-toast-text");
+    if (toastText) {
+        toastText.textContent = message;
+    }
+    toast.classList.add("open");
+    clearTimeout(headerToastTimerId);
+    headerToastTimerId = setTimeout(() => {
+        toast.classList.remove("open");
+    }, headerToastDuration);
 }
 
 // Dims a group whose master switch is off, the games keep their settings and stay clickable but are not being applied

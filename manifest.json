@@ -1,7 +1,7 @@
 {
   "name": "NYT Games Dark Mode",
   "description": "Adds a toggleable dark mode to NYT Games :D",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "manifest_version": 3,
   "permissions": ["scripting", "activeTab", "storage", "clipboardRead", "clipboardWrite"],
   "action": {
@@ -59,11 +59,11 @@
       "js": ["scripts/games/strands.js"],
       "run_at": "document_start"
     }, {
-      "matches": ["https://www.nytimes.com/puzzles/letter-boxed"],
+      "matches": ["https://www.nytimes.com/puzzles/letter-boxed*"],
       "js": ["scripts/games/letterBoxed.js"],
       "run_at": "document_start"
     }, {
-      "matches": ["https://www.nytimes.com/puzzles/tiles"],
+      "matches": ["https://www.nytimes.com/puzzles/tiles*"],
       "js": ["scripts/games/tiles.js"],
       "run_at": "document_start"
     }, {
