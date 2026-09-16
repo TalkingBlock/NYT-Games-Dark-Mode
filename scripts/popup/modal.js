@@ -1,8 +1,9 @@
-// Variables that track the state of the dialog
-let isModalOpen = false;
+// Build information and process of all modal dialogs such as import, export, clear, etc.
+
+// The confirm handler of whichever dialog is open
 let activeConfirmHandler = null;
 
-// Gets every element the dialog can be built out of
+// Gets every element the shared dialog is built out of
 export function getModalElements() {
     return {
         overlay: document.getElementById("modalOverlay"),
@@ -25,7 +26,6 @@ export function getModalElements() {
 export function openModal(config) {
     const modal = getModalElements();
     if (!modal.overlay) return;
-    isModalOpen = true;
     activeConfirmHandler = config.onConfirm || null;
     modal.error.textContent = "";
     modal.title.textContent = config.title;
@@ -48,7 +48,7 @@ export function openModal(config) {
     focusModalTarget(modal, config.focus);
 }
 
-// Rebuilds the dialog's bullet list for the changelog
+// Rebuilds the dialog's bullet list
 function fillModalNotes(modal, notes) {
     if (!modal.notes) return;
     modal.notes.replaceChildren();
@@ -60,7 +60,7 @@ function fillModalNotes(modal, notes) {
     }
 }
 
-// Points the dialog's link to the GitHub releases page for the changelog
+// Shows or hides the dialog's link
 function fillModalLink(modal, link) {
     if (!modal.link) return;
     modal.link.classList.toggle("hidden", !link);
@@ -69,7 +69,7 @@ function fillModalLink(modal, link) {
     modal.link.href = link.url;
 }
 
-// Changes the cursor appearance to pointer/select depending on the element hovered over
+// Focuses whichever part of the dialog the config asks for
 function focusModalTarget(modal, focusTarget) {
     if (focusTarget === "confirm") {
         modal.confirm.focus();
@@ -90,14 +90,13 @@ function focusModalTarget(modal, focusTarget) {
     modal.cancel.focus();
 }
 
-// Closes the dialog
+// Closes the dialog and forgets its confirm handler
 export function closeModal() {
-    isModalOpen = false;
     activeConfirmHandler = null;
     document.getElementById("modalOverlay")?.classList.remove("open");
 }
 
-// Attaches handlers for the dialog buttons at startup, and supplies the confirm handler
+// Attaches handlers at startup, keeping the dialog open to show an error when its confirm handler returns one
 export function attachModalHandlers() {
     const modal = getModalElements();
     modal.confirm?.addEventListener("click", async () => {
@@ -117,8 +116,5 @@ export function attachModalHandlers() {
     modal.cancel?.addEventListener("click", closeModal);
     modal.overlay?.addEventListener("click", (event) => {
         if (event.target === modal.overlay) closeModal();
-    });
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && isModalOpen) closeModal();
     });
 }

@@ -1,4 +1,6 @@
-// Import functions and variables
+// Handles the entire settings page
+
+// Imports
 import {popupState} from "./states.js";
 import {
     popupStorageKeys, defaultPageStorageKey, defaultColorPanelStorageKey,
@@ -7,7 +9,7 @@ import {
 } from "./defaultExports.js";
 import {readSyncValues, writeSyncValue, writeSyncValues, removeSyncValues, sendMessageToActiveTab} from "./storage.js";
 import {openModal} from "./modal.js";
-import {reloadPopupState} from "./actions.js";
+import {reloadPopupState} from "./startup.js";
 import {updateAll, showHeaderToast} from "./updater.js";
 
 // Bumped if the backup format ever changes so old codes can be rejected with a clear reason
@@ -16,19 +18,20 @@ const settingsCodeVersion = 1;
 // Marks a code as a whole backup, which keeps it from being confused with a single preset's code
 const settingsCodeType = "settings";
 
-// The report template for the question a bug report asks
+// Starting text of the bug report box thats above the automatically filled in details
 const reportTemplate = [
     "Error details:",
     "",
     ""
 ].join("\n");
 
-// Called once the popup starts to initialize every control on the settings page
+// Called once the popup starts to connect every control on the settings page
 export function initializeSettings() {
     attachDataHandlers();
     attachBehaviorHandlers();
     attachSupportHandlers();
     attachAboutHandlers();
+    loadVersionLabel();
 }
 
 // Connects the backup, restore and reset data options to their dialogs
@@ -76,7 +79,7 @@ function openRestoreModal() {
     });
 }
 
-// Opens the dialog that clears everything the extension has saved so it starts over from its defaults
+// Opens the dialog that clears everything the extension has saved so it resets to defaults
 function openResetModal() {
     openModal({
         title: "Reset To Defaults",
@@ -98,7 +101,7 @@ function buildSettingsCode(savedValues) {
     return encodeBase64(JSON.stringify({v: settingsCodeVersion, type: settingsCodeType, values}));
 }
 
-// Unpacks a backup code, returning either the values it holds or gives an error message
+// Unpacks a backup code, returning the values it holds or an error message
 function readSettingsCode(code) {
     let payload;
     try {
@@ -123,7 +126,7 @@ function readSettingsCode(code) {
     return {values};
 }
 
-// Helps base64 read  preset names typed with special characters
+// Converts text to and from base64 through UTF-8 so preset names with special characters survive a backup
 function encodeBase64(text) {
     const bytes = new TextEncoder().encode(text);
     let binary = "";
@@ -137,7 +140,7 @@ function decodeBase64(code) {
     return new TextDecoder().decode(bytes);
 }
 
-// Clears synced data then writes a backup's values into storage and redraws the popup
+// Removes saved keys the backup does not hold writes the backup's values and redraws the popup
 async function applyRestoredValues(values) {
     const missingKeys = popupStorageKeys.filter((storageKey) => values[storageKey] === undefined);
     await removeSyncValues(missingKeys);
@@ -145,20 +148,20 @@ async function applyRestoredValues(values) {
     await refreshAfterStorageRewrite("Data restored successfully!");
 }
 
-// Drops every key the extension saves, which leaves each one back at its built in default
+// Drops every key the extension saves which leaves each one back at its built in default
 async function resetToDefaults() {
     await removeSyncValues(popupStorageKeys);
     await refreshAfterStorageRewrite("Data reset successfully!");
 }
 
-// Pulls the rewritten storage back into the popup, tells the open tab to catch up and shows the confirmation toast
+// Pulls the rewritten storage back into the popup and tells the tab to catch up and show the confirmation toast
 async function refreshAfterStorageRewrite(confirmation) {
     await reloadPopupState();
     sendMessageToActiveTab({action: syncDarkModeAction});
     showHeaderToast(confirmation);
 }
 
-// Makes the default page/color panel buttons work
+// Connects the default page and default color panel choices and saves the selected pick
 function attachBehaviorHandlers() {
     attachChoiceGroup("#defaultPage [data-default-page]", "defaultPage", pageButtons, (choiceValue) => {
         popupState.defaultPage = choiceValue;
@@ -170,7 +173,7 @@ function attachBehaviorHandlers() {
     });
 }
 
-// Saves the preference of the clicked behavior button
+// Saves the clicked choice of a behavior group then redraws the popup
 function attachChoiceGroup(selector, datasetKey, allowedValues, saveChoice) {
     document.querySelectorAll(selector).forEach((choiceButton) => {
         choiceButton.addEventListener("click", async () => {
@@ -182,13 +185,13 @@ function attachChoiceGroup(selector, datasetKey, allowedValues, saveChoice) {
     });
 }
 
-// Wires the changelog and bug report rows to their dialogs
+// Connects the changelog and bug report rows to their dialogs
 function attachSupportHandlers() {
     document.getElementById("viewChangelog")?.addEventListener("click", openChangelogModal);
     document.getElementById("reportBug")?.addEventListener("click", openBugReportModal);
 }
 
-// Lists what changed in the running version, with a link to the releases page on GitHub
+// Lists what changed in the running version with a link to the releases page on GitHub
 function openChangelogModal() {
     openModal({
         title: `What's New in v${chrome.runtime.getManifest().version}`,
@@ -199,7 +202,7 @@ function openChangelogModal() {
     });
 }
 
-// Opens the bug report dialog, and reads the details to prefill information in the moment it appears
+// Opens the bug report dialog with details already filled in and opens the mail app on confirm
 async function openBugReportModal() {
     const details = await collectReportDetails();
     openModal({
@@ -230,7 +233,7 @@ async function collectReportDetails() {
     };
 }
 
-// Picks the browser out of the chromium brand list
+// Picks the browser's name and version out of the Chromium brand list, falling back to the user agent
 function readBrowserName() {
     const brands = (navigator.userAgentData?.brands || [])
         .filter((entry) => !/not.?a.?brand/i.test(entry.brand));
@@ -249,7 +252,7 @@ function readActiveGameUrl() {
     });
 }
 
-// Prefills the details at the bottom of the report
+// Builds the details block at the bottom of the bug report
 function buildDetailBlock(details) {
     const lines = [
         "--- please keep the details below ---",
@@ -263,15 +266,22 @@ function buildDetailBlock(details) {
     return lines.join("\n");
 }
 
-// Packs whatever is in the box into a mail link
+// Packs the bug report into a mail link addressed to the support email
 function buildMailtoUrl(version, reportBody) {
     const subject = `NYT Games Dark Mode v${version} - bug report`;
     return `mailto:${supportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(reportBody)}`;
 }
 
-// Opens the GitHub repo in a new tab
+// Opens the GitHub repository in a new tab from the about section
 function attachAboutHandlers() {
     document.getElementById("openGithub")?.addEventListener("click", () => {
         chrome.tabs.create({url: githubUrl});
     });
+}
+
+// Fills the about section's version row straight from manifest.json so it never drifts away from the build
+function loadVersionLabel() {
+    const versionLabel = document.getElementById("extensionVersion");
+    if (!versionLabel) return;
+    versionLabel.textContent = `v${chrome.runtime.getManifest().version}`;
 }

@@ -1,4 +1,6 @@
-// Import functions and variables
+// Redraws the popup from popupState
+
+// Imports
 import {popupState} from "./states.js";
 import {
     pageButtons, pages, dmToggleGroups, svCursorInset,
@@ -8,7 +10,7 @@ import {
 } from "./defaultExports.js";
 import {hsvToHex} from "./colorMath.js";
 
-// Functions to get HTML elements for updating, these are called throughout the file to read and update the popup's DOM
+// Gets the elements the color panels and the color picker are drawn into
 function getColorPanel(panelName) {
     return document.getElementById(colorPanelConfig[panelName].panelId);
 }
@@ -37,7 +39,7 @@ function getSaturationValueMask() {
     return document.querySelector("#sv .sv-mask");
 }
 
-// Gets the current color from the color picker and converts it into a usable Hex value
+// Returns the color picker's current color as a hex value
 export function getCurrentPickerHex() {
     return hsvToHex(
         popupState.pickerHue,
@@ -46,7 +48,7 @@ export function getCurrentPickerHex() {
     );
 }
 
-// Updates and displays the entire popup based on the popupState properties
+// Redraws the entire popup from popupState
 export function updateAll() {
     updatePages();
     updateSuspendedGroups();
@@ -59,23 +61,23 @@ export function updateAll() {
     updateScrollAffordance();
 }
 
-// Marks whichever behavior choice the settings page has saved
+// Marks whichever behavior choices the settings page has saved
 export function updateSettingsChoices() {
     updateChoiceGroup("#defaultPage [data-default-page]", "defaultPage", popupState.defaultPage);
     updateChoiceGroup("#defaultColorPanel [data-default-panel]", "defaultPanel", popupState.defaultColorPanel);
 }
 
-// Helper function for updateSettingsChoices() that lights up the selected behavior preference
+// Lights up the saved choice within one behavior group
 function updateChoiceGroup(selector, datasetKey, activeValue) {
     document.querySelectorAll(selector).forEach((choiceButton) => {
         choiceButton.classList.toggle("enabled", choiceButton.dataset[datasetKey] === activeValue);
     });
 }
 
-// Keeps the confirmation beside the title up for its full time even when it gets shown again
+// Timer that hides the confirmation toast, restarted whenever a new toast is shown
 let headerToastTimerId = null;
 
-// Flashes a short toast confirmation beside the popup's title, used once an action has been successful
+// Flashes a short confirmation beside the popup's title once an action succeeds
 export function showHeaderToast(message) {
     const toast = document.getElementById("headerToast");
     if (!toast) return;
@@ -90,7 +92,7 @@ export function showHeaderToast(message) {
     }, headerToastDuration);
 }
 
-// Dims a group whose master switch is off, the games keep their settings and stay clickable but are not being applied
+// Dims a group whose master switch is off, its games keep their settings and stay clickable but are not applied
 export function updateSuspendedGroups() {
     for (const parentToggleId of Object.keys(dmToggleGroups)) {
         const parentToggle = document.getElementById(parentToggleId);
@@ -102,7 +104,7 @@ export function updateSuspendedGroups() {
     }
 }
 
-// Fades the crosswords/sudoku color options at whichever edge still has more options past it
+// Fades the edges of the visible color panel wherever more options are still down/up
 export function updateScrollAffordance() {
     const panelsContainer = document.querySelector(".color-info-panels");
     if (!panelsContainer) return;
@@ -118,7 +120,7 @@ export function updateScrollAffordance() {
     panelsContainer.classList.toggle("can-scroll-up", visiblePanel.scrollTop > 2);
 }
 
-// Updates the preset buttons and dims/locks the color UI when a default or prebuilt preset is active
+// Draws the preset dropdown and locks the picker, hex field and preset buttons when a display or prebuilt preset is active
 export function updatePresetUI() {
     const activePreset = popupState.activePresets[popupState.activeColorPanel];
     updatePresetSelect(activePreset);
@@ -159,12 +161,12 @@ export function updatePresetUI() {
     }
 }
 
-// Returns true for the presets that come with the extension
+// Returns true for the display and prebuilt presets
 function isPresetLocked(presetName) {
     return presetName === displayPresetName || prebuiltPresetNames.includes(presetName);
 }
 
-// Previews whichever preset the dark mode toggles are enabled for the display preset
+// Returns true when the display preset should preview dark colors (dark toggles are on)
 export function isDisplayPresetDark(panelName) {
     const groupToggle = document.getElementById("games-main");
     if (groupToggle && !groupToggle.checked) return false;
@@ -173,17 +175,17 @@ export function isDisplayPresetDark(panelName) {
     );
 }
 
-// The name a preset shows in the dropdown for custom presets
+// Returns the name a preset shows in the dropdown
 export function getPresetDisplayName(panelName, presetName) {
     return popupState.presetMeta[panelName]?.[presetName]?.name || presetLabels[presetName] || presetName;
 }
 
-// The dot color a preset shows in the dropdown for custom presets
+// Returns a custom preset's saved dot color, or null when it does not have one
 export function getCustomPresetColor(panelName, presetName) {
     return popupState.presetMeta[panelName]?.[presetName]?.color || null;
 }
 
-// Returns the hex a preset shows as its dropdown dot
+// Returns the dot color a preset shows in the dropdown
 function getPresetSwatchHex(presetName) {
     const panelName = popupState.activeColorPanel;
     if (presetName === displayPresetName) {
@@ -196,7 +198,7 @@ function getPresetSwatchHex(presetName) {
     return getCustomPresetColor(panelName, presetName) || customPresetSwatch;
 }
 
-// Puts the active preset on the dropdown button and marks it in the popup page
+// Puts the active preset on the dropdown button, marks it in the menu and only allows editing custom presets
 function updatePresetSelect(activePreset) {
     const panelName = popupState.activeColorPanel;
     const selectName = document.querySelector("#presetSelectButton .preset-select-name");
@@ -240,7 +242,7 @@ export function updatePresetMenuOpenState() {
     }
 }
 
-// Updates and displays whichever page is active and visible to the user
+// Shows whichever page is active and highlights its button
 export function updatePages() {
     pageButtons.forEach((buttonClassName) => {
         const pageButton = document.querySelector(`.${buttonClassName}`);
@@ -256,7 +258,7 @@ export function updatePages() {
     });
 }
 
-// Updates and displays whichever game color button looks active
+// Highlights whichever game color tab is active
 export function updateGameColorButton() {
     document.querySelectorAll(".color-info-tab").forEach((panelButton) => {
         panelButton.classList.toggle(
@@ -266,7 +268,7 @@ export function updateGameColorButton() {
     });
 }
 
-// Updates and displays whichever game color panel is active and visible to the user
+// Shows whichever game color panel is active
 export function updateGameColorPanel() {
     for (const panelName of colorPanelNames) {
         const colorPanel = getColorPanel(panelName);
@@ -276,7 +278,7 @@ export function updateGameColorPanel() {
     }
 }
 
-// Updates and displays and updates all game color objects
+// Redraws every game's color options
 export function updateAllGamesColorObjects() {
     for (const panelName of colorPanelNames) {
         updateOneGamesColorObjects(
@@ -287,7 +289,7 @@ export function updateAllGamesColorObjects() {
     }
 }
 
-// Helper function for updateGameColorObject() that updates all game color objects for the given game
+// Redraws one game's color options and draws the checked radio and each option's hex and color box
 function updateOneGamesColorObjects(selector, colorMap, selectedColorKey) {
     document.querySelectorAll(selector).forEach((colorOption) => {
         const colorKey = colorOption.dataset.key;
@@ -309,7 +311,7 @@ function updateOneGamesColorObjects(selector, colorMap, selectedColorKey) {
     });
 }
 
-// Updates and displays the color picker
+// Redraws the color picker's box, cursors, preview and hex field, without overwriting the hex field
 export function updatePicker() {
     const saturationValueArea = getSaturationValueArea();
     const hueSlider = getHueSlider();

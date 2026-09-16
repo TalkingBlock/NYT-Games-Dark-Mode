@@ -7,11 +7,16 @@ const applyGameColorsAction = "applyGameColors";
 // Default presets that are made by NYT (light/dark)
 const lightWordleColors = {
     wd_empty_tile_border:            "#3A3A3C",
+    wd_filled_tile_border:           "#565758",
+    wd_filled_tile_text:             "#FFFFFF",
     wd_absent_tile_background:       "#3A3A3C",
+    wd_absent_tile_text:             "#FFFFFF",
     wd_present_tile_background:      "#B59F3B",
+    wd_present_tile_text:            "#FFFFFF",
     wd_correct_tile_background:      "#538D4E",
+    wd_correct_tile_text:            "#FFFFFF",
     wd_unused_letter_key_background: "#818384",
-    wd_tile_text:                    "#FFFFFF"
+    wd_unused_letter_key_text:       "#FFFFFF"
 };
 const darkWordleColors = {...lightWordleColors};
 
@@ -19,27 +24,42 @@ const darkWordleColors = {...lightWordleColors};
 const prebuiltWordleColors = {
     midnight: {
         wd_empty_tile_border:            "#3A4A61",
+        wd_filled_tile_border:           "#56688A",
+        wd_filled_tile_text:             "#E8EDF4",
         wd_absent_tile_background:       "#26303F",
+        wd_absent_tile_text:             "#E8EDF4",
         wd_present_tile_background:      "#7A6FA0",
+        wd_present_tile_text:            "#E8EDF4",
         wd_correct_tile_background:      "#4F87B8",
+        wd_correct_tile_text:            "#E8EDF4",
         wd_unused_letter_key_background: "#3C4A5E",
-        wd_tile_text:                    "#E8EDF4"
+        wd_unused_letter_key_text:       "#E8EDF4"
     },
     forest: {
         wd_empty_tile_border:            "#3C5142",
+        wd_filled_tile_border:           "#587060",
+        wd_filled_tile_text:             "#E9EFE9",
         wd_absent_tile_background:       "#26332A",
+        wd_absent_tile_text:             "#E9EFE9",
         wd_present_tile_background:      "#AE7B52",
+        wd_present_tile_text:            "#E9EFE9",
         wd_correct_tile_background:      "#6D9C7C",
+        wd_correct_tile_text:            "#E9EFE9",
         wd_unused_letter_key_background: "#3E5245",
-        wd_tile_text:                    "#E9EFE9"
+        wd_unused_letter_key_text:       "#E9EFE9"
     },
     magma: {
         wd_empty_tile_border:            "#5C4038",
+        wd_filled_tile_border:           "#7E5B50",
+        wd_filled_tile_text:             "#F9EEE6",
         wd_absent_tile_background:       "#3D2C26",
+        wd_absent_tile_text:             "#F9EEE6",
         wd_present_tile_background:      "#D08A45",
+        wd_present_tile_text:            "#F9EEE6",
         wd_correct_tile_background:      "#C8502F",
+        wd_correct_tile_text:            "#F9EEE6",
         wd_unused_letter_key_background: "#5C4038",
-        wd_tile_text:                    "#F9EEE6"
+        wd_unused_letter_key_text:       "#F9EEE6"
     }
 };
 
@@ -61,27 +81,36 @@ function buildWordleColorsCSS(customColors = {}) {
             border: 2px solid ${wdColors.wd_empty_tile_border};
         }
 
+        .Tile-module_tile__UWEHN[data-state=tbd] /* Filled tile border + text */ {
+            border: 2px solid ${wdColors.wd_filled_tile_border};
+            color: ${wdColors.wd_filled_tile_text};
+        }
+
         .Key-module_key__kchQI /* Unused letter key background */ {
             background-color: ${wdColors.wd_unused_letter_key_background};
-            color: ${wdColors.wd_tile_text};
+        }
+
+        .Key-module_key__kchQI, .Key-module_key__kchQI path /* Unused letter key text */ {
+            color: ${wdColors.wd_unused_letter_key_text};
+            fill: ${wdColors.wd_unused_letter_key_text};
         }
 
         .Tile-module_tile__UWEHN[data-state=absent],
-        .Key-module_key__kchQI[data-state=absent] /* Absent tile background */ {
+        .Key-module_key__kchQI[data-state=absent] /* Absent tile + key background + text */ {
             background-color: ${wdColors.wd_absent_tile_background};
-            color: ${wdColors.wd_tile_text};
+            color: ${wdColors.wd_absent_tile_text};
         }
 
         .Tile-module_tile__UWEHN[data-state=present],
-        .Key-module_key__kchQI[data-state=present] /* Present tile background */ {
+        .Key-module_key__kchQI[data-state=present] /* Present tile + key background + text */ {
             background-color: ${wdColors.wd_present_tile_background};
-            color: ${wdColors.wd_tile_text};
+            color: ${wdColors.wd_present_tile_text};
         }
 
         .Tile-module_tile__UWEHN[data-state=correct],
-        .Key-module_key__kchQI[data-state=correct] /* Correct tile background */ {
+        .Key-module_key__kchQI[data-state=correct] /* Correct tile + key background + text */ {
             background-color: ${wdColors.wd_correct_tile_background};
-            color: ${wdColors.wd_tile_text};
+            color: ${wdColors.wd_correct_tile_text};
         }
     `;
 }

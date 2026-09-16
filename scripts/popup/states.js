@@ -1,5 +1,4 @@
-// File acts like the popup's memory state, actions.js updates the properties and popup.js loads them
-
+// The popup's shared memory filled in from storage when the popup opens and changed by the other popup files before updater.js redraws it
 export const popupState = {
     activePageButtonClass: "dark-mode-button",
     activeColorPanel: "crosswords",

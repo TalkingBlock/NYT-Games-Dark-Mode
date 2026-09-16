@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="styles/darkmode.css">
         <link rel="stylesheet" href="styles/colors.css">
         <link rel="stylesheet" href="styles/modal.css">
+        <link rel="stylesheet" href="styles/help.css">
         <link rel="stylesheet" href="styles/settings.css">
         <link rel="stylesheet" href="styles/accessibility.css">
         <script type="module" src="scripts/popup/popup.js"></script>
@@ -265,7 +266,7 @@
                                 <button class="color-info-tab" data-color-panel="sudoku">Sudoku</button>
                                 <button class="color-info-tab" data-color-panel="wordle">Wordle</button>
                                 <button class="color-info-tab" data-color-panel="connections">Connections</button>
-                                <button class="color-info-help" title="Help" aria-label="Help">?</button>
+                                <button class="color-info-help" id="colorHelp" type="button" title="Help" aria-label="Help" aria-haspopup="dialog">?</button>
                             </div>
                             <div class="color-info-panels">
                                 <div class="color-info-panel" id="panel-crosswords">
@@ -438,7 +439,29 @@
                                 <div class="color-info-panel hidden" id="panel-sudoku">
                                     <label class="color-option" data-key="sd_board_frame">
                                         <span class="color-option-body">
-                                            <span class="color-option-text">Board Frame</span>
+                                            <span class="color-option-text">Outer Board Frame</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="sudoku-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_inner_board_frame">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Inner Board Frame</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="sudoku-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_grid_lines">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Grid Lines</span>
                                             <span class="element-item">
                                                 <span class="element-hex-box" aria-hidden="true"></span>
                                                 <span class="element-hex">#FFFFFF</span>
@@ -557,11 +580,66 @@
                                         <input type="radio" name="sudoku-color">
                                         <span class="radio-ui"></span>
                                     </label>
+                                    <label class="color-option" data-key="sd_confirmed_cell_number">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Confirmed Cell Number</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="sudoku-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_conflicted_cell_bubble">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Conflicted Cell Bubble</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="sudoku-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="sd_cell_correction">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Cell Correction</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="sudoku-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
                                 </div>
                                 <div class="color-info-panel hidden" id="panel-wordle">
                                     <label class="color-option" data-key="wd_empty_tile_border">
                                         <span class="color-option-body">
                                             <span class="color-option-text">Empty Tile Border</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="wordle-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="wd_filled_tile_border">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Filled Tile Border</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="wordle-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="wd_filled_tile_text">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Filled Tile Text</span>
                                             <span class="element-item">
                                                 <span class="element-hex-box" aria-hidden="true"></span>
                                                 <span class="element-hex">#FFFFFF</span>
@@ -581,9 +659,31 @@
                                         <input type="radio" name="wordle-color">
                                         <span class="radio-ui"></span>
                                     </label>
+                                    <label class="color-option" data-key="wd_absent_tile_text">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Absent Tile Text + Key Text</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="wordle-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
                                     <label class="color-option" data-key="wd_present_tile_background">
                                         <span class="color-option-body">
                                             <span class="color-option-text">Present Tile + Key</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="wordle-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
+                                    <label class="color-option" data-key="wd_present_tile_text">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Present Tile Text + Key Text</span>
                                             <span class="element-item">
                                                 <span class="element-hex-box" aria-hidden="true"></span>
                                                 <span class="element-hex">#FFFFFF</span>
@@ -603,6 +703,17 @@
                                         <input type="radio" name="wordle-color">
                                         <span class="radio-ui"></span>
                                     </label>
+                                    <label class="color-option" data-key="wd_correct_tile_text">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Correct Tile Text + Key Text</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="wordle-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
                                     <label class="color-option" data-key="wd_unused_letter_key_background">
                                         <span class="color-option-body">
                                             <span class="color-option-text">Unused Letter Key</span>
@@ -614,9 +725,9 @@
                                         <input type="radio" name="wordle-color">
                                         <span class="radio-ui"></span>
                                     </label>
-                                    <label class="color-option" data-key="wd_tile_text">
+                                    <label class="color-option" data-key="wd_unused_letter_key_text">
                                         <span class="color-option-body">
-                                            <span class="color-option-text">Tile + Key Text</span>
+                                            <span class="color-option-text">Unused Letter Key Text</span>
                                             <span class="element-item">
                                                 <span class="element-hex-box" aria-hidden="true"></span>
                                                 <span class="element-hex">#FFFFFF</span>
@@ -770,6 +881,17 @@
                                         <input type="radio" name="connections-color">
                                         <span class="radio-ui"></span>
                                     </label>
+                                    <label class="color-option" data-key="cn_top_mistakes_text">
+                                        <span class="color-option-body">
+                                            <span class="color-option-text">Top + Mistakes Text</span>
+                                            <span class="element-item">
+                                                <span class="element-hex-box" aria-hidden="true"></span>
+                                                <span class="element-hex">#FFFFFF</span>
+                                            </span>
+                                        </span>
+                                        <input type="radio" name="connections-color">
+                                        <span class="radio-ui"></span>
+                                    </label>
                                 </div>
                             </div>
                             <div class="color-presets">
@@ -907,6 +1029,40 @@
                         </section>
                     </div>
                 </div>
+            </div>
+            <div class="modal-overlay" id="helpOverlay">
+                <div class="modal help-modal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+                    <div class="help-head">
+                        <span class="help-title" id="helpTitle">Help</span>
+                        <span class="help-count" id="helpCount"></span>
+                        <button class="help-close" id="helpClose" type="button" title="Close" aria-label="Close help">
+                            <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                        </button>
+                    </div>
+                    <div class="help-body" id="helpBody">
+                        <div class="help-grid" id="helpGrid"></div>
+                    </div>
+                    <div class="help-foot">
+                        <button class="help-arrow" id="helpPrevious" type="button" title="Previous game" aria-label="Previous game">
+                            <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M6.5 1.5L3 5l3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <div class="help-game">
+                            <span class="help-game-name" id="helpGameName" aria-live="polite"></span>
+                            <div class="help-dots" id="helpDots" aria-hidden="true"></div>
+                        </div>
+                        <button class="help-arrow" id="helpNext" type="button" title="Next game" aria-label="Next game">
+                            <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M3.5 1.5L7 5 3.5 8.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="help-zoom" id="helpZoom" role="dialog" aria-modal="true" aria-labelledby="helpZoomName" tabindex="-1">
+                <div class="help-zoom-frame" id="helpZoomFrame"></div>
+                <div class="help-zoom-caption">
+                    <span class="help-zoom-name" id="helpZoomName"></span>
+                    <span class="help-zoom-description" id="helpZoomDescription"></span>
+                </div>
+                <span class="help-zoom-hint">(click anywhere to close)</span>
             </div>
             <div class="modal-overlay" id="modalOverlay">
                 <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">

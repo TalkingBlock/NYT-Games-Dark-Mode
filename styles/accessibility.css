@@ -6,6 +6,9 @@
 .preset-menu-item:focus-visible,
 .settings-action:focus-visible,
 .modal-link:focus-visible,
+.help-close:focus-visible,
+.help-arrow:focus-visible,
+.help-item:focus-visible,
 .value button:focus-visible,
 .hex-actions button:focus-visible,
 .switch input:focus-visible + .slider,
@@ -28,7 +31,9 @@
     .radio-ui, .radio-ui::before,
     .color-option, .color-info-panels,
     .color-picker > .wrap > *, .color-picker::before, .color-picker::after,
-    .modal-overlay, .modal {
+    .modal-overlay, .modal,
+    .help-close, .help-arrow,
+    .help-item, .help-thumb::after, .help-zoom {
         transition: none;
     }
 }

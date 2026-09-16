@@ -18,7 +18,8 @@ const lightConnectionsColors = {
     cn_solved_category_text_3: "#000000",
     cn_solved_category_background_4: "#BA81C5",
     cn_solved_category_text_4: "#000000",
-    cn_mistakes_bubbles: "#5A594E"
+    cn_mistakes_bubbles: "#5A594E",
+    cn_top_mistakes_text: "#000000"
 };
 const darkConnectionsColors = {
     cn_card_background: "#FFFFFF",
@@ -33,7 +34,8 @@ const darkConnectionsColors = {
     cn_solved_category_text_3: "#000000",
     cn_solved_category_background_4: "#BA81C5",
     cn_solved_category_text_4: "#000000",
-    cn_mistakes_bubbles: "#FFFFFF"
+    cn_mistakes_bubbles: "#FFFFFF",
+    cn_top_mistakes_text: "#FFFFFF"
 };
 
 // Prebuilt presets that come with the extension (Midnight, Forest, Magma)
@@ -51,7 +53,8 @@ const prebuiltConnectionsColors = {
         cn_solved_category_text_3:       "#14202E",
         cn_solved_category_background_4: "#9B72D4",
         cn_solved_category_text_4:       "#14202E",
-        cn_mistakes_bubbles:             "#7E9AB8"
+        cn_mistakes_bubbles:             "#7E9AB8",
+        cn_top_mistakes_text:            "#E4EAF2"
     },
     forest: {
         cn_card_background:              "#26332A",
@@ -66,7 +69,8 @@ const prebuiltConnectionsColors = {
         cn_solved_category_text_3:       "#16211A",
         cn_solved_category_background_4: "#A47AB8",
         cn_solved_category_text_4:       "#16211A",
-        cn_mistakes_bubbles:             "#8FAF95"
+        cn_mistakes_bubbles:             "#8FAF95",
+        cn_top_mistakes_text:            "#E6EDE6"
     },
     magma: {
         cn_card_background:              "#45302A",
@@ -81,7 +85,8 @@ const prebuiltConnectionsColors = {
         cn_solved_category_text_3:       "#241A18",
         cn_solved_category_background_4: "#B394D1",
         cn_solved_category_text_4:       "#241A18",
-        cn_mistakes_bubbles:             "#D9B8A6"
+        cn_mistakes_bubbles:             "#D9B8A6",
+        cn_top_mistakes_text:            "#F7E9E0"
     }
 };
 
@@ -131,6 +136,10 @@ function buildConnectionsColorsCSS(customColors = {}) {
 
         .Mistakes-module_bubble__nDlOh /* Mistakes bubbles */ {
             background-color: ${cnColors.cn_mistakes_bubbles};
+        }
+
+        .Game-module_form__BCqGO, .Mistakes-module_mistakesContent__nlijY /* Top + mistakes text */ {
+            color: ${cnColors.cn_top_mistakes_text};
         }
     `;
 }

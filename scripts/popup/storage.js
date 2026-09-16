@@ -1,4 +1,6 @@
-// Import variable
+// Storage to save, read and sync keys throughout chrome storage
+
+// Wraps chrome storage and tab messaging for the rest of the popup
 import {gameColorsStorageKey} from "./defaultExports.js";
 
 // Reads every given key from chrome.storage.sync and returns them as an object
@@ -17,7 +19,7 @@ export function writeSyncValue(key, value) {
     });
 }
 
-// Saves a whole object of keys and values to chrome.storage.sync in one go
+// Saves a whole object of keys and values to chrome.storage.sync
 export function writeSyncValues(values) {
     return new Promise((resolve) => {
         chrome.storage.sync.set(values, resolve);
@@ -31,12 +33,12 @@ export function removeSyncValues(keys) {
     });
 }
 
-// Saves every game's color theme to chrome storage.
+// Saves every game's color theme under its storage key
 export function saveTheme(themeData) {
     return writeSyncValue(gameColorsStorageKey, themeData);
 }
 
-// Sends a void runtime message to the active tab the user is on to prevent unneeded console errors
+// Sends a message to the tab the user is on and ignores tabs that have nothing to listen to
 export function sendMessageToActiveTab(message) {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (!tabs?.length) return;

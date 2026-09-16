@@ -1,3 +1,5 @@
+// Runs the color math calculations for format translations
+
 // Ensures HSV numbers are always between 0 and 1
 export function clamp(value) {
     return Math.min(1, Math.max(0, value));

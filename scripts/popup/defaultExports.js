@@ -1,55 +1,51 @@
-// File contains a bunch of default constants that are exported to other popup files.
+// Stored information that all popup script files can easily access without copy pasting preexisting code
 
-// Key exports for localStorage
+// Storage keys for the last page and game color panel the popup was on and every game's saved colors
 export const popupActivePageStorageKey = "popupActivePage";
 export const popupActiveColorPanelStorageKey = "popupActiveColorPanel";
 export const gameColorsStorageKey = "gameColorSettings";
 
-// Key exports for the settings page's behavior choices
+// Storage keys and behavior choice for the settings page's default page and color panel preferences
 export const defaultPageStorageKey = "defaultPageOnOpen";
 export const defaultColorPanelStorageKey = "defaultColorPanelOnOpen";
-
-// The behavior choice of opening the last page and game color the user was on in the popup
 export const lastUsedOptionValue = "last-used";
 
-// GitHub URLs for the extension's repository and changelog
+// GitHub links for the extension's repository and its releases page
 export const githubUrl = "https://github.com/TalkingBlock/NYT-Games-Dark-Mode";
 export const changelogUrl = "https://github.com/TalkingBlock/NYT-Games-Dark-Mode/releases";
 
-// The changelog dialog's notes (updated with every release)
+// Notes shown in the changelog dialog, updated with every release
 export const changelogNotes = [
-    "Settings page is now functional",
-    "New confirmation toast after a successful action gets committed",
-    "Changed sidebar coloring for all games to be consistent with Wordle",
-    "Fixed tiles and letter boxed redirects from wordle"
+    "Implemented help popup for custom color elements",
+    "Added 5 sudoku, 5 wordle and 1 connections elements to custom colors page"
 ];
 
-// Support email for bug reports, feedback and questions
+// Email address that bug reports, feedback and questions are sent to
 export const supportEmail = "speakingblock@gmail.com";
 
-// Only pages on this origin are ever attached to a bug report
+// Only pages on this origin get attached to a bug report
 export const gameUrlPrefix = "https://www.nytimes.com/";
 
-// Key exports for master switches
+// Storage keys for the games, archives and misc master switches
 export const dmGroupMasterStorageKeys = {
     "games-main": "gamesMasterEnabled",
     "archives-main": "archivesMasterEnabled",
     "misc-main": "miscMasterEnabled"
 };
 
-// Message for syncing dark mode state across tabs
+// Message that tells the open tab to resync its dark mode state
 export const syncDarkModeAction = "syncDarkModeState";
 
-// Message the popup sends for live color preview
+// Message that sends a game's colors to the open tab for preview
 export const applyGameColorsAction = "applyGameColors";
 
-// Keys written by the old popup gate (cleared out on startup)
+// Keys written by the old popup, cleared out on startup
 export const legacyGroupStorageKeys = [
     "games-main", "archives-main", "misc-main",
     "games-mainRememberedChildren", "archives-mainRememberedChildren", "misc-mainRememberedChildren"
 ];
 
-// Light/Dark preset colors for crosswords, sudoku, wordle and connections
+// Default light (made by NYT) and dark (made by the extension) colors for crosswords, sudoku, wordle and connections
 export const lightCrosswordColors = {
     cw_cell_borders:            "#696969",
     cw_letter_number_in_cell:   "#000000",
@@ -86,6 +82,8 @@ export const darkCrosswordColors = {
 };
 export const lightSudokuColors = {
     sd_board_frame:               "#121212",
+    sd_inner_board_frame:         "#979797",
+    sd_grid_lines:                "#979797",
     sd_empty_cell:                "#FFFFFF",
     sd_prefilled_cell:            "#DFDFDF",
     sd_affected_no_number_cell:   "#F9EAC2",
@@ -95,10 +93,15 @@ export const lightSudokuColors = {
     sd_selected_number:           "#FEC468",
     sd_prefilled_selected_number: "#E69100",
     sd_numbers:                   "#000000",
-    sd_candidate_number:          "#5A5A5A"
+    sd_candidate_number:          "#5A5A5A",
+    sd_confirmed_cell_number:     "#2C64D5",
+    sd_conflicted_cell_bubble:    "#FF4B56",
+    sd_cell_correction:           "#FF4B56"
 };
 export const darkSudokuColors = {
     sd_board_frame:               "#FFFFFF",
+    sd_inner_board_frame:         "#979797",
+    sd_grid_lines:                "#979797",
     sd_empty_cell:                "#0F0F0F",
     sd_prefilled_cell:            "#434342",
     sd_affected_no_number_cell:   "#5C5639",
@@ -108,15 +111,23 @@ export const darkSudokuColors = {
     sd_selected_number:           "#9E6708",
     sd_prefilled_selected_number: "#563B0A",
     sd_numbers:                   "#FFFFFF",
-    sd_candidate_number:          "#D3D3D3"
+    sd_candidate_number:          "#D3D3D3",
+    sd_confirmed_cell_number:     "#2C64D5",
+    sd_conflicted_cell_bubble:    "#FF4B56",
+    sd_cell_correction:           "#FF4B56"
 };
 export const lightWordleColors = {
     wd_empty_tile_border:            "#3A3A3C",
+    wd_filled_tile_border:           "#565758",
+    wd_filled_tile_text:             "#FFFFFF",
     wd_absent_tile_background:       "#3A3A3C",
+    wd_absent_tile_text:             "#FFFFFF",
     wd_present_tile_background:      "#B59F3B",
+    wd_present_tile_text:            "#FFFFFF",
     wd_correct_tile_background:      "#538D4E",
+    wd_correct_tile_text:            "#FFFFFF",
     wd_unused_letter_key_background: "#818384",
-    wd_tile_text:                    "#FFFFFF"
+    wd_unused_letter_key_text:       "#FFFFFF"
 };
 export const darkWordleColors = {...lightWordleColors};
 export const lightConnectionsColors = {
@@ -132,7 +143,8 @@ export const lightConnectionsColors = {
     cn_solved_category_text_3:       "#000000",
     cn_solved_category_background_4: "#BA81C5",
     cn_solved_category_text_4:       "#000000",
-    cn_mistakes_bubbles:             "#5A594E"
+    cn_mistakes_bubbles:             "#5A594E",
+    cn_top_mistakes_text:            "#000000"
 };
 export const darkConnectionsColors = {
     cn_card_background:              "#FFFFFF",
@@ -147,10 +159,11 @@ export const darkConnectionsColors = {
     cn_solved_category_text_3:       "#000000",
     cn_solved_category_background_4: "#BA81C5",
     cn_solved_category_text_4:       "#000000",
-    cn_mistakes_bubbles:             "#FFFFFF"
+    cn_mistakes_bubbles:             "#FFFFFF",
+    cn_top_mistakes_text:            "#FFFFFF"
 };
 
-// Prebuilt palettes for crosswords, sudoku, wordle and connections
+// Prebuilt Midnight, Forest and Magma palettes for crosswords, sudoku, wordle and connections
 export const prebuiltCrosswordColors = {
     midnight: {
         cw_cell_borders:            "#0E1622",
@@ -207,6 +220,8 @@ export const prebuiltCrosswordColors = {
 export const prebuiltSudokuColors = {
     midnight: {
         sd_board_frame:               "#8FA8C4",
+        sd_inner_board_frame:         "#5A6B80",
+        sd_grid_lines:                "#5A6B80",
         sd_empty_cell:                "#16202E",
         sd_prefilled_cell:            "#2B3A4E",
         sd_affected_no_number_cell:   "#1E3B5F",
@@ -216,10 +231,15 @@ export const prebuiltSudokuColors = {
         sd_selected_number:           "#7A5FA8",
         sd_prefilled_selected_number: "#4C3A6E",
         sd_numbers:                   "#E8EEF6",
-        sd_candidate_number:          "#93A9C2"
+        sd_candidate_number:          "#93A9C2",
+        sd_confirmed_cell_number:     "#5B8DEF",
+        sd_conflicted_cell_bubble:    "#E2626B",
+        sd_cell_correction:           "#E2626B"
     },
     forest: {
         sd_board_frame:               "#9BBBA1",
+        sd_inner_board_frame:         "#5E7563",
+        sd_grid_lines:                "#5E7563",
         sd_empty_cell:                "#1A241C",
         sd_prefilled_cell:            "#2E3D31",
         sd_affected_no_number_cell:   "#1E4429",
@@ -229,10 +249,15 @@ export const prebuiltSudokuColors = {
         sd_selected_number:           "#835F79",
         sd_prefilled_selected_number: "#523C4D",
         sd_numbers:                   "#EAF1EA",
-        sd_candidate_number:          "#A6BCAA"
+        sd_candidate_number:          "#A6BCAA",
+        sd_confirmed_cell_number:     "#6FA8B8",
+        sd_conflicted_cell_bubble:    "#C96A5E",
+        sd_cell_correction:           "#C96A5E"
     },
     magma: {
         sd_board_frame:               "#D9B8A6",
+        sd_inner_board_frame:         "#8A6E60",
+        sd_grid_lines:                "#8A6E60",
         sd_empty_cell:                "#241A18",
         sd_prefilled_cell:            "#45302A",
         sd_affected_no_number_cell:   "#5E3418",
@@ -242,33 +267,51 @@ export const prebuiltSudokuColors = {
         sd_selected_number:           "#427F79",
         sd_prefilled_selected_number: "#2A5551",
         sd_numbers:                   "#F9EEE6",
-        sd_candidate_number:          "#CFB3A3"
+        sd_candidate_number:          "#CFB3A3",
+        sd_confirmed_cell_number:     "#5FB3AA",
+        sd_conflicted_cell_bubble:    "#E2624F",
+        sd_cell_correction:           "#E2624F"
     }
 };
 export const prebuiltWordleColors = {
     midnight: {
         wd_empty_tile_border:            "#3A4A61",
+        wd_filled_tile_border:           "#56688A",
+        wd_filled_tile_text:             "#E8EDF4",
         wd_absent_tile_background:       "#26303F",
+        wd_absent_tile_text:             "#E8EDF4",
         wd_present_tile_background:      "#7A6FA0",
+        wd_present_tile_text:            "#E8EDF4",
         wd_correct_tile_background:      "#4F87B8",
+        wd_correct_tile_text:            "#E8EDF4",
         wd_unused_letter_key_background: "#3C4A5E",
-        wd_tile_text:                    "#E8EDF4"
+        wd_unused_letter_key_text:       "#E8EDF4"
     },
     forest: {
         wd_empty_tile_border:            "#3C5142",
+        wd_filled_tile_border:           "#587060",
+        wd_filled_tile_text:             "#E9EFE9",
         wd_absent_tile_background:       "#26332A",
+        wd_absent_tile_text:             "#E9EFE9",
         wd_present_tile_background:      "#AE7B52",
+        wd_present_tile_text:            "#E9EFE9",
         wd_correct_tile_background:      "#6D9C7C",
+        wd_correct_tile_text:            "#E9EFE9",
         wd_unused_letter_key_background: "#3E5245",
-        wd_tile_text:                    "#E9EFE9"
+        wd_unused_letter_key_text:       "#E9EFE9"
     },
     magma: {
         wd_empty_tile_border:            "#5C4038",
+        wd_filled_tile_border:           "#7E5B50",
+        wd_filled_tile_text:             "#F9EEE6",
         wd_absent_tile_background:       "#3D2C26",
+        wd_absent_tile_text:             "#F9EEE6",
         wd_present_tile_background:      "#D08A45",
+        wd_present_tile_text:            "#F9EEE6",
         wd_correct_tile_background:      "#C8502F",
+        wd_correct_tile_text:            "#F9EEE6",
         wd_unused_letter_key_background: "#5C4038",
-        wd_tile_text:                    "#F9EEE6"
+        wd_unused_letter_key_text:       "#F9EEE6"
     }
 };
 export const prebuiltConnectionsColors = {
@@ -285,7 +328,8 @@ export const prebuiltConnectionsColors = {
         cn_solved_category_text_3:       "#14202E",
         cn_solved_category_background_4: "#9B72D4",
         cn_solved_category_text_4:       "#14202E",
-        cn_mistakes_bubbles:             "#7E9AB8"
+        cn_mistakes_bubbles:             "#7E9AB8",
+        cn_top_mistakes_text:            "#E4EAF2"
     },
     forest: {
         cn_card_background:              "#26332A",
@@ -300,7 +344,8 @@ export const prebuiltConnectionsColors = {
         cn_solved_category_text_3:       "#16211A",
         cn_solved_category_background_4: "#A47AB8",
         cn_solved_category_text_4:       "#16211A",
-        cn_mistakes_bubbles:             "#8FAF95"
+        cn_mistakes_bubbles:             "#8FAF95",
+        cn_top_mistakes_text:            "#E6EDE6"
     },
     magma: {
         cn_card_background:              "#45302A",
@@ -315,11 +360,12 @@ export const prebuiltConnectionsColors = {
         cn_solved_category_text_3:       "#241A18",
         cn_solved_category_background_4: "#B394D1",
         cn_solved_category_text_4:       "#241A18",
-        cn_mistakes_bubbles:             "#D9B8A6"
+        cn_mistakes_bubbles:             "#D9B8A6",
+        cn_top_mistakes_text:            "#F7E9E0"
     }
 };
 
-// Toggle configs linked with their storage keys and actions
+// Every dark mode toggle along with the storage key it saves to plus the message it sends to the open tab
 export const dmToggleConfig = {
     "the-crossword": {
         storageKey: "crosswordDarkModeEnabled",
@@ -403,7 +449,7 @@ export const dmToggleConfig = {
     }
 };
 
-// Toggle groups for parent-child relationships in the popup
+// Grouped dark mode toggles under each master switch
 export const dmToggleGroups = {
     "games-main": [
         "the-crossword",
@@ -433,7 +479,7 @@ export const dmToggleGroups = {
     ]
 };
 
-// Every key the popup reads when opened so the switches are not wrong before storage is reached
+// Every key the popup reads on open so the switches show the right state before storage is reached
 export const popupStorageKeys = [
     popupActivePageStorageKey,
     popupActiveColorPanelStorageKey,
@@ -444,18 +490,18 @@ export const popupStorageKeys = [
     ...Object.values(dmToggleConfig).map((toggleConfig) => toggleConfig.storageKey)
 ];
 
-// Cursor inset for the color picker so it can always be exactly at the corners
+// How far the picker cursor stays inside the saturation/value box so it can still reach the exact corners
 export const svCursorInset = 4;
 
-// How long the confirmation beside the title stays up after an action succeeds
+// How long the confirmation toast beside the title stays up in milliseconds
 export const headerToastDuration = 2000;
 
-// The preset names
+// Names of the display preset, the prebuilt presets and the custom presets
 export const displayPresetName = "display";
 export const prebuiltPresetNames = ["midnight", "forest", "magma"];
 export const customPresetNames = ["preset1", "preset2", "preset3"];
 
-// Display names for every preset, used by the dropdown, the locked overlay and the export dialog
+// Display names for every preset
 export const presetLabels = {
     display:  "Display",
     midnight: "Midnight",
@@ -466,22 +512,22 @@ export const presetLabels = {
     preset3:  "Preset 3"
 };
 
-// Dot colors the dropdown shows for the display and unttouched custom presets
+// Dropdown dot colors for the light/dark display preset and the custom color presets
 export const displayLightSwatch = "#FFFFFF";
 export const displayDarkSwatch = "#000000";
 export const customPresetSwatch = "#FFFFFF";
 
-// Dot colors the dropdown shown for each prebuilt preset
+// Dropdown dot colors for each prebuilt preset
 export const prebuiltPresetSwatches = {
     midnight: "#6FA0E8",
     forest:   "#86B96B",
     magma:    "#E8894A"
 };
 
-// Longest a user may name a custom preset, so it still fits the dropdown button
+// Longest character length a custom preset can have
 export const presetNameMaxLength = 14;
 
-// Every game the custom colors page offers a panel for, keyed by its data-color-panel name.
+// Every game on the custom colors page with its corresponding fields and the dark mode toggles
 export const colorPanelConfig = {
     crosswords: {
         label: "Crosswords",
@@ -530,7 +576,7 @@ export const colorPanelConfig = {
 };
 export const colorPanelNames = Object.keys(colorPanelConfig);
 
-// Grouped names of page buttons and their corresponding pages
+// Page buttons and the pages they open, in the same order
 export const pageButtons = [
     "dark-mode-button",
     "custom-colors-button",
